@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LocalEventMap xmlns="http://mate.asfusion.com/" xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<EventHandlers type="{FlexEvent.PREINITIALIZE}">
+		<ObjectBuilder generator="{UndoManager}"/>
+		
+		<!--
+		A MethodInvoker is a kind of ObjectBuilder, so this creates a DocumentManager,
+		sets its "dispatcher" property and calls the setDocument method.
+		-->
+		<MethodInvoker generator="{DocumentManager}" method="setDocument" arguments="{[doc]}">
+			<Properties dispatcher="{scope.dispatcher}"/>
+		</MethodInvoker>
+	</EventHandlers>
+		
+	<EventHandlers type="{DocumentEvent.UPDATE}">
+		<MethodInvoker generator="{DocumentManager}" method="update" arguments="{[event.data.title, event.data.text]}"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{DocumentEvent.SAVE}">		
+		<MethodInvoker generator="{DocumentManager}" method="documentSaved"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{UndoEvent.UNDO}">
+		<MethodInvoker generator="{UndoManager}" method="undo"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{UndoEvent.REDO}">
+		<MethodInvoker generator="{UndoManager}" method="redo"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{UndoEvent.RESTORE}">
+		<MethodInvoker generator="{UndoManager}" method="restore" arguments="{event.undoable}"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{UndoEvent.ADD_UNDOABLE}">
+		<MethodInvoker generator="{UndoManager}" method="addUndoable" arguments="{event.undoable}"/>
+	</EventHandlers>
+	
+	
+	<Injectors targets="{[PlainDocumentView, RichDocumentView]}">
+		<!--
+		This creates the Presentation Model object for the DocumentView, notice the registerTarget
+		property, which makes it possible to use Injectors that target this object, something that
+		otherwise is only possible with view objects.
+		-->
+		<ObjectBuilder generator="{DocumentModel}" registerTarget="true"/>
+
+	    <PropertyInjector targetKey="model" source="{lastReturn}" />
+	</Injectors>
+	
+	<Injectors target="{DocumentModel}">
+		<!--
+		DocumentModel is not a view class, but can be used as a target for injection because an instance
+		of the class was created with an ObjectBuilder that had the registerTarget property set to true,
+		see the Injectors for DocumentView.
+		-->
+		
+		<PropertyInjector targetKey="dispatcher"    source="{scope.dispatcher}"/>
+		<PropertyInjector targetKey="document"      source="{DocumentManager}" sourceKey="document"/>
+		<PropertyInjector targetKey="documentDirty" source="{DocumentManager}" sourceKey="documentDirty"/>
+		<PropertyInjector targetKey="undoPossible"  source="{UndoManager}"     sourceKey="undoPossible"/>
+		<PropertyInjector targetKey="redoPossible"  source="{UndoManager}"     sourceKey="redoPossible"/>
+		<PropertyInjector targetKey="undoHistory"   source="{UndoManager}"     sourceKey="history"/>
+	</Injectors>
+
+		
+	<mx:Script>
+	<![CDATA[
+
+	import mx.events.FlexEvent;
+
+	import example.event.DocumentEvent;
+	import example.event.UndoEvent;
+	
+	import example.model.Document;
+	
+	import example.manager.DocumentManager;
+	import example.manager.UndoManager;
+	
+	import example.view.PlainDocumentView;
+	import example.view.RichDocumentView;
+
+	import example.view.model.DocumentModel;
+	
+	
+	[Bindable]
+	public var doc : Document;
+
+	]]>
+	</mx:Script>
+	
+	<Debugger level="{Debugger.ALL}"/>
+		
+</LocalEventMap>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<VBox xmlns="http://www.adobe.com/2006/mxml" xmlns:view="example.view.*">
+	
+	<creationComplete>onCreationComplete(event)</creationComplete>
+
+	<Script>
+	<![CDATA[
+	
+	import flash.utils.Dictionary;
+
+	import mx.binding.utils.BindingUtils;
+	
+	import mx.events.CollectionEvent;
+	
+	import mx.collections.ICollectionView;
+	
+	import mx.core.UIComponent;
+	import mx.core.Container;
+	
+	import example.model.Document;
+	
+	import example.view.model.MainModel;
+
+
+	[Bindable]
+	public var model : MainModel;
+	
+	[Bindable]
+	public var documentViewFactory : DocumentViewFactory;
+	
+	
+	private var documentToView : Dictionary;
+	
+	
+	private function onCreationComplete( event : Event ) : void {
+		BindingUtils.bindSetter(openDocumentsChanged,   this, ["model", "openDocuments"]);
+		BindingUtils.bindSetter(currentDocumentChanged, this, ["model", "currentDocument"]);
+		
+		documentToView = new Dictionary();
+	}
+	
+	private function openDocumentsChanged( openDocuments : ICollectionView ) : void {
+		if ( openDocuments != null ) {
+			// listen for change events to be able to react to the opening and closing of documents
+			// the listener is weakly referenced because we are only notified after the collection object
+			// has changed, not before, and so have no possibility of removing the listener cleanly
+			openDocuments.addEventListener(CollectionEvent.COLLECTION_CHANGE, onOpenDocumentsChanged, false, 0, true);
+		
+			syncOpenedDocuments();
+		}
+	}
+	
+	private function currentDocumentChanged( d : Document ) : void {
+		syncOpenedDocuments();
+	}
+	
+	private function onOpenDocumentsChanged( event : Event ) : void {
+		syncOpenedDocuments();
+	}
+	
+	private function openDocument( doc : Document ) : void {
+		model.openDocument(doc);
+		
+		// make sure the documents selector always shows the prompt
+		documentsSelector.selectedIndex = -1;
+	}
+	
+	private function syncOpenedDocuments( ) : void {
+		removeClosedDocuments();
+		createOpenedDocuments();
+		selectCurrentDocument();
+	}
+	
+	private function removeClosedDocuments( ) : void {
+		for ( var doc : * in documentToView ) {
+			// for each child in documentToView see if it is in the openDocuments collection
+			// if not remove it from both documentToView and documentsContainer
+			// (the "doc" variable is untyped because of a bug in the compiler, the variable of
+			// a for-in-loop has to be typed as string)
+			
+			if ( ! model.isOpen(doc) ) {
+				var view : Container = documentToView[doc];
+				
+				documentsContainer.removeChild(view);
+				
+				delete documentToView[doc];
+			}
+		}
+	}
+	
+	private function createOpenedDocuments( ) : void {
+		for each ( var doc : Document in model.openDocuments ) {
+			// for each document in openDocuments see if it is in the documentToView dictionary
+			// if not create a new view and add it to both documentToView and documentsContainer
+			
+			if ( documentToView[doc] == null ) {
+				var view : Container = documentViewFactory.createDocumentView(doc);
+				
+				documentsContainer.addChild(view);
+				documentsContainer.selectedIndex = documentsContainer.numChildren - 1;
+				
+				documentToView[doc] = view;
+			}
+		}
+	}
+	
+	private function selectCurrentDocument( ) : void {
+		if ( model.currentDocument != null ) {
+			var documentView : Container = documentToView[model.currentDocument];
+			
+			if ( documentView != null ) {
+				documentsContainer.selectedChild = documentView;
+			}
+		}
+	}
+	
+	]]>
+	</Script>
+	
+	<HBox width="100%">
+		<ComboBox id="documentsSelector">
+			<prompt>Open document</prompt>
+			<dataProvider>{model.documents}</dataProvider>
+			<labelField>title</labelField>
+			<change>openDocument(Document(documentsSelector.selectedItem))</change>
+			<enabled>{model.openSelectorEnabled}</enabled>
+		</ComboBox>
+		
+		<Button>
+			<label>Delete current document</label>
+			<click>model.deleteCurrentDocument()</click>
+			<enabled>{model.deleteButtonEnabled}</enabled>
+		</Button>
+
+		<Button>
+			<label>Close current document</label>
+			<click>model.closeCurrentDocument()</click>
+			<enabled>{model.closeButtonEnabled}</enabled>
+		</Button>
+		
+		<Spacer width="100%"/>
+		
+		<!--
+		<Button>
+			<label>New plain document</label>
+			<click>model.newPlainDocument()</click>
+		</Button>
+		<Button>
+			<label>New rich text document</label>
+			<click>model.newRichDocument()</click>
+		</Button>
+		-->
+		
+		<Button>
+			<label>New document</label>
+			<click>model.newPlainDocument()</click>
+		</Button>
+	</HBox>
+	
+	<TabNavigator id="documentsContainer" width="100%" height="100%"/>
+	
+</VBox>

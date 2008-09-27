@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<EventMap xmlns="http://mate.asfusion.com/" xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<EventHandlers type="{FlexEvent.PREINITIALIZE}">
+		<!--
+		The FlexEvent.PREINITIALIZE event is a good place for creating and initializing managers.
+		-->
+		
+		<ObjectBuilder generator="{DocumentFactory}"/>
+		
+		<ObjectBuilder generator="{ApplicationManager}">
+			<Properties documentFactory="{lastReturn}"/>
+		</ObjectBuilder>
+	</EventHandlers>
+	
+	<EventHandlers type="{FlexEvent.APPLICATION_COMPLETE}">
+		<!--
+		The FlexEvent.APPLICATION_COMPLETE is a good place to do things that need to be done just
+		when the application setup is finished. Think of it as the FlexEvent.CREATION_COMPLETE of
+		the whole application. It's a good place to load data that needs to be loaded early and
+		set the default navigation state.
+		
+		This application doesn't load anything and has only one view, so it doesn't need to do
+		anything here. I have declared this EventHandlers just to add these tips.
+		-->
+	</EventHandlers>
+	
+	<EventHandlers type="{DocumentEvent.CREATE_NEW}">
+		<MethodInvoker generator="{ApplicationManager}" method="createNewDocument" arguments="{event.documentType}"/>		
+	</EventHandlers>
+	
+	<EventHandlers type="{DocumentEvent.OPEN}">
+		<MethodInvoker generator="{ApplicationManager}" method="openDocument" arguments="{[event.reference]}"/>		
+	</EventHandlers>
+	
+	<EventHandlers type="{DocumentEvent.CLOSE}">
+		<MethodInvoker generator="{ApplicationManager}" method="closeDocument" arguments="{[event.reference]}"/>		
+	</EventHandlers>
+	
+	<EventHandlers type="{DocumentEvent.DELETE}">
+		<MethodInvoker generator="{ApplicationManager}" method="deleteDocument" arguments="{[event.reference]}"/>		
+	</EventHandlers>
+	
+	<EventHandlers type="{DocumentEvent.SAVE}">
+		<!-- This application doesn't actually save documents, but if it had this would be the place to do it. -->
+	</EventHandlers>
+	
+	
+	<Injectors target="{MainView}">
+		<!--
+		This creates the Presentation Model object for the MainView, notice the registerTarget
+		property, which makes it possible to use Injectors that target this object, something that
+		otherwise is only possible with view objects.
+		-->
+	    <ObjectBuilder generator="{MainModel}" registerTarget="true" />
+
+		<PropertyInjector targetKey="model" source="{lastReturn}" />
+		
+		<!--
+		This creates a DocumentViewFactory and injects it into MainView. If more than one MainView
+		were to be created the same DocumentViewFactory instance would be reused, because Mate caches
+		all objects that are created by the EventMap, unless you tell it not to.
+		-->
+		<PropertyInjector targetKey="documentViewFactory" source="{DocumentViewFactory}"/>
+	</Injectors>
+	
+	<Injectors target="{MainModel}">
+		<!--
+		DocumentModel is not a view class, but can be used as a target for injection because an instance
+		of the class was created with an ObjectBuilder that had the registerTarget property set to true,
+		see the Injectors for DocumentView.
+		-->
+		
+		<PropertyInjector targetKey="dispatcher"      source="{scope.dispatcher}"/>
+		<PropertyInjector targetKey="documents"       source="{ApplicationManager}" sourceKey="documents"/>
+		<PropertyInjector targetKey="openDocuments"   source="{ApplicationManager}" sourceKey="openDocuments"/>
+		<PropertyInjector targetKey="currentDocument" source="{ApplicationManager}" sourceKey="currentDocument"/>
+	</Injectors>
+	
+	
+	<mx:Script>
+	<![CDATA[
+			
+	import mx.events.FlexEvent;
+	
+	import example.event.DocumentEvent;
+	
+	import example.manager.ApplicationManager;
+	
+	import example.view.MainView;
+	import example.view.DocumentViewFactory;
+	
+	import example.view.model.MainModel;
+	
+	import example.model.DocumentFactory;
+			
+	]]>
+	</mx:Script>
+	
+	<Debugger level="{Debugger.ALL}"/>
+		
+</EventMap>

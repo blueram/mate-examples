@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<VBox xmlns="http://www.adobe.com/2006/mxml" xmlns:map="example.application.*">
+
+	<label>{model.displayTitle}</label>
+	
+	<paddingLeft>5</paddingLeft>
+	<paddingRight>5</paddingRight>
+	<paddingTop>5</paddingTop>
+	<paddingBottom>5</paddingBottom>
+	
+	<Script>
+	<![CDATA[
+
+	import flash.events.Event;
+	
+	import mx.binding.utils.BindingUtils;
+	
+	import example.model.Document;
+	
+	import example.manager.command.Undoable;
+	
+	import example.view.model.DocumentModel;
+	
+	
+	[Bindable]
+	public var model : DocumentModel;
+	
+	]]>
+	</Script>
+
+	<map:DocumentEventMap>
+		<map:dispatcher>{this}</map:dispatcher>
+		<map:doc>{Document(data)}</map:doc>
+	</map:DocumentEventMap>
+	
+	<TextInput id="titleField">
+		<text>{model.title}</text>
+		<change>model.title = titleField.text</change>
+	</TextInput>
+	
+	<TextArea id="textField" width="100%" height="100%">
+		<text>{model.text}</text>
+		<change>model.text = textField.text</change>
+	</TextArea>
+	
+	<HBox width="100%">
+		<Button label="Undo" click="model.undo()" enabled="{model.undoButtonEnabled}"/>
+		<Button label="Redo" click="model.redo()" enabled="{model.redoButtonEnabled}"/>
+		
+		<ComboBox id="undoHistory">
+			<dataProvider>{model.undoHistory}</dataProvider>
+			<labelFunction>{model.labelForUndoable}</labelFunction>
+			<prompt>Undo history</prompt>
+			<change>model.restore(Undoable(undoHistory.selectedItem))</change>
+		</ComboBox>
+		
+		<Spacer width="100%"/>
+		
+		<Button label="Save"   click="model.save()" enabled="{model.saveButtonEnabled}"/>
+	</HBox>
+	
+</VBox>
