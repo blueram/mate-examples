@@ -2,6 +2,10 @@
 
 <EventMap xmlns="http://mate.asfusion.com/" xmlns:mx="http://www.adobe.com/2006/mxml">
 
+	<!--
+	This is the main event map for the application, think of it as the application controller.
+	-->
+
 	<EventHandlers type="{FlexEvent.PREINITIALIZE}">
 		<!--
 		The FlexEvent.PREINITIALIZE event is a good place for creating and initializing managers.
@@ -10,6 +14,10 @@
 		<ObjectBuilder generator="{DocumentFactory}"/>
 		
 		<ObjectBuilder generator="{ApplicationManager}">
+			<!--
+			"lastReturn" refers to the return value of the last action, in this case the object
+			created by the ObjectBuilder tag above
+			-->
 			<Properties documentFactory="{lastReturn}"/>
 		</ObjectBuilder>
 	</EventHandlers>
@@ -43,7 +51,15 @@
 	</EventHandlers>
 	
 	<EventHandlers type="{DocumentEvent.SAVE}">
-		<!-- This application doesn't actually save documents, but if it had this would be the place to do it. -->
+		<!--
+		This application doesn't actually save documents, but if it had this would be the place to do it.
+
+		When the save is successfully completed (or just not done at all, in this case), I dispatch an
+		event telling anyone who listens that a document has been saved.
+		-->
+		<EventAnnouncer generator="{DocumentEvent}" type="{DocumentEvent.SAVED}">
+			<Properties reference="{event.reference}"/>
+		</EventAnnouncer>
 	</EventHandlers>
 	
 	
@@ -55,6 +71,7 @@
 		-->
 	    <ObjectBuilder generator="{MainModel}" registerTarget="true" />
 
+		<!-- This injects the MainModel instance created by the last tag into the MainView instance -->
 		<PropertyInjector targetKey="model" source="{lastReturn}" />
 		
 		<!--
@@ -71,8 +88,20 @@
 		of the class was created with an ObjectBuilder that had the registerTarget property set to true,
 		see the Injectors for DocumentView.
 		-->
-		
+
+		<!--
+		"scope.dispatcher" refers to the event dispatcher used by the event map. Events dispatched using this
+		dispatcher will be heard by this event map. The reason why I inject this dispatcher into the MainModel
+		object is that since it's not a view class events that it dispatches don't bubble up, and so it needs
+		a way to dispatch events that can be heard by this event map.
+		-->
 		<PropertyInjector targetKey="dispatcher"      source="{scope.dispatcher}"/>
+		
+		<!--
+		This injects some objects into the MainModel instance, but also sets up bindings so that when the
+		"documents", "openDocuments" or "currentDocument" properties on the ApplicationManager instance change
+		they will automatically be updated in the MainModel instance too.
+		-->
 		<PropertyInjector targetKey="documents"       source="{ApplicationManager}" sourceKey="documents"/>
 		<PropertyInjector targetKey="openDocuments"   source="{ApplicationManager}" sourceKey="openDocuments"/>
 		<PropertyInjector targetKey="currentDocument" source="{ApplicationManager}" sourceKey="currentDocument"/>

@@ -30,8 +30,6 @@ package example.manager.command {
 		
 		
 		public function UpdateDocumentCommand( document : Document, title : String, text : String ) {
-			_timestamp = new Date();
-			
 			this.document = document;
 			this.title    = title;
 			this.text     = text;
@@ -42,6 +40,12 @@ package example.manager.command {
 			
 			document.setTitle(title);
 			document.setText(text);
+			
+			if ( _timestamp == null ) {
+				// don't overwrite the timestamp on redo
+				
+				_timestamp = new Date();
+			}
 		}
 		
 		public function undo( ) : void {

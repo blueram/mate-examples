@@ -20,6 +20,7 @@ package example.event {
 		public static const      CLOSE : String = "close";
 		public static const     DELETE : String = "delete";
 		public static const       SAVE : String = "save";
+		public static const      SAVED : String = "saved";
 
 		
 		/**
@@ -29,20 +30,20 @@ package example.event {
 		public var data : DocumentData;
 		
 		/**
-		 * Events that refer to a specific document (UPDATE, OPEN, CLOSE, DELETE and SAVE)
+		 * Events that refer to a specific document (UPDATE, OPEN, CLOSE, DELETE, SAVE and SAVED)
 		 * use this property to pass that document.
 		 */
 		public var reference : Document;
 		
 		/**
 		 * Events that create new documents (CREATE_NEW) use this property to specify
-		 * which kind of document to create. Should be 
+		 * which kind of document to create. Must be one of the constants on the DocumentType class.
 		 */
 		public var documentType : String;
 		
 		
-		public function DocumentEvent( type : String ) {
-			super(type, true);
+		public function DocumentEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false ) {
+			super(type, true, cancelable);
 		}
 		
 	}
