@@ -18,6 +18,8 @@ package example.view.model {
 	public class DocumentModel extends EventDispatcher {
 		
 		private var _document : Document;
+
+		private var _undoHistory : Array;
 		
 		private var _undoPossible  : Boolean;
 		private var _redoPossible  : Boolean;
@@ -48,7 +50,13 @@ package example.view.model {
 		}
 		
 		[Bindable]
-		public var undoHistory : Array;
+		public function get undoHistory( ) : Array {
+			return (_undoHistory || []).slice().reverse();
+		}
+		
+		public function set undoHistory( value : Array ) : void {
+			_undoHistory = value;
+		}
 		
 		[Bindable]
 		public function get document( ) : Document {
@@ -133,7 +141,7 @@ package example.view.model {
 			var hours   : String = (undoable.timestamp.hours   < 10 ? "0" : "") + undoable.timestamp.hours;
 			var minutes : String = (undoable.timestamp.minutes < 10 ? "0" : "") + undoable.timestamp.minutes;
 			var seconds : String = (undoable.timestamp.seconds < 10 ? "0" : "") + undoable.timestamp.seconds;
-			var index   : int    = undoHistory.length - undoHistory.indexOf(undoable);
+			var index   : int    = undoHistory.indexOf(undoable) + 1;
 			
 			return index + ". " + undoable.description + " (" + hours + ":" + minutes + ":" + seconds + ")";
 		}
