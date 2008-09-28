@@ -23,42 +23,60 @@
 	import example.view.model.MainModel;
 
 
+	/** This is the presentation model object for this view, it is injected by the application controller when view is created. */
 	[Bindable]
 	public var model : MainModel;
 	
+	/** This factory is used to create document views, it is injected by the application controller when the view is created. */
 	[Bindable]
 	public var documentViewFactory : DocumentViewFactory;
 	
 	
+	/**
+	 * A dictionary to keep track of which document is displayed in which view.
+	 */
 	private var documentToView : Dictionary;
 	
 	
 	private function onCreationComplete( event : Event ) : void {
+		// we want to be notified when the open documents collection object changes,
+		// note that this is not the same as listening for when the collection changes,
+		// see openDocumentsChanged for further explanation
 		BindingUtils.bindSetter(openDocumentsChanged,   this, ["model", "openDocuments"]);
+		
+		// we also want to know when the current document changes
 		BindingUtils.bindSetter(currentDocumentChanged, this, ["model", "currentDocument"]);
 		
 		documentToView = new Dictionary();
 	}
 	
 	private function openDocumentsChanged( openDocuments : ICollectionView ) : void {
+		// this is run when the openDocuments property on the presentation model changes, which
+		// should only be once (but we can't assume that), it is not the same as when the collection
+		// changes (e.g. when an item is added or removed from the collection). 
+		
 		if ( openDocuments != null ) {
 			// listen for change events to be able to react to the opening and closing of documents
 			// the listener is weakly referenced because we are only notified after the collection object
 			// has changed, not before, and so have no possibility of removing the listener cleanly
 			openDocuments.addEventListener(CollectionEvent.COLLECTION_CHANGE, onOpenDocumentsChanged, false, 0, true);
 		
-			syncOpenedDocuments();
+			syncDocuments();
 		}
 	}
 	
 	private function currentDocumentChanged( d : Document ) : void {
-		syncOpenedDocuments();
+		syncDocuments();
 	}
 	
 	private function onOpenDocumentsChanged( event : Event ) : void {
-		syncOpenedDocuments();
+		syncDocuments();
 	}
 	
+	/**
+	 * Calls a method by the same name on the presentation model, but also resets the
+	 * selected item on the open documents selector.
+	 */
 	private function openDocument( doc : Document ) : void {
 		model.openDocument(doc);
 		
@@ -66,12 +84,20 @@
 		documentsSelector.selectedIndex = -1;
 	}
 	
-	private function syncOpenedDocuments( ) : void {
+	/**
+	 * Synchronizes the application state version of which documents are open with this view's state by
+	 * removing any document views whose document is no longer open, creates views for open documents
+	 * that don't have a view yet, and makes sure that the current document is the selected tab.
+	 */
+	private function syncDocuments( ) : void {
 		removeClosedDocuments();
 		createOpenedDocuments();
 		selectCurrentDocument();
 	}
 	
+	/**
+	 * See syncDocuments.
+	 */
 	private function removeClosedDocuments( ) : void {
 		for ( var doc : * in documentToView ) {
 			// for each child in documentToView see if it is in the openDocuments collection
@@ -89,6 +115,9 @@
 		}
 	}
 	
+	/**
+	 * See syncDocuments.
+	 */
 	private function createOpenedDocuments( ) : void {
 		for each ( var doc : Document in model.openDocuments ) {
 			// for each document in openDocuments see if it is in the documentToView dictionary
@@ -105,6 +134,9 @@
 		}
 	}
 	
+	/**
+	 * See syncDocuments.
+	 */
 	private function selectCurrentDocument( ) : void {
 		if ( model.currentDocument != null ) {
 			var documentView : Container = documentToView[model.currentDocument];
@@ -142,6 +174,9 @@
 		<Spacer width="100%"/>
 		
 		<!--
+		Currently only plain documents are supported, but in the future you will be able
+		to choose between plain and rich text documents.
+		
 		<Button>
 			<label>New plain document</label>
 			<click>model.newPlainDocument()</click>

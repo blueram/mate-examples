@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <view:DocumentView xmlns:view="example.view.*">
-
+	<!--
+	This view currently does nothing different from PlainDocumentView, but the idea is that 
+	in the future it will support rich tex editing.
+	-->
 </view:DocumentView>

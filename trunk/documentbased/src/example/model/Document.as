@@ -6,12 +6,6 @@ package example.model {
 
 	/**
 	 * Abstract superclass of all document types.
-	 * 
-	 * Notes on the implementation: This should be an interface, but interfaces can't 
-	 * declare namespaced methods. Moreover there is problems with the namespaced
-	 * methods because of an apparent bug in the compiler, it doesn't allow namespaced
-	 * methods to be overridden, so instead I've had to create protected doubles of
-	 * the namespaced methods so that subclasses can override and implement these instead.
 	 */
 	public class Document extends EventDispatcher {
 		
@@ -51,6 +45,11 @@ package example.model {
 			setTitleImpl(title);
 		}
 		
+		/**
+		 * This is the actual implementation of setTitle. Because there are problems
+		 * with overriding methods in custom namespaces this method is needed to
+		 * let subclasses override the setting of the title.
+		 */
 		protected function setTitleImpl( title : String ) : void {
 			_title = title;
 			
@@ -61,20 +60,38 @@ package example.model {
 			setTextImpl(text);
 		}
 		
+		/**
+		 * This is the actual implementation of setText. Because there are problems
+		 * with overriding methods in custom namespaces this method is needed to
+		 * let subclasses override the setting of the text.
+		 */
 		protected function setTextImpl( text : String ) : void {
 			_text = text;
 			
 			dispatchChange();
 		}
 		
+		/**
+		 * Create a snapshot of the current state of the document. This snapshot can
+		 * be used to restore the document at a later time, for example when undoing
+		 * a series of actions. To restore the document pass the snapshot to loadSnapshot.
+		 */
 		public function createSnapshot( ) : Snapshot {
 			return new DocumentSnapshot(title, text, type);
 		}
 
+		/**
+		 * Restore the document as it was at an earlier time. See createSnapshot.
+		 */
 		app_internal function loadSnapshot( snapshot : Snapshot ) : void {
 			loadSnapshotImpl(snapshot);
 		}
 		
+		/**
+		 * This is the actual implementation of loadSnapshot. Because there are problems
+		 * with overriding methods in custom namespaces this method is needed to
+		 * let subclasses override the loading of snapshots.
+		 */
 		protected function loadSnapshotImpl( snapshot : Snapshot ) : void {
 			if ( snapshot is DocumentSnapshot ) {
 				var s : DocumentSnapshot = DocumentSnapshot(snapshot);
@@ -97,6 +114,10 @@ import example.model.DocumentData;
 import example.model.Snapshot;
 
 
+/**
+ * The document snapshot implementation. It is based on the DocumentData VO and adds the
+ * type and the getters defined by the Snapshot interface.
+ */
 class DocumentSnapshot extends DocumentData implements Snapshot {
 	
 	public var type : String;

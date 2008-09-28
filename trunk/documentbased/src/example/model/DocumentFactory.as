@@ -3,6 +3,10 @@ package example.model {
 	import flash.utils.Dictionary;
 	
 
+	/**
+	 * A factory for creating Document instances. The specific implementation created
+	 * depends on the DocumentType that is passed to the createDocument method.
+	 */
 	public class DocumentFactory {
 		
 		use namespace app_internal;
@@ -22,14 +26,23 @@ package example.model {
 		}
 		
 		
-		public function createDocument( title : String, text : String, type : String ) : Document {
+		/**
+		 * Create a new document of the specified type using some default data.
+		 * 
+		 * Throws an exception if this factory cannot create documents of the specified type.
+		 */
+		public function createDocument( data : DocumentData, type : String ) : Document {
+			if ( factoryMap[type] == null ) {
+				throw new ArgumentError("Cannot create document, unknown type: \"" + type + "\"");
+			}
+			
 			var documentClass : Class = factoryMap[type];
-			
+		
 			var document : Document = new documentClass(type);
-			
-			document.setTitle(title);
-			document.setText(text);
-			
+		
+			document.setTitle(data.title);
+			document.setText(data.text);
+		
 			return document;
 		}
 

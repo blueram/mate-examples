@@ -53,6 +53,8 @@ package example.manager {
 		/**
 		 * Returns a copy of the undo stack. This can be used to display the undo
 		 * history and provide a way to jump multiple steps back in the undo history at once.
+		 * 
+		 * The commands in the history are sorted from the oldest to the newest.
 		 */
 		[Bindable(event="undoChanged")]
 		public function get history( ) : Array {

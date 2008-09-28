@@ -29,6 +29,10 @@
 	]]>
 	</Script>
 
+	<!--
+	The event map that is the local controller. Notice that the data property
+	is injected into the event map here, as the document.
+	-->
 	<map:DocumentEventMap>
 		<map:dispatcher>{this}</map:dispatcher>
 		<map:doc>{Document(data)}</map:doc>
@@ -57,7 +61,7 @@
 		
 		<Spacer width="100%"/>
 		
-		<Button label="Save"   click="model.save()" enabled="{model.saveButtonEnabled}"/>
+		<Button label="Save" click="model.save()" enabled="{model.saveButtonEnabled}"/>
 	</HBox>
 	
 </VBox>

@@ -1,5 +1,5 @@
 package example.manager {
-
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
@@ -7,8 +7,7 @@ package example.manager {
 	import mx.collections.ICollectionView;
 	
 	import example.model.Document;
-	import example.model.PlainDocument;
-	import example.model.DocumentType;
+	import example.model.DocumentData;
 	import example.model.DocumentFactory;
 	
 	
@@ -72,7 +71,9 @@ package example.manager {
 		 * Creates a new document of the specified type and opens it with openDocument.
 		 */
 		public function createNewDocument( type : String ) : void {
-			var d : Document = _documentFactory.createDocument("Untitled " + (documents.length + 1), "", type);
+			var data : DocumentData = new DocumentData("Untitled " + (documents.length + 1), "");
+			
+			var d : Document = _documentFactory.createDocument(data, type);
 			
 			_documents.addItem(d);
 			
