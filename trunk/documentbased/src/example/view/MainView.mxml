@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- Copyright 2008 Theo Hultberg/Iconara -->
+
 <VBox xmlns="http://www.adobe.com/2006/mxml" xmlns:view="example.view.*">
 	
 	<creationComplete>onCreationComplete(event)</creationComplete>

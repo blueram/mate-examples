@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- Copyright 2008 Theo Hultberg/Iconara -->
+
 <Application xmlns="http://www.adobe.com/2006/mxml" xmlns:app="example.application.*" xmlns:view="example.view.*">
 	
 	<app:ApplicationEventMap/>

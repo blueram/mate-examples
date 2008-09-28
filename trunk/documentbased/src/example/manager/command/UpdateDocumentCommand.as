@@ -1,3 +1,5 @@
+/* Copyright 2008 Theo Hultberg/Iconara */
+
 package example.manager.command {
 
 	import example.model.Document;

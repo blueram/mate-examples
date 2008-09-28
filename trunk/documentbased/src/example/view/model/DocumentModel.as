@@ -1,3 +1,5 @@
+/* Copyright 2008 Theo Hultberg/Iconara */
+
 package example.view.model {
 	
 	import flash.events.Event;
