@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Copyright 2008 Theo Hultberg/Iconara -->
+
+<LocalEventMap xmlns="http://mate.asfusion.com/" xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<!--
+	This is a local event map, which is different from regular event maps in some small, but crucial aspects:
+	
+	- A local event map only hears events comming from the part of the application where it is defined, i.e.
+	  from the view that declares it and all children of that view.
+	- By default all objects created by ObjectBuilder, MethodInvoker and other tags are local to this event map.
+	
+	The reason I use a local event map here is that it makes each DocumentView into a mini-application within 
+	the application. This is the controller for this mini-application, and the only thing it knows about is how
+	to manage a Document instance. The application controller has to worry about all documents, which of them are
+	open, which is the current, etc. but this sub-controller only needs to know about its specific document. This
+	makes the code here much simpler.
+	
+	The events that this event map handles are also heard by the top-level event map, unless you stop their
+	propagation explicitly. For example the DocumentEvent.SAVE event is handled both here and in the top-level 
+	event map. Most other events are only handled here.
+	-->
+
+	<EventHandlers type="{FlexEvent.PREINITIALIZE}">		
+		<!--
+		A MethodInvoker is a kind of ObjectBuilder, so this creates a DocumentManager,
+		sets its "dispatcher" property and calls the setDocument method.
+		-->
+		<MethodInvoker generator="{DocumentManager}" method="setDocument" arguments="{[doc]}">
+			<Properties dispatcher="{scope.dispatcher}"/>
+		</MethodInvoker>
+		
+		<ObjectBuilder generator="{UndoManager}"/>
+	</EventHandlers>
+		
+	<EventHandlers type="{DocumentEvent.UPDATE}">
+		<MethodInvoker generator="{DocumentManager}" method="update" arguments="{[event.data.title, event.data.text]}"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{DocumentEvent.SAVED}" dispatcherType="global">
+		<!--
+		This just tells the DocumentManager instance to remove the dirty flag for the document.
+		
+		The event is dispatched by the top-level event map when the document has been successfully saved. 
+		Notice the  dispatcherType property that is set to "global", it makes it possible to listen to
+		events in the same way as top-level event maps can, and it makes it possible to communicate from
+		a top-level event map to local event maps.
+		
+		To avoid reacting to events dispatched because other documents were saved there is a StopHandlers
+		that checks the document reference in the event and compares it to the local document, unless
+		they are the same the event handling will stop.
+		-->
+
+		<StopHandlers eventPropagation="noStop">
+			<stopFunction>{function( scope : IScope ) : Boolean {
+				return DocumentEvent(scope.event).reference != DocumentEventMap(scope.eventMap).doc;
+			}}</stopFunction>
+		</StopHandlers>
+		
+		<MethodInvoker generator="{DocumentManager}" method="documentSaved"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{UndoEvent.UNDO}">
+		<MethodInvoker generator="{UndoManager}" method="undo"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{UndoEvent.REDO}">
+		<MethodInvoker generator="{UndoManager}" method="redo"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{UndoEvent.RESTORE}">
+		<MethodInvoker generator="{UndoManager}" method="restore" arguments="{event.undoable}"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{UndoEvent.ADD_UNDOABLE}">
+		<MethodInvoker generator="{UndoManager}" method="addUndoable" arguments="{event.undoable}"/>
+	</EventHandlers>
+	
+	
+	<Injectors targets="{[PlainDocumentView, RichDocumentView]}">
+		<ObjectBuilder generator="{DocumentModel}" registerTarget="true"/>
+
+	    <PropertyInjector targetKey="model" source="{lastReturn}" />
+	</Injectors>
+	
+	<Injectors target="{DocumentModel}">
+		<PropertyInjector targetKey="dispatcher"    source="{scope.dispatcher}"/>
+		<PropertyInjector targetKey="document"      source="{DocumentManager}" sourceKey="document"/>
+		<PropertyInjector targetKey="documentDirty" source="{DocumentManager}" sourceKey="documentDirty"/>
+		<PropertyInjector targetKey="undoPossible"  source="{UndoManager}"     sourceKey="undoPossible"/>
+		<PropertyInjector targetKey="redoPossible"  source="{UndoManager}"     sourceKey="redoPossible"/>
+		<PropertyInjector targetKey="undoHistory"   source="{UndoManager}"     sourceKey="history"/>
+	</Injectors>
+
+		
+	<mx:Script>
+	<![CDATA[
+
+	import mx.events.FlexEvent;
+	
+	import com.asfusion.mate.actionLists.IScope;
+
+	import example.event.DocumentEvent;
+	import example.event.UndoEvent;
+	
+	import example.model.Document;
+	
+	import example.manager.DocumentManager;
+	import example.manager.UndoManager;
+	
+	import example.view.PlainDocumentView;
+	import example.view.RichDocumentView;
+
+	import example.view.model.DocumentModel;
+	
+	
+	[Bindable]
+	public var doc : Document;
+
+	]]>
+	</mx:Script>
+	
+	<Debugger level="{Debugger.ALL}"/>
+		
+</LocalEventMap>
