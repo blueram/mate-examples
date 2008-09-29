@@ -32,7 +32,7 @@ The main view has a toolbar with a list of documents and a few buttons, as well 
 
 If you look through the code for !MainView you will see that it refers to a variable called "model" very often. This variable contains the presentation model object for the view, and is an instance of !MainModel (this is my naming scheme, each view is suffixed with "View" and has a corresponding class with the suffix "Model"). The presentation model object takes care of everything that isn't strictly UI-related, it has, for example, properties that determine if the delete and close buttons, and the open document dropdown are enabled or not.
 
-I would like to be able to say that "look how simple the view code is, that's because I use the Presentation Model pattern to keep state logic outside of the view code", but !MainView isn't simple, it has a lot of code. I will get to say that a bit later when I show the !DocumentView, but not right now.
+I would like to be able to say that "look how simple the view code is, that's because I use the PresentationModel pattern to keep state logic outside of the view code", but !MainView isn't simple, it has a lot of code. I will get to say that a bit later when I show the !DocumentView, but not right now.
 
 The reason why !MainView isn't simple is that there is some complex logic that deals with the documents that are displayed in the !TabNavigator. The view has to keep track of which documents belong to which view and which of these that should be open, as well as creating new views when new documents are created. This code isn't the kind of code that you push down into the presentation model, since it's definitely UI-related.
 
