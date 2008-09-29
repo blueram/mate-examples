@@ -1,4 +1,5 @@
 #summary First page of the description of the document-based application
+#labels Featured
 
 = Creating a document-based application with Mate: Introduction =
 
