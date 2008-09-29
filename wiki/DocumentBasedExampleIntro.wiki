@@ -21,7 +21,7 @@ I also aim to expand it to show how to
 
 == Getting started ==
 
-If you have written applications with Mate before and consider yourself an experienced Flex developer, I recommend diving straight into the code, and come back and read the walk-though or the definitions if you're new to the Presentation Model pattern or not sure what I mean by "document-based".
+If you have written applications with Mate before and consider yourself an experienced Flex developer, I recommend diving straight into the code, and come back and read the walk-though or the definitions if you're new to the PresentationModel pattern or not sure what I mean by "document-based".
 
 The code contains a lot of explanations that you won't find here because they are more relevant in a context, so I really recommend looking at the code first, or at least have it open as you read this.
 
