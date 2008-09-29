@@ -1,7 +1,7 @@
 #summary First page of the description of the document-based application
 #labels Featured
 
-= Creating a document-based application with Mate: Introduction =
+= Creating a document-based application with Mate =
 
 The code for this application is available at [http://mate-examples.googlecode.com/svn/trunk/examples/documentbased/ /trunk/examples/documentbased/]. Both the code and this document was written by [http://blog.iconara.net/ Theo Hultberg/Iconara].
 
