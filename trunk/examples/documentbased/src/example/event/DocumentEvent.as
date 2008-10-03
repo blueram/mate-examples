@@ -6,6 +6,7 @@ package example.event {
 
 	import example.model.Document;
 	import example.model.DocumentData;
+	import example.model.DocumentType;
 
 	
 	/**
@@ -41,7 +42,7 @@ package example.event {
 		 * Events that create new documents (CREATE_NEW) use this property to specify
 		 * which kind of document to create. Must be one of the constants on the DocumentType class.
 		 */
-		public var documentType : String;
+		public var documentType : DocumentType;
 		
 		
 		public function DocumentEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false ) {

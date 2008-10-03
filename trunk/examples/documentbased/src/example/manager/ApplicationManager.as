@@ -10,6 +10,7 @@ package example.manager {
 	
 	import example.model.Document;
 	import example.model.DocumentData;
+	import example.model.DocumentType;
 	import example.model.DocumentFactory;
 	
 	
@@ -72,10 +73,10 @@ package example.manager {
 		/**
 		 * Creates a new document of the specified type and opens it with openDocument.
 		 */
-		public function createNewDocument( type : String ) : void {
+		public function createNewDocument( type : DocumentType ) : void {
 			var data : DocumentData = new DocumentData("Untitled " + (documents.length + 1), "");
 			
-			var d : Document = _documentFactory.createDocument(data, type);
+			var d : Document = _documentFactory.createDocument(type, data);
 			
 			_documents.addItem(d);
 			
