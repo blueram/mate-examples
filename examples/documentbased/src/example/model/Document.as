@@ -17,7 +17,7 @@ package example.model {
 		private var _title : String;
 		private var _text  : String;
 
-		private var _type  : String;
+		private var _type  : DocumentType;
 		
 		
 		[Bindable(event="change")]
@@ -30,12 +30,12 @@ package example.model {
 			return _text;
 		}
 		
-		public function get type( ) : String {
+		public function get type( ) : DocumentType {
 			return _type;
 		}
 
 
-		public function Document( type : String ) {
+		public function Document( type : DocumentType ) {
 			_type = type;
 		}
 		
@@ -113,6 +113,7 @@ package example.model {
 import flash.utils.ByteArray;
 
 import example.model.DocumentData;
+import example.model.DocumentType;
 import example.model.Snapshot;
 
 
@@ -122,7 +123,7 @@ import example.model.Snapshot;
  */
 class DocumentSnapshot extends DocumentData implements Snapshot {
 	
-	public var type : String;
+	public var type : DocumentType;
 	
 	
 	public function get bytes( ) : ByteArray {
@@ -134,11 +135,11 @@ class DocumentSnapshot extends DocumentData implements Snapshot {
 	}
 	
 	public function get xml( ) : XML {
-		return <document type={type}><title>{title}</title><text>{text}</text></document>;
+		return <document type={type.type}><title>{title}</title><text>{text}</text></document>;
 	}
 	
 	
-	public function DocumentSnapshot( title : String, text : String, type : String ) {
+	public function DocumentSnapshot( title : String, text : String, type : DocumentType ) {
 		super(title, text);
 		
 		this.type = type;

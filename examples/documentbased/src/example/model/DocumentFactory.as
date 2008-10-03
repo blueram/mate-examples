@@ -33,17 +33,19 @@ package example.model {
 		 * 
 		 * Throws an exception if this factory cannot create documents of the specified type.
 		 */
-		public function createDocument( data : DocumentData, type : String ) : Document {
+		public function createDocument( type : DocumentType, data : DocumentData = null ) : Document {
 			if ( factoryMap[type] == null ) {
 				throw new ArgumentError("Cannot create document, unknown type: \"" + type + "\"");
 			}
 			
 			var documentClass : Class = factoryMap[type];
 		
-			var document : Document = new documentClass(type);
-		
-			document.setTitle(data.title);
-			document.setText(data.text);
+			var document : Document = new documentClass();
+
+			if ( data != null ) {
+				document.setTitle(data.title);
+				document.setText(data.text);
+			}
 		
 			return document;
 		}
