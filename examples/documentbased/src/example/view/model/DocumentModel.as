@@ -145,7 +145,7 @@ package example.view.model {
 		
 		[Bindable(event="textChanged")]
 		public function get text( ) : String {
-			return _text;
+			return _text || "";
 		}
 		
 		public function set text( value : String ) : void {
@@ -156,7 +156,7 @@ package example.view.model {
 		
 		[Bindable(event="titleChanged")]
 		public function get title( ) : String {
-			return _title;
+			return _title || "";
 		}
 		
 		public function set title( value : String ) : void {
