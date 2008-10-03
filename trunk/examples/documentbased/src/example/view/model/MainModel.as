@@ -103,7 +103,11 @@ package example.view.model {
 		 * instead of querying the openDocuments collection directly.
 		 */
 		public function isOpen( document : Document ) : Boolean {
-			return openDocuments.contains(document);
+			if ( openDocuments != null ) {
+				return openDocuments.contains(document);
+			} else {
+				return false;
+			}
 		}
 		
 		/**
