@@ -92,4 +92,4 @@ I've touched briefly on the subject on undo when discussing the !UndoManager, bu
 
 == Testing ==
 
-As you probably all know, writing tests is boring. That's why there are not tests, even though I've probably mentioned how this and that makes the code easier to test. I would like there to be tests, but I make the mistake of waiting a little too long before writing them, and many times that means that they don't get written. I will make an effort of writing tests for this application, so come back again and see if this section has been updated.
+~~As you probably all know, writing tests is boring. That's why there are not tests, even though I've probably mentioned how this and that makes the code easier to test. I would like there to be tests, but I make the mistake of waiting a little too long before writing them, and many times that means that they don't get written. I will make an effort of writing tests for this application, so come back again and see if this section has been updated.~~ Tests for most classes is now in the repository. Description forthcoming.
