@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Application xmlns="http://www.adobe.com/2006/mxml" xmlns:fluint="http://www.digitalprimates.net/2008/fluint">
+	<creationComplete>runTests()</creationComplete>
+	
+	<Script>
+	<![CDATA[
+		
+		import net.digitalprimates.fluint.unitTests.frameworkSuite.FrameworkSuite;
+		
+		import example.model.test.TestModelSuite;
+		
+		import example.view.test.TestViewSuite;
+		
+
+		protected function runTests( ) : void {
+			var suites : Array = new Array();
+			
+			suites.push(new TestModelSuite());
+			suites.push(new TestViewSuite());
+			
+			testRunner.startTests(suites);
+		}
+
+	]]>
+	</Script>
+	
+	<fluint:TestResultDisplay width="100%" height="100%" />
+
+	<fluint:TestRunner id="testRunner"/>
+
+</Application>
