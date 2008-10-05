@@ -6,7 +6,7 @@ I've taken the name "document-based" from the Cocoa environment. When you start 
 
 In a document-based application each document can be though of as a mini-application within a larger application. The controller of the whole application orchestrates creation and destruction of documents, as well as other non-document-related actions, but all actions performed on a document is handled by the document controller.
 
-When explaning the benefits of MVC one feature often mentioned is that it's easy to have several different views showing the same data, a bunch of numbers can be shown as a graph or as atable, say. A document-based application could be seen as the reverse of that: several identical views showing different data.
+When explaning the benefits of MVC one feature often mentioned is that it's easy to have several different views showing the same data, a bunch of numbers can be shown as a graph or as a table, say. A document-based application could be seen as the reverse of that: several identical views showing different data.
 
 == So, what's the problem? ==
 
