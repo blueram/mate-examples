@@ -10,21 +10,25 @@ The code for this application is available at [http://mate-examples.googlecode.c
 
 The main class, defined in Main.mxml is extremely simple. It declares two things: an event map (!ApplicationEventMap) and a view (!MainView), that is all.
 
-I try to do as little as possible in the main class, just the bare necessities and the things that may change if I would decide to target AIR instead of the browser, say. It should be easy to have multiple main classes targeting different platforms, but keep code duplication to a minimum and reusability to a maximum.
+I try to do as little as possible in the main class, just the bare necessities and the things that may change if I would decide to target AIR instead of the browser, say. It should be easy to have multiple main classes targeting different platforms, but at the sama time keep code duplication to a minimum and reusability to a maximum.
 
 Let's leave !MainView to the side for the time being and focus on the !ApplicationEventMap. This is the controller for the application, it wires everything together and orchestrates everything that happens. Without the application controller the code is just a bundle of unrelated classes with nothing in common.
 
 That last sentence may sound like it was something bad. It's not, it's actually exactly what you want. The parts of your application should have as little to do with each other as possible. They should be unaware of there even being other parts. That way you can reuse them easily (in other applications, but more commonly within the application), and you can test them in isolation. The code is also easier to maintain since each part can be studied separately. The downside is that it can be harder to follow the flow within the application since communication between the parts is less direct. This is rarely a problem, but it should be said.
 
-The !ApplicationEventMap doesn't do very much by itself, but still it is the one thing that keeps the application together -- this is one of the beauties of Mate. It creates some managers, it listens for events, translates these events into actions that the managers should take, and it sets up bindings between the managers and views.
+The !ApplicationEventMap doesn't do very much by itself, but still it is the one thing that keeps the application together -- this is one of the beauties of Mate. It creates some managers, it listens for events, translates these events into actions that the managers should take, and it sets up bindings between the managers and views. It is the central hub of the application and the only thing that knows about any other parts.
 
-In a larger application the event map would also call services and pass the results these calls to the relevant managers.
+By writing reusable parts that have no knowledge of the other parts of the application I can reassemble everything just by writing another event map. Instead of the monolithical style of application development promoted by, for example Cairngorm, Mate favours a style that is more akin to Lego. Just pick it apart and assemble it another way and your medieval caste is a spaceship. This is the power of loose coupling.
 
-These are the three responsibilities of an event map:
+As I've mentioned, this example application is missing a common feature: it doesn't communicate with any backend system. If it had,  the event map would also call services and pass the results these calls to the relevant managers.
+
+To sum up, these are the three responsibilities of an event map:
 
   * create managers
   * translate events into method calls on the managers, or call services and pass the results to managers
   * set up bindings between managers and views
+
+The event map is the application controller, it is the only thing that makes the application what it is. Another application could be built by writing another event map that used the same or a subset of the parts in a different way.
 
 == !MainView & !MainModel ==
 
@@ -34,17 +38,19 @@ If you look through the code for !MainView you will see that it refers to a vari
 
 I would like to be able to say that "look how simple the view code is, that's because I use the PresentationModel pattern to keep state logic outside of the view code", but !MainView isn't simple, it has a lot of code. I will get to say that a bit later when I show the !DocumentView, but not right now.
 
-The reason why !MainView isn't simple is that there is some complex logic that deals with the documents that are displayed in the !TabNavigator. The view has to keep track of which documents belong to which view and which of these that should be open, as well as creating new views when new documents are created. This code isn't the kind of code that you push down into the presentation model, since it's definitely UI-related.
+The reason why !MainView isn't simple is that there is some complex logic that deals with the documents that are displayed in the !TabNavigator. The view has to keep track of which documents belong to which view and which of these that should be open, as well as creating new views when new documents are created. This code isn't the kind of code that you push down into the presentation model, since it's definitely UI-related (although this could definitely be debated, I have chosen to place it in the view, but placing it in the presentation model or another helper wouldn't have been wrong in any way).
 
 One other thing of note in !MainView is how it creates new views for documents. !MainView has no knowledge of which kind of view to create, instead it uses a factory object for this. It gives the factory the document instance and gets a view back, to the !MainView it's just a Container. This means that !MainView is more or less completely decoupled from the document views, and that makes it easier to implement a feature that is not yet there, but something I would like to do: different kinds of documents.
 
 If you have looked through the code already you may have noticed that there are two kinds of documents, plain documents and rich (text) documents. Currently these are the same, and actually only plain documents are created. The goal is to support both kinds, and this can be done without !MainView having to know about it. In the future the application may support three kinds, or five, it shouldn't matter (with the exception that there must be a button or some other way for the user to say which kind he or she wants).
 
+The toolbar in !Main view has gained complexity since I first started the application, and I will probably extract it sooner rather than later. As with any type of class I prefer to keep my views as cohesive as possible. If I can't describe what they do in a simple sentence, it's time to refactor.
+
 == !DocumentView, !DocumentModel & !DocumentEventMap ==
 
-This is where things start to get interesting (and this is also where I get to say that look how simple the view code is). !DocumentView looks just like any other view, but with one difference: it declares a !LocalEventMap.
+This is where things start to get interesting (and this is also where I get to say "look how simple the view code is"). !DocumentView looks just like any other view, but with one difference: it declares a !LocalEventMap.
 
-!LocalEventMaps are like regular !EventMaps, with two differences: they only hear events from the part of the application where they are defined (i.e. the view that declared it and all its child views) and all objects they create are available only in that event map. Regular event maps hear all events in the application (all that bubble, that is), and objects they create are available to all (non-local) event maps. These things can be partly overridden, but it's true in the default case.
+!LocalEventMaps are like regular !EventMaps, with two differences: they only hear events from the part of the application where they are defined (i.e. the view that declared it and all its child views) and all objects they create are available only in that event map. Regular event maps hear all events in the application (all that reach the top level, for example by bubbling up), and objects they create are available to all (non-local) event maps. These things can be partly overridden, but it's true in the default case.
 
 The reason why I have a local event map in !DocumentView is that I want to handle all things having to do with a document separately from the handling of all other documents. If the user edits a document I want to keep a undo history for that document only, for example. It would require a lot of unnecessary code to make this possible using only a global application controller (i.e. event map). I would need to make an undo system that handled multiple undo histories, and all code that worked with documents would need to be aware of the possibility of there being other documents.
 
@@ -52,39 +58,51 @@ By doing things locally I can design a simpler undo system, because I get multip
 
 I have written quite extensive documentation in !DocumentModel to explain how I implement the specifics of my presentation models, especially how I use bindings to achieve low coupling between the part of the code that interacts with the application (for example the setters where things are injected) and the parts that are used by the view.
 
+When teachers of programming introduce the Model-View-Controller idea one of the main features they point to is that you can have many views showing the same data but in different ways. Usually this is illustrated by a chart and a table of numbers, both with arrows to a blob called "model". Creating a document-based application is about solving the reverse problem. You want many identical views each showing different data.
+
 == The managers & the model == 
 
 Managers are the model of the application. They keep track of model objects and provide a transactional interface for modifying them. By "transactional" I mean that they make sure that model objects are modified in a correct way, and perform any extra work necessary, like set a flag if an object has unsaved changes, or notifying the undo system of a new undoable action.
 
 You may notice that my managers don't have many properties with both a getter and setter, usually only a getter. If the thing you get with the getter is settable at all, it usually has a method that can be used to update the property, but that method is more general (there is, for example a getter for open documents on !ApplicationManager, but no setter, instead there is a method called `openDocument` that adds documents to the list of open documents, and so modifies the property indirectly).
 
-There are a number of reasons for this: one is that I don't like to have public properties at all. Public properties are usually a violation of the information hiding principle (google [http://www.google.com/search?q=information+hiding "information hiding"] or [http://www.google.com/search?q=encapsulation "encapsulation"] if you're not familiar with these concepts), and as such they should be avoided.
+There are a number of reasons for this: one is that I don't like to have public properties at all. Public properties are usually a violation of encapsulation and the information hiding principle (google [http://www.google.com/search?q=information+hiding "information hiding"] or [http://www.google.com/search?q=encapsulation "encapsulation"] if you're not familiar with these concepts), and as such they should be avoided.
 
 Another reason is that it's an adaption to the way Mate works. It's easier to call methods when you want to send something to a manager, and it's necessary to have a property if you want bindings to work. Modifying your application code to suit the application framework you happen to use shouldn't be needed, but in this case I think it only enforces good behaviour. Since it doesn't make the managers dependent on Mate it's just a matter of style, and what works best.
 
+=== Mutable collections are evil ===
+One thing I haven't solved very well is the fact that the ApplicationManager returns mutable collections. The `documents` getter, for example, returns a `ICollectionView` object. Even if there's no setter for this property you can modify the collection object without going through the manager. This is a serious problem that there's no good solution for in the Flex API:s. There is simply no standard collection type that is not mutable, so any time you return collections you're opening up the inner workings of an object to the caller. In other projects I try to wrap any collections I return in wrappers that throw exceptions when any destructive or modifying method is called.
+
+You may think that that it's overkill, after all I have control over all the code and if I'm so picky about information hiding I won't abuse the fact that collections are mutable in my own code. The sad fact is that it doesn't matter if I'm careful, because some of the Flex controls modify collections you pass them, moving items, apply sorting, etc. You simply can't trust the framework with your data, so you either have to copy it before passing it on, or wrap it in an immutable wrapper.
+
+=== About commands ===
 You may have learnt to encapsulate all model-modifications in commands. I think this is overdoing it. I reserve the use of commands for when I really need to encapsulate an action, for example to make it undoable, or if it is going to be executed later by some other object that doesn't need to know about the specifics of the action.
 
 Apart from those cases I think that a simple method in a manager is good enough. The methods of the !ApplicationManager class is a good example, none of them are undoable, and all are simple and direct. There is no need to stick them in commands, that would only complicate things unnecessarily.
 
-!DocumentManager, by contrast uses commands, because some of its actions are undoable (ok, only one actually).
+!DocumentManager, by contrast uses commands, because some of its actions are undoable (ok, so far only one actually).
 
-It may look like there's quite a few model objects, but in reality there's only one that is important at this point: Document. There is !PlainDocument and !RichDocument too, but they don't do anything right now (they are part of a future expansion where the application will support multiple document types). There is also !DocumentType, which just contains constants; !DocumentFactory, which is the only thing that should know about how to create Document instances; !DocumentData which is a transfer object double for Document; and finally Snapshot, which is an interface that represents a snapshot of a model object and can be safely ignored for now, it too is part of an idea that is not yet implemented.
+=== Model objects ===
+It may look like there's quite a few model objects, but in reality there's only one that is important at this point: Document. There is !PlainDocument and !RichDocument too, but they don't do anything right now (they are part of a future expansion where the application will support multiple document types). There is also !DocumentType, which just contains constants; !DocumentFactory, which is the only thing that should know about how to create Document instances; !DocumentData which is a value object double for Document; and finally Snapshot, which is an interface that represents a snapshot of a model object and can be safely ignored for now, it too is part of an idea that is not yet fully implemented.
 
-Besides the classes and interfaces there is also a namespace called app_internal. This namespace is part of a pattern that I haven't come up with a good name for yet. The idea is to let the model objects present both a mutable and an immutable interface, one for the views/presentation models and one for the model/managers. Only managers are allowed to make changes to model objects (otherwise things like undo gets very hard to do), the view tier is only allowed to query model objects for their state.
+=== Partially immutable interfaces ===
+Besides the classes and interfaces there is also a namespace called app_internal. This namespace is part of a pattern that I haven't come up with a good name for yet (perhaps "partially immutable interface"?). The idea is to let the model objects present both a mutable and an immutable interface, one for the view tier of the application and one for the model tier. 
 
-By putting all methods that modify model objects in a namespace and only use that namespace in the managers I can be fairly sure that I don't accidentally modify them anywhere else. By using the namespace a class gets access to the mutable interface, without it the objects are immutable.
+Only managers are allowed to make changes to model objects (otherwise things like undo gets very hard to do), the view tier is only allowed to query model objects for their state. By putting all methods that modify model objects in a namespace and only use that namespace in the managers I can be fairly sure that I don't accidentally modify them anywhere else. By using the namespace a class gets access to the mutable interface, without it the objects are immutable.
 
+=== Value Objects are evil ===
 You may ask yourself what the point of !DocumentData is. It's a Value Object (VO) double for Document, but why have both?
 
-To start with I'd like to say that I find the tendency of Flex developers to use VO-style objects for their model worrying. VO's are violations of encapsulation waiting to happen. The only valid use of VO's is to transfer data either from or to the backend server, or as [http://www.refactoring.com/catalog/introduceParameterObject.html Parameter Objects] within the application. The important thing is that VO's should only be used as temporary throw-away objects, they should not be used to represent state within the model. Real objects are encapsulated.
+To start with I'd like to say that I find the tendency of Flex developers to use VO-style objects for their model worrying. VO's are violations of encapsulation waiting to happen. The only valid use of VO's is to transfer data either from or to the backend server, or as [http://www.refactoring.com/catalog/introduceParameterObject.html Parameter Objects] within the application. The important thing is that VO's should only be used as temporary throw-away objects, they should not be used to represent state within the model. Real objects encapsulate data, structs are what you write in C.
 
 !DocumentData is used in the application in three places: as a parameter object in the `createDocument` method of !DocumentFactory, as a kind of parameter object for passing document data in !DocumentEvent and for the snapshots created by the `createSnapshot` method of Document. It could be argued that the !DocumentData objects created in the last example aren't temporary, since they are stored in the undo history, but at least they are treated as throw-away objects -- and besides, they are hidden behind the Snapshot interface, nothing besides Document knows that the snapshot it creates uses !DocumentData.
 
-== Where are my global variables? ==
+== Some other things of note ==
 
-If you're used to the almost procedural style of programming touted by frameworks like Cairngorm or PureMVC you may be wondering where the getInstance methods are. Since this is object oriented programming there aren't any. Programming with Mate works on the Hollywood Principle: "don't call us, we'll call you". Instead of objects retrieving what they need by themselves (by calling `MyFacade.getInstance()` for example) the application injects dependencies into them. This has all sorts of benefits like isolating objects from the concrete implementations of the objects they depend on. Just google for [http://www.google.com/search?q=dependency+injection "dependency injection"] and I'm sure you will find half a million pages that will explain the benefits in great detail, or read [http://misko.hevery.com/2008/07/30/top-10-things-which-make-your-code-hard-to-test/ Miško Heverys article about how to write testable code] -- because testable code is also high quality, reusable and maintainable code.
+=== Where are my global variables? ===
+If you're used to the procedural style of programming touted by frameworks like Cairngorm or PureMVC you may be wondering where the getInstance methods are. Since this is object oriented programming there aren't any. Programming with Mate works on the Hollywood Principle: "don't call us, we'll call you". Instead of objects retrieving what they need by themselves (by calling `MyFacade.getInstance()` for example) the application injects dependencies into them. This has all sorts of benefits like isolating objects from the concrete implementations of the objects they depend on. Just google for [http://www.google.com/search?q=dependency+injection "dependency injection"] and I'm sure you will find half a million pages that will explain the benefits in great detail, or read [http://misko.hevery.com/2008/07/30/top-10-things-which-make-your-code-hard-to-test/ Miško Heverys article about how to write testable code] -- because testable code is also high quality, reusable and maintainable code.
 
-== Undo ==
+=== Undo ===
 
 I've touched briefly on the subject on undo when discussing the !UndoManager, but perhaps a more thorough explanation would be in order.
 
