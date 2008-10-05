@@ -103,7 +103,6 @@ To start with I'd like to say that I find the tendency of Flex developers to use
 If you're used to the procedural style of programming touted by frameworks like Cairngorm or PureMVC you may be wondering where the getInstance methods are. Since this is object oriented programming there aren't any. Programming with Mate works on the Hollywood Principle: "don't call us, we'll call you". Instead of objects retrieving what they need by themselves (by calling `MyFacade.getInstance()` for example) the application injects dependencies into them. This has all sorts of benefits like isolating objects from the concrete implementations of the objects they depend on. Just google for [http://www.google.com/search?q=dependency+injection "dependency injection"] and I'm sure you will find half a million pages that will explain the benefits in great detail, or read [http://misko.hevery.com/2008/07/30/top-10-things-which-make-your-code-hard-to-test/ Miško Heverys article about how to write testable code] -- because testable code is also high quality, reusable and maintainable code.
 
 === Undo ===
-
 I've touched briefly on the subject on undo when discussing the !UndoManager, but perhaps a more thorough explanation would be in order.
 
 To support undo you need to be able to encapsulate each undoable action and how to reverse it in an object and save this object in an undo history. When the user want to undo you take the most recent object in the undo history and have it reverse its action. You also have to save the object in a redo history if you want to let the user redo undone actions (and you really want to do that, undo without redo makes no sense).
@@ -122,9 +121,9 @@ Now, that doesn't mean that it's easy, or that it is completely without drawback
 
 When creating the snapshot you need to make sure that you create a true copy, otherwise future actions will modify your snapshot and it becomes useless. You need to make sure that the copy is a _deep copy_, that every object it references is also a copy, or a reference to an immutable object.
 
-In this application I copy instances of the Document class by creating an instance of DocumentSnapshot, which is a private inner class of Document. It has properties for title, text and type. The first two are strings, and since strings are immutable I don't have to copy them, and the same goes for the third, which is a DocumentType object. If I had had an array or any other mutable object I would have needed to copy it and all objects that it referenced.
+In this application I copy instances of the Document class by creating an instance of !DocumentSnapshot, which is a private inner class of Document. It has properties for title, text and type. The first two are strings, and since strings are immutable I don't have to copy them, and the same goes for the third, which is a DocumentType object. If I had had an array or any other mutable object I would have needed to copy it and all objects that it referenced.
 
-If you look at the DocumentSnapshot class and the Snapshot interface, don't be confused by the `xml` and `bytes` getters, they don't serve any function yet. I have an idea of extending the application so that it can save documents, and these will come into play then. For now just ignore them.
+If you look at the !DocumentSnapshot class and the Snapshot interface, don't be confused by the `xml` and `bytes` getters, they don't serve any function yet. I have an idea of extending the application so that it can save documents, and these will come into play then. For now just ignore them.
 
 == Testing ==
 
