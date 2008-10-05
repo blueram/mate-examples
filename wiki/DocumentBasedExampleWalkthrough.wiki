@@ -121,7 +121,7 @@ Now, that doesn't mean that it's easy, or that it is completely without drawback
 
 When creating the snapshot you need to make sure that you create a true copy, otherwise future actions will modify your snapshot and it becomes useless. You need to make sure that the copy is a _deep copy_, that every object it references is also a copy, or a reference to an immutable object.
 
-In this application I copy instances of the Document class by creating an instance of !DocumentSnapshot, which is a private inner class of Document. It has properties for title, text and type. The first two are strings, and since strings are immutable I don't have to copy them, and the same goes for the third, which is a DocumentType object. If I had had an array or any other mutable object I would have needed to copy it and all objects that it referenced.
+In this application I copy instances of the Document class by creating an instance of !DocumentSnapshot, which is a private inner class of Document. It has properties for title, text and type. The first two are strings, and since strings are immutable I don't have to copy them, and the same goes for the third, which is a !DocumentType object. If I had had an array or any other mutable object I would have needed to copy it and all objects that it referenced.
 
 If you look at the !DocumentSnapshot class and the Snapshot interface, don't be confused by the `xml` and `bytes` getters, they don't serve any function yet. I have an idea of extending the application so that it can save documents, and these will come into play then. For now just ignore them.
 
