@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* 
+* Mate extensions called "SQLService" and "SQLServiceInvoker" for using AIR and SQLite
+* 
+* @author	Jens Krause [ www.websector.de/blog ]
+* 
+-->
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"
+	>
+	<mx:Script>
+		<![CDATA[
+			import example.models.presentation.MainViewModel;
+			import example.models.vo.UserVO;
+			
+			// presentation model
+			[Bindable] public var pModel: MainViewModel;
+			
+			private function clearTxtInputs():void
+			{
+				inp_firstName.text
+				= inp_lastName.text
+				= '';
+			}
+		]]>
+	</mx:Script>
+
+
+	 <mx:Label
+		text="UserDataBase - Mate meets SQLite" 
+		fontSize="20"
+		/>
+	 	
+	
+	<mx:Form
+		width="100%"
+		label="add user"
+		paddingLeft="0"
+		>
+		
+		<mx:FormItem
+			label="FIRST NAME"
+			textAlign="left"
+			>
+			<mx:TextInput id="inp_firstName"
+				width="220"
+				text="{ pModel.selectedUser.firstName }"
+				 />
+
+		</mx:FormItem>
+		<mx:FormItem
+			label="LAST NAME"
+			textAlign="left"
+			>
+			<mx:TextInput id="inp_lastName"
+				width="220"
+				text="{ pModel.selectedUser.lastName }"
+				/>
+		</mx:FormItem>
+		<mx:FormItem
+			direction="horizontal"
+			>
+			<mx:Button 
+				label="ADD"
+				click="pModel.addUser( inp_firstName.text, inp_lastName.text ); clearTxtInputs()" 
+				/>
+			<mx:Button 
+				label="UPDATE"
+				enabled="{ dgUsers.selectedItem != null}"
+				click="pModel.updateUser( inp_firstName.text, inp_lastName.text ); clearTxtInputs()" />
+			<mx:Button 
+				label="DELETE"
+				enabled="{ dgUsers.selectedItem != null }"
+				click="pModel.deleteUser(); clearTxtInputs()" />
+
+		</mx:FormItem>
+	</mx:Form>
+	
+	<mx:DataGrid id="dgUsers"
+		width="100%" height="100%"
+		dataProvider="{ pModel.userData }"
+		change="{ pModel.selectedUser = dgUsers.selectedItem as UserVO }" 
+		>
+		<mx:columns>
+			<mx:DataGridColumn 
+				width="50"
+				headerText="ID"
+				dataField="userId" 
+				/>
+			<mx:DataGridColumn
+				headerText="FIRST NAME"
+				dataField="firstName" 
+				/>
+			<mx:DataGridColumn
+				headerText="LAST NAME"
+				dataField="lastName"
+				/>
+		</mx:columns>
+	</mx:DataGrid>
+	
+</mx:VBox>

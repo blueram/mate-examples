@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* 
+* Mate extensions called "SQLService" and "SQLServiceInvoker" for using AIR and SQLite
+* 
+* @author	Jens Krause [ www.websector.de/blog ]
+* 
+-->
+<EventMap 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="http://mate.asfusion.com/" 
+	xmlns:air="http://mate.asfusion.com/extensions"
+	xmlns:manager="example.models.manager.*"
+	xmlns:data="flash.data.*">
+	<mx:Script>
+		<![CDATA[
+			import example.models.presentation.MainViewModel;
+			import example.views.MainView;
+			import example.models.domain.MainModel;
+			import example.views.GenericFaultHandler;
+			import example.events.UserEvent;
+			import example.models.vo.UserVO;
+			import com.asfusion.mate.events.UnhandledFaultEvent;
+			import mx.events.FlexEvent;
+
+
+			
+		]]>
+	</mx:Script>
+
+	<Debugger 
+		level="{ Debugger.ALL }" 
+		/>
+
+	<air:SQLService id="sqlService"
+	 	databasePath="{ SQLManager.DB_PATH }"
+		/>
+		
+	<manager:SQLManager id="sqlManager" />	
+
+	<!--
+		Flex Events
+	-->
+	
+
+	<EventHandlers type="{FlexEvent.PREINITIALIZE}">
+		<ObjectBuilder generator="{ MainModel }" />		
+	</EventHandlers>
+
+
+	
+	<!--
+		Create a table using SQLServiceInvokers attribute called sql to set a SQL text 
+	-->
+	<EventHandlers type="{FlexEvent.APPLICATION_COMPLETE}">
+			<air:SQLServiceInvoker
+				instance="{ sqlService }"
+				sql="CREATE TABLE IF NOT EXISTS users (userId INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT)"
+				 >
+				 <air:resultHandlers>
+				 	<EventAnnouncer 
+						generator="{ UserEvent}" 
+						type="{ UserEvent.GET_ALL }" 
+						/>
+				 </air:resultHandlers>
+			</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!--
+		Get all stored user from database using a prepared SQLStatement, which is created by SQLManager.
+	-->
+	<EventHandlers type="{ UserEvent.GET_ALL }">
+			<air:SQLServiceInvoker
+				instance="{ sqlService }"
+				statement="{ sqlManager.getAllUsers }"
+				 >
+				<air:resultHandlers>
+					<MethodInvoker 
+						generator="{ MainModel }"
+						method="setUserData" 
+						arguments="{ resultObject }" 
+						/>	
+	        	</air:resultHandlers>        			
+			</air:SQLServiceInvoker>
+	</EventHandlers>
+
+	<!--
+		Delete selected user from database using a prepared SQLStatement, which is created by SQLManager.
+	-->
+	<EventHandlers type="{ UserEvent.DELETE }">
+			<air:SQLServiceInvoker
+				instance="{ sqlService }"
+				statement="{ sqlManager.deleteUser }"
+				parameters="{[ event.userId ]}"
+				 >
+				<air:resultHandlers>
+					<EventAnnouncer 
+						generator="{ UserEvent}" 
+						type="{ UserEvent.GET_ALL}" 
+						/>
+	        	</air:resultHandlers>      			
+			</air:SQLServiceInvoker>
+	</EventHandlers>
+
+	<!--
+		Add new user to database using a prepared SQLStatement, which is created by SQLManager.
+	-->
+	<EventHandlers type="{ UserEvent.ADD }">
+			<air:SQLServiceInvoker
+				instance="{ sqlService }"
+				statement="{ sqlManager.addUser }"
+				parameters="{[ event.userVO.firstName, event.userVO.lastName ]}"
+				 >
+				<air:resultHandlers>
+					<EventAnnouncer 
+						generator="{ UserEvent}" 
+						type="{ UserEvent.GET_ALL }" 
+						/>
+	        	</air:resultHandlers>      			
+			</air:SQLServiceInvoker>
+	</EventHandlers>
+
+	<!--
+		Update selected user from database using a prepared SQLStatement, which is created by SQLManager.
+	-->
+	<EventHandlers type="{ UserEvent.UPDATE }">
+			<air:SQLServiceInvoker
+				instance="{ sqlService }"
+				statement="{ sqlManager.updateUser }"
+				parameters="{[ event.userVO.firstName, event.userVO.lastName, event.userVO.userId ]}"
+				 >
+				<air:resultHandlers>
+					<EventAnnouncer 
+						generator="{ UserEvent}" 
+						type="{ UserEvent.GET_ALL }" 
+						/>
+	        	</air:resultHandlers>      			
+			</air:SQLServiceInvoker>
+	</EventHandlers>
+		
+	
+	<!--
+		Handling for fault event may dispatched by SQLServiceInvoker or other services
+	-->
+	<EventHandlers type="{ UnhandledFaultEvent.FAULT }">
+		<MethodInvoker generator="{ GenericFaultHandler }" 
+			method="handleFault" 
+			arguments="{event.fault}" />
+	</EventHandlers>			
+
+
+
+</EventMap>
