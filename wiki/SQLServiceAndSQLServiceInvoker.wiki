@@ -1,0 +1,24 @@
+*SQLService and SQLServiceInvoker are extensions for using Mate with AIR and SQLite.*
+
+= Source =
+
+Grab the SWC ( SQLiteExtension_(version-no).swc ) available at [http://code.google.com/p/mate-examples/downloads/list 'Downloads'] or check out the latest source from the [http://code.google.com/p/mate-examples/source/checkout repository] (folder 'extensions/airsqlite')
+
+= Usage =
+
+Detailed instructions are coming soon...
+
+Meanwhile check out the source of the example called [http://code.google.com/p/mate-examples/source/browse/trunk/#trunk/examples/airsqlite 'airsqlite'] or check out the post on [http://www.websector.de/blog/ WS-Blog]: [http://www.websector.de/blog/2008/10/04/new-mate-extensions-for-using-air-and-sqlite-sqlservice-sqlserviceinvoker/ New Mate extensions for using AIR and SQLite: “SQLService + SQLServiceInvoker”]
+
+
+= Example =
+
+You will find the following example within the repository as mentioned above.
+
+==Screen shot== 
+
+[http://www.websector.de/blog/2008/10/04/new-mate-extensions-for-using-air-and-sqlite-sqlservice-sqlserviceinvoker/ http://mate-examples.googlecode.com/svn/trunk/wiki/images/mateAIRSQLiteExample.png]
+
+= Author =
+
+Jens Krause: [http://www.websector.de/blog www.websector.de/blog]
