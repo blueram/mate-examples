@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* 
+* Mate extensions called "SQLService" and "SQLServiceInvoker" for using AIR and SQLite
+* 
+* @author	Jens Krause [ www.websector.de/blog ]
+* 
+-->
+<EventMap 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="http://mate.asfusion.com/" 
+	>
+	<mx:Script>
+		<![CDATA[
+			import example.models.domain.MainModel;
+			import example.models.presentation.MainViewModel;
+			import example.views.MainView;
+
+
+
+			
+		]]>
+	</mx:Script>
+
+	<!--
+		Main model is the domain model of this app
+	-->
+	<Injectors 
+		target="{MainViewModel}"
+		>		
+		<PropertyInjector 
+			targetKey="userData" 
+			source="{ MainModel}" 
+			sourceKey="userData" />
+	</Injectors>	
+	
+	
+	<!--
+		The main view uses its own presentation model, which is injected.
+	-->
+	<Injectors 
+		target="{MainView}">
+		<ObjectBuilder 
+			generator="{ MainViewModel }" 
+			registerTarget="true" 
+			>
+			<Properties 
+				dispatcher="{ scope.dispatcher}"
+				/>
+		</ObjectBuilder>
+		<PropertyInjector 
+			targetKey="pModel" 
+			source="{lastReturn}" 
+			/>
+	</Injectors>	
+
+
+	
+			
+
+</EventMap>
