@@ -1,4 +1,4 @@
-#SQLService and SQLServiceInvoker are extensions for using Mate with AIR and SQLite.
+#summary SQLService and SQLServiceInvoker are extensions for using Mate with AIR and SQLite.
 
 = Source =
 
