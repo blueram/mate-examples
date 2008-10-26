@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	
+	
+	Compiling a swc-component using compc on OS X 
+	@author:	Jens Krause [www.websector.de]
+	@date: 		10/14/07
+	
+	
+	- First of all: The compc compiler has to be in your system path. If not, add it to the PATH environment variable. For more information about PATH environment variables on OS X check: http://www.tech-recipes.com/rx/2621/os_x_change_path_environment_variable
+	
+	- Create a new folder anywhere on your machine
+	- Copy the all needed classes located in {svnFolder}/trunk/extensions/airsqlite/src/ to the new folder
+	- Open Terminal and go to the new folder typing cd /your/folder 
+	- Compile the SWCs using compc adding the following parameters
+
+	compc -source-path+=. 
+	-output SQLiteExtension_v01.swc 
+	-namespace http://mate.asfusion.com/extensions manifest.xml 
+	-include-namespaces http://mate.asfusion.com/extensions	
+	
+	P.S. For more information about creating swc components check "Flex Quick Starts: Building custom components":
+	http://www.adobe.com/devnet/flex/quickstart/deploying_components/
+	
+	Have fun!
+
+ -->
+
+<componentPackage>
+    <component 
+    	id="SQLService" 
+    	class="de.websector.mate.extensions.air.SQLService"
+    />
+    <component 
+    	id="SQLServiceInvoker" 
+    	class="de.websector.mate.extensions.air.SQLServiceInvoker"
+    />
+</componentPackage>
