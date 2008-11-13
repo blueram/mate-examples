@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" 
+		xmlns:mate="http://mate.asfusion.com/"
+		title="Message directly from event response" 
+		resizeEffect="Resize"  
+		horizontalScrollPolicy="off" 
+		verticalScrollPolicy="off">
+
+	<mx:Script>
+		<![CDATA[
+			import helloworld.events.*;
+			
+			//...........................................handleResult........................................
+			
+			// This method is called by the EventMap in response 
+			// to the event that this view dispatches
+			
+			public function handleResult(text:String):void
+			{
+				currentState='response'; 
+				display.text = text;
+			}
+			
+			//...........................................handleFault........................................
+			
+			// This method is called by the EventMap in response 
+			// to the event that this view dispatches
+			// If a fault is coming from the server, this method will execute
+			
+			public function handleFault(text:String):void
+			{
+				currentState='response'; 
+				display.text = text; 
+				display.styleName='error'
+			}
+			
+			//...........................................submitForm........................................
+			
+			// Dispatching an event that bubbles up to reach the EventMap
+			// After that, we will wait for a callBack from the EventMap with 
+			// the data coming from the server
+			
+			private function submitForm():void 
+			{
+				var event:MessageEvent = new MessageEvent(MessageEvent.GET, true);
+				event.name = inputName.text;
+				dispatchEvent(event);
+			}
+		]]>
+	</mx:Script>
+	
+	
+	<!-- Views _______________________________________________________ -->
+	
+	<mx:HBox>
+		<mx:Label text="Write your name:"/>
+				
+		<!-- Text input to enter name -->
+		<mx:TextInput id="inputName" enter="submitForm()"/>
+						
+		<!-- button that sends the request -->
+		<mx:Button label="GO" click="submitForm()"/>
+	</mx:HBox>
+
+	
+	<!-- States _______________________________________________________ -->
+	<!-- State to show the response text -->
+		<mx:states>
+			<mx:State name="response">
+				<mx:AddChild position="lastChild">
+					<!-- We get the message text directly from the server response by 
+					using the response attribute in the Dispatcher's ResponseListener -->			
+					<mx:Text id="display" styleName="message" />
+				</mx:AddChild>
+			</mx:State>
+		</mx:states>
+</mx:Panel>
