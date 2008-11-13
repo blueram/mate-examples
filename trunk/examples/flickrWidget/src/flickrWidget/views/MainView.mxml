@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:views="flickrWidget.views.*"
+	rollOver="link.visible=true">
+	
+	<!-- GUI ____________________________________________________________________________ -->
+	
+	<views:PictureHolder /><!-- the photo -->
+	
+	<!-- a link to download this widget -->
+	<mx:LinkButton id="link" label="Powered by Mate" visible="false" showEffect="Fade" filters="{[glow]}" 
+		click="navigateToURL(new URLRequest('http://mate.asfusion.com'))" />
+	
+
+
+	<!-- Effects and filters ________________________________________________________________ -->
+	
+	<mx:GlowFilter id="glow" color="#FFFFFF" quality="10" />
+	
+</mx:VBox>
