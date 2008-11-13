@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:maps="flickrWidget.maps.*" 
+	xmlns:views="flickrWidget.views.*" 
+	width="200" height="210"
+	layout="absolute"
+ 	viewSourceURL="srcview/index.html">	
+	
+	<!-- Styles______________________________________________________ -->
+	
+	<mx:Style source="/assets/styles/main.css" />
+	
+	
+	<!-- Event Maps __________________________________________________ -->
+	
+	<maps:MainEventMap />
+	
+	
+	<!-- Views _______________________________________________________ -->
+	
+	<views:MainView />
+	
+</mx:Application>

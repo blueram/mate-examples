@@ -1,0 +1,32 @@
+/* CSS file */
+
+Application{
+	/* backgroundGradientColors:#161616, #161616;
+	color:#dedede; */	
+	backgroundGradientColors:#FFFFFF, #FFFFFF;
+	color: #000000;
+	backgroundAlpha: 0;
+}
+
+MainView {
+	horizontalAlign: center;
+	verticalGap: 0;
+	paddingTop: 5;	
+}
+
+
+LinkButton {
+	rollOverColor: #cccccc;
+   selectionColor: #999999;
+   cornerRadius: 9;
+}
+
+.picture {
+	verticalCenter: 0;
+	horizontalCenter: 0;
+}
+
+.caption {
+	textAlign: center;
+	horizontalCenter: 0; 	
+}

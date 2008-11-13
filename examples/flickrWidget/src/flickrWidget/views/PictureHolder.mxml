@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:views="flickrWidget.views.*" 
+	xmlns:mate="http://mate.asfusion.com/" 
+	width="180" height="180" 
+	click="goToPhoto()">
+
+	<mx:Script>
+		<![CDATA[
+			import flickrWidget.vos.Photo;
+			import flickrWidget.events.*;
+			
+			private var currentPhoto:Photo;
+			
+			
+			//...........................................photoSelectHandler............................................
+			
+			// This function is an event handler that listens for events dispatched in the EventMap. 
+			// Inside the injectors in the EventMap, we define what function we want to
+ 			// call when the event triggers.
+			
+			public function photoSelectHandler(event:PhotoEvent):void
+			{
+				currentPhoto = event.photo; 
+				transitionMediator.switchImage(currentPhoto.urlSmall);
+			}
+			
+			//...........................................turnSmoothingOn............................................
+			
+			// in order for the picture resize to look smooth, we 
+			// need to turn smoothing on
+			private function turnSmoothingOn(event:Event):void 
+			{
+				var bitmap:Bitmap = ((event.target as Image).content as Bitmap);
+	            if (bitmap != null) 
+	            {
+	                bitmap.smoothing = true;
+	        	}
+			}
+			
+			//...........................................goToPhoto................................................
+			
+			// goes to flickr to see photo
+			private function goToPhoto():void 
+			{
+				if (currentPhoto)
+					navigateToURL(new URLRequest(currentPhoto.url));
+			}
+			
+			//...........................................dispatchSelectApplied........................................
+			
+			// Dispatching an event that bubbles up to reach the EventMap
+			
+			private function dispatchSelectApplied():void
+			{
+				var event:PhotoEvent = new PhotoEvent(PhotoEvent.SELECT_APPLIED, true);
+				event.photo = currentPhoto;
+				dispatchEvent(event);
+			}
+		]]>
+	</mx:Script>
+	
+	
+	<!-- Mediators ____________________________________________________________________________ -->
+	
+    <views:ImageSwitchMediator  id="transitionMediator"  image1="{topImage}" 
+    							image2="{bottomImage}" switchComplete="dispatchSelectApplied()" />
+	
+    
+    <!-- GUI ____________________________________________________________________________ -->
+    
+    <!-- we have two images so that we can make the switch smoothly -->
+    <mx:Image id="topImage" showEffect="{fadeIn}" hideEffect="{fadeOut}" styleName="picture" filters="{[shadow]}" 
+    		  width="150" height="150" trustContent="true" complete="turnSmoothingOn(event)" />
+    		  
+    <mx:Image id="bottomImage" showEffect="{fadeIn}" hideEffect="{fadeOut}" styleName="picture" filters="{[shadow]}" 
+    		  width="150" height="150" trustContent="true" complete="turnSmoothingOn(event)" />
+    
+   
+	
+	<!-- Effects and filters ____________________________________________________________________________ -->
+	
+	<mx:Fade id="fadeOut" duration="1000" alphaFrom="1.0" alphaTo="0.0" effectEnd="transitionMediator.removeFinished()" />
+    <mx:Fade id="fadeIn" duration="1000" alphaFrom="0.0" alphaTo="1.0"/>
+    
+	<!-- ideally, this should be done in a style sheet -->
+    <mx:DropShadowFilter id="shadow" quality="10" />
+    
+</mx:Canvas>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EventMap 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="http://mate.asfusion.com/">
+	
+	<mx:Script>
+		<![CDATA[
+			import flickrWidget.views.PictureHolder;
+			import mx.events.FlexEvent;
+			import flickrWidget.business.*;
+			import flickrWidget.events.*;
+		]]>
+	</mx:Script>
+	
+	<!-- FlexEvent.PREINITIALIZE ______________________________________________________________ -->
+	
+	<EventHandlers type="{FlexEvent.PREINITIALIZE}">
+		<ObjectBuilder generator="{PhotoCoordinator}" constructorArguments="{scope.dispatcher}" />
+		<ObjectBuilder generator="{Initializer}" 	  constructorArguments="{scope.dispatcher}" />
+	</EventHandlers>
+	
+	<!-- Getting initial data -->
+	<!-- _______________________________________________________________________________________ -->
+	
+	<EventHandlers type="{FlexEvent.INITIALIZE}">
+		<!--This object will get cached and can be used later, already configured -->
+		<ObjectBuilder generator="{FlickrHelper}">
+			<Properties apiKey="{Config.API_KEY}" apiUrl="{Config.API_URL}"/>
+		</ObjectBuilder>
+		
+		<MethodInvoker generator="{Initializer}" method="initByFlashVars" />		
+	</EventHandlers>
+	
+	
+		
+	<!-- InitializeEvent.BY_TAGS __________________________________________________________________ -->
+	
+	<EventHandlers type="{InitializeEvent.BY_TAGS}">		
+		<EventAnnouncer generator="{PhotoCollectionEvent}" type="{PhotoCollectionEvent.SEARCH}">
+			<Properties tags="{event.tags}"/>
+		</EventAnnouncer>
+	</EventHandlers>
+	
+	
+	<!-- InitializeEvent.BY_TAGS __________________________________________________________________ -->
+	
+	<EventHandlers type="{InitializeEvent.BY_USERNAME}">
+		
+		<HTTPServiceInvoker  url="{Config.API_URL}" resultFormat="e4x">
+			<Request  method="flickr.people.findByUsername" api_key="{Config.API_KEY}" username="{event.username}" />
+			<resultHandlers>
+				<MethodInvoker generator="{FlickrHelper}" method="parseUser" arguments="{resultObject}" />
+
+				<EventAnnouncer generator="{PhotoCollectionEvent}" type="{PhotoCollectionEvent.SEARCH}">
+					<Properties userId="{lastReturn}" tags="{event.tags}"/>
+				</EventAnnouncer>
+				
+			</resultHandlers>
+		</HTTPServiceInvoker>
+	</EventHandlers>
+	
+	
+	<!-- PhotoCollectionEvent.SEARCH __________________________________________________________________ -->
+	
+	<EventHandlers type="{PhotoCollectionEvent.SEARCH}">
+	
+		<MethodInvoker generator="{FlickrHelper}" method="getSearchUrl" arguments="{[event.userId, event.tags, event.page]}" />
+		
+		<HTTPServiceInvoker url="{lastReturn}" method="GET" resultFormat="e4x">
+			
+			<resultHandlers>
+				<!-- parse results into an array collection the photo coordinator can use -->			
+				<MethodInvoker generator="{FlickrHelper}" method="parsePhotos" arguments="{resultObject}" />				
+				<!-- set the photos -->
+				<MethodInvoker generator="{PhotoCoordinator}" method="setUp" arguments="{lastReturn}" />	
+				<!-- start show -->
+				<MethodInvoker generator="{PhotoCoordinator}" method="start" />
+			</resultHandlers>
+			
+		</HTTPServiceInvoker>
+	</EventHandlers>
+
+	
+	<!-- PhotoEvent.SELECT_APPLIED __________________________________________________________________ -->
+	
+	<EventHandlers type="{PhotoEvent.SELECT_APPLIED}">
+		<MethodInvoker generator="{PhotoCoordinator}" method="navigateNext" /> 
+	</EventHandlers>
+	
+	
+	<!-- Injectors PictureHolder __________________________________________________________________ -->
+	
+	<Injectors target="{PictureHolder}">
+		<ListenerInjector eventType="{PhotoEvent.SELECT}" method="photoSelectHandler"/>
+	</Injectors>
+	
+</EventMap>
