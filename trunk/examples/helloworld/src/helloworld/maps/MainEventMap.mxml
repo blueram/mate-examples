@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EventMap 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="http://mate.asfusion.com/" 
+	xmlns:services="helloworld.services.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.asfusion.mate.core.*;
+			import helloworld.events.*;
+		]]>
+	</mx:Script>
+	
+	<!-- Fired when the user enters his/her name and sends them to the server -->
+	
+	<EventHandlers type="{MessageEvent.GET}">
+	
+		<!-- call the remoting service -->
+		<RemoteObjectInvoker instance="{services.helloService}" method="sayHello" arguments="{event.name}">
+			
+			<!-- result sequence gets executed when service returns with a result -->
+			<resultHandlers>
+				<CallBack method="handleResult" arguments="{resultObject.text}"/>
+			</resultHandlers>
+			
+			<!-- server fault -->
+			<faultHandlers>
+				<CallBack method="handleFault" arguments="{fault.faultDetail}"/>
+			</faultHandlers>
+			
+		</RemoteObjectInvoker>
+	</EventHandlers>
+	
+	
+	<!-- Services _______________________________________________________ -->
+	
+	<services:MockServices id="services"/>
+	
+	<!-- Uncomment this tag if you are using ColdFusion, and comment the MockServices tag
+	<services:Services id="services"/> -->
+	
+</EventMap>
