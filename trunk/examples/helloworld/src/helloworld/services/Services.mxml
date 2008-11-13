@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Object	xmlns:mx="http://www.adobe.com/2006/mxml">
-
+<mx:Object	xmlns="http://mate.asfusion.com/" xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<!--
+	 Uncomment this tag if you are using ColdFusion, and comment the MockRemoteObject tag 
+	 
 	<mx:RemoteObject id="helloService" showBusyCursor="true" destination="ColdFusion"
-					 source="assets.content.examples.helloworld.HelloWorldService"/>
+					 source="assets.content.examples.helloworld.HelloWorldService"/> -->
+	
+	<MockRemoteObject id="helloService" showBusyCursor="true" delay="1" mockGenerator="{MockHelloService}"/>
+	
 </mx:Object>
