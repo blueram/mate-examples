@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Base application for CacheCopier demo
+ 
+ @author Collin Peters, last modified by $Author$
+ @version $Rev$ 
+ @lastmodifieddate $Date$
+-->
+<mx:Application 
+	layout="absolute"
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:maps="demo.maps.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import demo.events.FruitEvent;
+			import demo.business.Orange;
+			import demo.business.Apple;
+			import mx.events.FlexEvent;
+			import mx.collections.ArrayCollection;
+			
+			//Reference these classes so that they get compiled into the swf
+			//Better way to do this is with compiler arguments
+			private var references:Array = [Apple, Orange];
+		
+		    //Define these here for the sake of the demo.  Normally they would be loaded elsewhere
+		    [Bindable]
+		    public var classes:ArrayCollection = new ArrayCollection( [ 
+		        {label:"Apple", clazz:"demo.business.Apple"},
+		        {label:"Orange", clazz:"demo.business.Orange"}
+		        ]);
+		        
+		]]>
+	</mx:Script>
+	
+	<!-- Mate event map -->
+	<maps:DemoEventMap />
+	
+    <mx:Panel id="panel" title="CacheCopier Example" 
+        height="75%" width="75%" 
+        paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
+
+    	<mx:HBox>
+    	    <mx:Label text="Class to instantiate" />
+    	    <mx:ComboBox id="fruit_cmb" dataProvider="{classes}" />
+    	    <mx:Button label="Instantiate with factory" click="dispatchEvent(new FruitEvent(FruitEvent.CREATE_FRUIT, fruit_cmb.selectedItem.clazz ))" />
+        	<mx:Button label="Get description from instance" click="dispatchEvent(new FlexEvent('GET_DESC', true ))" />
+    	</mx:HBox>
+    </mx:Panel>
+	
+</mx:Application>
