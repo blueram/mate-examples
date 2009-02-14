@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ EventMap for CacheCopier demo
+ 
+ @author Collin Peters, last modified by $Author$
+ @version $Rev$ 
+ @lastmodifieddate $Date$
+-->
+<EventMap
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns="http://mate.asfusion.com/" 
+    xmlns:extensions="mate.extensions.*">
+    
+    <mx:Script>
+    	<![CDATA[
+    		import mx.controls.Alert;
+    		import demo.business.AbstractFruit;
+    		import demo.business.FruitFactory;
+    		import demo.events.FruitEvent;
+    		
+            private function printDescription(desc:String):void
+            {
+            	Alert.show('The fruit says: ' + desc);
+            }    		
+    	]]>
+    </mx:Script>
+    
+    <mx:Boolean id="debug">true</mx:Boolean>
+    <Debugger level="{Debugger.ALL}" />
+    
+    <EventHandlers type="{FruitEvent.CREATE_FRUIT}" debug="{debug}">
+        <!-- Get the factory to create the fruit instance -->
+        <InlineInvoker method="FruitFactory.createFruit" arguments="{[event.fruitClass]}" />
+        	
+        <!-- Store the instance in the Mate cache -->
+        <extensions:CacheCopier cacheKey="{AbstractFruit}" instance="{lastReturn}" />
+        
+    </EventHandlers>
+    
+    <EventHandlers type="GET_DESC">
+        <!-- Call the getDescription on the fruit instance -->
+        <MethodInvoker generator="{AbstractFruit}" method="getDescription" />
+    	
+    	<!-- Print the description -->
+    	<InlineInvoker method="printDescription" arguments="{[lastReturn]}" />
+    </EventHandlers>
+    
+</EventMap>
