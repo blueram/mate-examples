@@ -7,7 +7,7 @@ Grab the SWC ( SQLiteExtension_(version-no).swc ) available at [http://code.goog
 
 = Usage =
 
-The instruction in the post on [http://www.websector.de/blog/ WS-Blog]: [http://www.websector.de/blog/2008/10/04/new-mate-extensions-for-using-air-and-sqlite-sqlservice-sqlserviceinvoker/ New Mate extensions for using AIR and SQLite: “SQLService + SQLServiceInvoker”] demonstrate the original implementation of the SQLite Extention for Mate, and not a lot has changed since. :)
+The instructions in the post on [http://www.websector.de/blog/ WS-Blog]: [http://www.websector.de/blog/2008/10/04/new-mate-extensions-for-using-air-and-sqlite-sqlservice-sqlserviceinvoker/ New Mate extensions for using AIR and SQLite: “SQLService + SQLServiceInvoker”] demonstrate the original implementation of the SQLite Extention for Mate, and not a lot has changed since. :)
 
 
 Check out the source of the example called [http://code.google.com/p/mate-examples/source/browse/trunk/#trunk/examples/airsqlite 'airsqlite']
