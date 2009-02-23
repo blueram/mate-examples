@@ -18,11 +18,15 @@ package example.events
 		public static const ADD: String = "addUser";
 		public static const DELETE: String = "deleteUser";
 		public static const UPDATE: String = "updateUser";
-		public static const GET_ALL: String = "getAllUser";
-
+		public static const GET_USERS: String = "getUsers";
+		public static const GET_NEXT: String = "getNextCount";
+		public static const INSERT_STRINGS:String = "insertStrings";
+		public static const INSERT_STATEMENTS:String = "insertStatements";
 
 		public var userId : int;
 		public var userVO : UserVO;
+		
+		public var number:Number;
 
 		public function UserEvent(type : String, bubbles: Boolean = false, cancelable: Boolean = false ) 
 		{

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 * 
-* Mate extensions called "SQLService" and "SQLServiceInvoker" for using AIR and SQLite
+* Mate extensions called "SQLService" and "SQLServiceInvokerfor" using AIR and SQLite
 * 
 * @author	Jens Krause [ www.websector.de/blog ]
+* @author	Ben Reynolds [ likethewolf.net ]
 * 
 -->
 <EventMap 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns="http://mate.asfusion.com/" 
-	xmlns:air="http://mate.asfusion.com/extensions"
+	xmlns:air="de.websector.mate.extensions.air.*"
 	xmlns:manager="example.models.manager.*"
 	xmlns:data="flash.data.*">
 	<mx:Script>
@@ -22,123 +23,161 @@
 			import example.models.vo.UserVO;
 			import com.asfusion.mate.events.UnhandledFaultEvent;
 			import mx.events.FlexEvent;
-
-
-			
 		]]>
 	</mx:Script>
 
-	<Debugger 
-		level="{ Debugger.ALL }" 
-		/>
-
-	<air:SQLService id="sqlService"
-	 	databasePath="{ SQLManager.DB_PATH }"
-		/>
-		
+	<Debugger level="{ Debugger.ALL }" />
+	<air:SQLService id="sqlService"	databasePath="{ SQLManager.DB_PATH }" />
 	<manager:SQLManager id="sqlManager" />	
-
 	<!--
 		Flex Events
 	-->
-	
 
 	<EventHandlers type="{FlexEvent.PREINITIALIZE}">
-		<ObjectBuilder generator="{ MainModel }" />		
+		<ObjectBuilder generator="{ MainModel }" />
 	</EventHandlers>
 
-
-	
 	<!--
-		Create a table using SQLServiceInvokers attribute called sql to set a SQL text 
+		Create a table (if needed) when the application is loaded 
 	-->
 	<EventHandlers type="{FlexEvent.APPLICATION_COMPLETE}">
 			<air:SQLServiceInvoker
 				instance="{ sqlService }"
-				sql="CREATE TABLE IF NOT EXISTS users (userId INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT)"
-				 >
+				sql="{ sqlManager.createUserTable }">
 				 <air:resultHandlers>
 				 	<EventAnnouncer 
-						generator="{ UserEvent}" 
-						type="{ UserEvent.GET_ALL }" 
+						generator="{ UserEvent }" 
+						type="{ UserEvent.GET_USERS }" 
 						/>
 				 </air:resultHandlers>
 			</air:SQLServiceInvoker>
 	</EventHandlers>
 	
 	<!--
-		Get all stored user from database using a prepared SQLStatement, which is created by SQLManager.
+		Get all stored users from database using the value in SQLManager.getAllUsers.
+		(statement created from sql will be retained in memory if there are more than #count# records)
 	-->
-	<EventHandlers type="{ UserEvent.GET_ALL }">
-			<air:SQLServiceInvoker
-				instance="{ sqlService }"
-				statement="{ sqlManager.getAllUsers }"
-				 >
-				<air:resultHandlers>
-					<MethodInvoker 
-						generator="{ MainModel }"
-						method="setUserData" 
-						arguments="{ resultObject }" 
-						/>	
-	        	</air:resultHandlers>        			
-			</air:SQLServiceInvoker>
+	<EventHandlers type="{ UserEvent.GET_USERS }">
+		<air:SQLServiceInvoker
+			instance="{ sqlService }"
+			itemClass="{ UserVO }"
+			sql="{ sqlManager.getAllUsers }"
+			prefetch="20">
+			<air:resultHandlers>
+				<MethodInvoker 
+					generator="{ MainModel }"
+					method="setUserData" 
+					arguments="{ resultObject.data }" 
+					/>	
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!--
+		If there are records remaining from the previous query on sqlService then get the next 20.
+		Here, it will always be the above query as that's called after every insert/update/delete.
+	-->
+	<EventHandlers type="{ UserEvent.GET_NEXT }">
+		<air:SQLServiceInvoker
+			instance="{ sqlService }"
+			prefetch="20">
+			<air:resultHandlers>
+				<MethodInvoker 
+					generator="{ MainModel }"
+					method="addToUserData" 
+					arguments="{ resultObject }" 
+					/>
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
 	</EventHandlers>
 
 	<!--
-		Delete selected user from database using a prepared SQLStatement, which is created by SQLManager.
+		Delete selected user from database using the value in SQLManager.deleteUser with applied parameters
 	-->
 	<EventHandlers type="{ UserEvent.DELETE }">
-			<air:SQLServiceInvoker
-				instance="{ sqlService }"
-				statement="{ sqlManager.deleteUser }"
-				parameters="{[ event.userId ]}"
-				 >
-				<air:resultHandlers>
-					<EventAnnouncer 
+		<air:SQLServiceInvoker
+			instance="{ sqlService }"
+			sql="{ sqlManager.deleteUser }"
+			parameters="{[ event.userId ]}">
+			<air:resultHandlers>
+				<EventAnnouncer 
 						generator="{ UserEvent}" 
-						type="{ UserEvent.GET_ALL}" 
-						/>
-	        	</air:resultHandlers>      			
-			</air:SQLServiceInvoker>
+				type="{ UserEvent.GET_USERS}" 
+					/>
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
 	</EventHandlers>
 
 	<!--
-		Add new user to database using a prepared SQLStatement, which is created by SQLManager.
+		Add new user using a prepared SQLStatement from SQLManager.addUser with applied parameters
 	-->
 	<EventHandlers type="{ UserEvent.ADD }">
-			<air:SQLServiceInvoker
-				instance="{ sqlService }"
-				statement="{ sqlManager.addUser }"
-				parameters="{[ event.userVO.firstName, event.userVO.lastName ]}"
-				 >
-				<air:resultHandlers>
-					<EventAnnouncer 
-						generator="{ UserEvent}" 
-						type="{ UserEvent.GET_ALL }" 
-						/>
-	        	</air:resultHandlers>      			
-			</air:SQLServiceInvoker>
+		<air:SQLServiceInvoker
+			instance="{ sqlService }"
+			statement="{ sqlManager.addUser }"
+			parameters="{[ event.userVO.firstName, event.userVO.lastName ]}">
+			<air:resultHandlers>
+				<!-- resultObject is an SQLResult. lastInsertRowID can be retrieved -->
+				<EventAnnouncer 
+					generator="{ UserEvent}" 
+					type="{ UserEvent.GET_USERS }" 
+					/>
+	        </air:resultHandlers>      			
+		</air:SQLServiceInvoker>
 	</EventHandlers>
 
 	<!--
-		Update selected user from database using a prepared SQLStatement, which is created by SQLManager.
+		Update selected user using the query in SQLManager.updateUser with applied parameters
 	-->
 	<EventHandlers type="{ UserEvent.UPDATE }">
-			<air:SQLServiceInvoker
-				instance="{ sqlService }"
-				statement="{ sqlManager.updateUser }"
-				parameters="{[ event.userVO.firstName, event.userVO.lastName, event.userVO.userId ]}"
-				 >
-				<air:resultHandlers>
-					<EventAnnouncer 
-						generator="{ UserEvent}" 
-						type="{ UserEvent.GET_ALL }" 
-						/>
-	        	</air:resultHandlers>      			
-			</air:SQLServiceInvoker>
+		<air:SQLServiceInvoker
+			instance="{ sqlService }"
+			sql="{ sqlManager.updateUser }"
+			parameters="{[ event.userVO.firstName, event.userVO.lastName, event.userVO.userId ]}">
+			<air:resultHandlers>
+				<EventAnnouncer 
+					generator="{ UserEvent}" 
+					type="{ UserEvent.GET_USERS }" 
+					/>
+	       	</air:resultHandlers>      			
+		</air:SQLServiceInvoker>
 	</EventHandlers>
-		
 	
+	
+	<!--
+		Insert records from strings generated by SQLManager.setInsertStrings
+	-->	
+	<EventHandlers type="{ UserEvent.INSERT_STRINGS }">
+		<MethodInvoker generator="{ SQLManager }" method="setInsertStrings" arguments="{event.number}" />
+		<DataCopier destination="{ sqlManager }" destinationKey="insertStrings" source="{lastReturn}" />
+		<air:SQLServiceInvoker
+			instance="{ sqlService }"
+			sqlArray="{ sqlManager.insertStrings }">
+			<air:resultHandlers>
+				<EventAnnouncer 
+					generator="{ UserEvent}" 
+					type="{ UserEvent.GET_USERS }" 
+					/>
+	        </air:resultHandlers>      			
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!--
+		Insert multiple user records from an array of SQLStatements.
+	-->
+	<EventHandlers type="{ UserEvent.INSERT_STATEMENTS }">
+		<air:SQLServiceInvoker
+			instance="{ sqlService }"
+			sqlArray="{ sqlManager.insertStatements }">
+			<air:resultHandlers>
+				<EventAnnouncer 
+					generator="{ UserEvent}" 
+					type="{ UserEvent.GET_USERS }" 
+					/>
+	        </air:resultHandlers>      			
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+
 	<!--
 		Handling for fault event may dispatched by SQLServiceInvoker or other services
 	-->

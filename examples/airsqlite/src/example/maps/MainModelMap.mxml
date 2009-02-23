@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 * 
-* Mate extensions called "SQLService" and "SQLServiceInvoker" for using AIR and SQLite
+* Mate extensions called "SQLService" and "SQLServiceInvokerfor" using AIR and SQLite
 * 
 * @author	Jens Krause [ www.websector.de/blog ]
 * 
@@ -30,7 +30,7 @@
 		>		
 		<PropertyInjector 
 			targetKey="userData" 
-			source="{ MainModel}" 
+			source="{ MainModel }" 
 			sourceKey="userData" />
 	</Injectors>	
 	
