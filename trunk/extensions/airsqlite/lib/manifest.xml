@@ -23,6 +23,21 @@
 	http://www.adobe.com/devnet/flex/quickstart/deploying_components/
 	
 	Have fun!
+    
+    @author:	Ben Reynolds [ likethewolf.net ]
+	@date: 		2008-02-23
+    
+    To get this file down to the 6kb size, I ran the following (on PC, but it should be generally the same for other platforms) from the root directory (the one with the readme.txt file)
+    
+    compc -source-path+=src 
+        -output SQLExtension_v02.swc
+        -namespace http://mate.asfusion.com/extensions lib/manifest.xml
+        -include-namespaces http://mate.asfusion.com/extensions
+        -external-library-path+=lib/;
+            "C:/Program Files/Adobe/Flex Builder 3/sdks/3.2.0/frameworks/libs/";
+            "C:/Program Files/Adobe/Flex Builder 3/sdks/3.2.0/frameworks/libs/air/"
+            
+    Obviously you should reconfigure this for your paths, or into an ANT build
 
  -->
 

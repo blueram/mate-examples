@@ -5,6 +5,7 @@ package de.websector.mate.extensions.air
 	import com.asfusion.mate.actions.AbstractServiceInvoker;
 	import com.asfusion.mate.actions.IAction;
 	import com.asfusion.mate.core.SmartArguments;
+	import com.asfusion.mate.core.SmartObject;
 	import com.asfusion.mate.events.UnhandledFaultEvent;
 	import com.asfusion.mate.utils.debug.LogInfo;
 	import com.asfusion.mate.utils.debug.LogTypes;
@@ -15,11 +16,14 @@ package de.websector.mate.extensions.air
 	import mx.rpc.events.ResultEvent;
 
 	/**
-	 * SQLServiceInvoker is an extention for using Mate (http://mate.asfusion.com/) with AIR and SQLite
+	 * SQLServiceInvoker is an exention for using Mate (http://mate.asfusion.com/) with AIR and SQLite
 	 * 
 	 * @author 		Jens Krause [www.websector.de]
 	 * @version      0.1
-	 * @date         10/26/08
+	 * @date         10/04/08
+	 * @author		Ben Reynolds [ likethewolf.net ]
+	 * @version		0.2
+	 * @date		2009-02-20
 	 * 
 	 */	
 	public class SQLServiceInvoker extends AbstractServiceInvoker implements IAction
@@ -34,9 +38,11 @@ package de.websector.mate.extensions.air
 		// instances
 		protected var _sqlService: SQLService;
 		protected var _statement: SQLStatement;
-		protected var _sql: String = '';
+		protected var _sql: String;
+		protected var _sqlArray: Array;
 		protected var _itemClass: Class;
 		protected var _parameters: Array;
+		protected var _prefetch: Number;
 		
 				
 			
@@ -49,11 +55,13 @@ package de.websector.mate.extensions.air
 		
 		override protected function prepare(scope:IScope):void
 		{
-			//
+
 			// lets use scope's dispatcher for dispatching events from sqlService
 			_sqlService.dispatcher 
 			= innerHandlersDispatcher
 			= scope.dispatcher;
+			
+			
 			
 			if(resultHandlers && resultHandlers.length > 0)
 			{
@@ -78,9 +86,17 @@ package de.websector.mate.extensions.air
 				scope.getLogger().error(LogTypes.INSTANCE_UNDEFINED, logInfo);
 				return;
 			}
+
+			_sqlService.prefetch = (!isNaN(prefetch))?prefetch:-1;
+			_itemClass = itemClass;
 			
-			if ( statement )
+			// new statement, don't maintain existing one for next()
+			// TODO: figger out use cases as there may be issues with this logic
+			if (isNaN(prefetch) || statement)	
 				_sqlService.statement = statement;
+			_sqlService.statementArray = sqlArray;
+			if (sqlArray)
+				_sqlService.statement = null;
 			
 		}
 				
@@ -93,8 +109,11 @@ package de.websector.mate.extensions.air
 				cleanedParameters = (new SmartArguments()).getRealArguments(scope, this.parameters);			
 			}
 			
-			_sqlService.execute( sql, itemClass, cleanedParameters);
-		}	
+			if (statement == null && sql == null && sqlArray == null && !isNaN(prefetch))
+				_sqlService.next();
+			else
+				_sqlService.execute(sql, itemClass, cleanedParameters);
+		}
 		
 					
 		//--------------------------------------------------------------------------
@@ -115,38 +134,56 @@ package de.websector.mate.extensions.air
 		public function get statement (): SQLStatement 
 		{
 			return _statement;
-		};		
+		}	
 		public function set statement (value: SQLStatement): void 
 		{
 			_statement = value;
-		};
+		}
 
 		public function get itemClass (): Class 
 		{
 			return _itemClass;
-		};		
+		}	
 		public function set itemClass (value: Class): void 
 		{
 			_itemClass = value;
-		};
+		}
 
 		public function get parameters (): Array 
 		{
 			return _parameters;
-		};		
+		}		
 		public function set parameters (value: Array): void 
 		{
 			_parameters = value;
-		};
+		}
 
 		public function get sql (): String 
 		{
 			return _sql;
-		};		
+		}		
 		public function set sql (value: String): void 
 		{
 			_sql = value;
-		};	
+		}
+		
+		public function get sqlArray (): Array 
+		{
+			return _sqlArray;
+		}	
+		public function set sqlArray (value: Array): void 
+		{
+			_sqlArray = value;
+		}
+		
+		public function get prefetch (): Number 
+		{
+			return _prefetch;
+		}	
+		public function set prefetch (value: Number): void 
+		{
+			_prefetch = value;
+		}
 		
 	}
 }
