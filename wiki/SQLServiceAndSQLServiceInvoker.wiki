@@ -13,10 +13,10 @@ The instruction in the post on [http://www.websector.de/blog/ WS-Blog]: [http://
 Check out the source of the example called [http://code.google.com/p/mate-examples/source/browse/trunk/#trunk/examples/airsqlite 'airsqlite']
 
 Key changes into version 0.2 allow for
-* Multiple SQLStatements/Strings to be executed in one transaction
-* Business logic within a manager
-* Prefetch
-* Return of SQLresult, rather than just the data array allowing for the retrieval of lastInsertRowID and wotnot
+ * Multiple SQLStatements/Strings to be executed in one transaction
+ * Business logic within a manager
+ * Prefetch
+ * Return of SQLresult, rather than just the data array allowing for the retrieval of lastInsertRowID and wotnot
 
 = Examples =
 
