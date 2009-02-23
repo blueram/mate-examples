@@ -147,6 +147,14 @@ The second event, with no sql or statements defined, takes the SQLStatement that
 
 [http://www.websector.de/blog/2008/10/04/new-mate-extensions-for-using-air-and-sqlite-sqlservice-sqlserviceinvoker/ http://mate-examples.googlecode.com/svn/trunk/wiki/images/mateAIRSQLiteExample.png]
 
+= To Do =
+
+Functionality enhancements might be...
+ * Asynchronous execution (for non-transactions. Transactions are always synchronous)
+ * Integration with an Active Record framework
+ * Formalised standard for use of Managers
+
+
 = Author =
 
 Jens Krause: [http://www.websector.de/blog www.websector.de/blog]
