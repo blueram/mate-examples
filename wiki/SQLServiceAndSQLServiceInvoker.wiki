@@ -65,12 +65,10 @@ Here the statement parameter is passed an SQLStatement. It is not strictly neces
 
 == Executing via Transaction ==
 {{{
-	<EventHandlers type="{ UserEvent.INSERT_STRINGS }">
-		<MethodInvoker generator="{ SQLManager }" method="setInsertStrings" arguments="{event.number}" />
-		<DataCopier destination="{ sqlManager }" destinationKey="insertStrings" source="{lastReturn}" />
+	<EventHandlers type="{ UserEvent.INSERT_STATEMENTS }">
 		<air:SQLServiceInvoker
 			instance="{ sqlService }"
-			sqlArray="{ sqlManager.insertStrings }">
+			sqlArray="{ sqlManager.insertStatements }">
 			<air:resultHandlers>
 				<EventAnnouncer 
 					generator="{ UserEvent}" 
