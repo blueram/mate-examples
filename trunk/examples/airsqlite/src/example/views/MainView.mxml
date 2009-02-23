@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 * 
-* Mate extensions called "SQLService" and "SQLServiceInvoker" for using AIR and SQLite
+* Mate extensions called "SQLService" and "SQLServiceInvokerfor" using AIR and SQLite
 * 
 * @author	Jens Krause [ www.websector.de/blog ]
+* @author	Ben Reynolds [ likethewolf.net ]
 * 
 -->
 <mx:VBox 
@@ -12,6 +13,8 @@
 	>
 	<mx:Script>
 		<![CDATA[
+			import example.models.manager.SQLManager;
+			import de.websector.mate.extensions.air.SQLService;
 			import example.models.presentation.MainViewModel;
 			import example.models.vo.UserVO;
 			
@@ -24,6 +27,11 @@
 				= inp_lastName.text
 				= '';
 			}
+			
+			private function addANumberOfUsers():void
+			{
+				pModel.insertStrings(NumberToAdd.selectedItem.value);
+			}
 		]]>
 	</mx:Script>
 
@@ -34,34 +42,20 @@
 		/>
 	 	
 	
-	<mx:Form
-		width="100%"
-		label="add user"
-		paddingLeft="0"
-		>
-		
-		<mx:FormItem
-			label="FIRST NAME"
-			textAlign="left"
-			>
+	<mx:Form width="100%" label="add user" paddingLeft="0">
+		<mx:FormItem label="FIRST NAME"	textAlign="left">
 			<mx:TextInput id="inp_firstName"
 				width="220"
 				text="{ pModel.selectedUser.firstName }"
-				 />
-
+			/>
 		</mx:FormItem>
-		<mx:FormItem
-			label="LAST NAME"
-			textAlign="left"
-			>
+		<mx:FormItem label="LAST NAME" textAlign="left">
 			<mx:TextInput id="inp_lastName"
 				width="220"
 				text="{ pModel.selectedUser.lastName }"
-				/>
+			/>
 		</mx:FormItem>
-		<mx:FormItem
-			direction="horizontal"
-			>
+		<mx:FormItem direction="horizontal">
 			<mx:Button 
 				label="ADD"
 				click="pModel.addUser( inp_firstName.text, inp_lastName.text ); clearTxtInputs()" 
@@ -74,7 +68,25 @@
 				label="DELETE"
 				enabled="{ dgUsers.selectedItem != null }"
 				click="pModel.deleteUser(); clearTxtInputs()" />
-
+		</mx:FormItem>
+		<mx:FormItem direction="horizontal">
+			<mx:HBox backgroundColor="#cccccc">
+				<mx:ComboBox id="NumberToAdd">
+				<mx:dataProvider>
+					<mx:Array>
+						<mx:Object value="1" label="One" />
+						<mx:Object value="2" label="Two" />
+						<mx:Object value="3" label="Three" />
+					</mx:Array>
+				</mx:dataProvider>
+			</mx:ComboBox>
+			<mx:Button click="addANumberOfUsers()" label="GENERATE {NumberToAdd.selectedItem.value}" />
+			</mx:HBox>
+			
+			<mx:Spacer width="20" />
+			<mx:Button 
+				label="INIT"
+				click="pModel.insertStatements()" />
 		</mx:FormItem>
 	</mx:Form>
 	
@@ -99,5 +111,8 @@
 				/>
 		</mx:columns>
 	</mx:DataGrid>
-	
+	<mx:HBox>
+		
+	</mx:HBox>
+	<mx:Button click="pModel.getNextUsers();" label="Get Next 20" />
 </mx:VBox>

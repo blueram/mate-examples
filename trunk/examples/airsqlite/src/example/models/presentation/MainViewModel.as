@@ -2,7 +2,7 @@
  * Mate extensions called "SQLService" and "SQLServiceInvokerfor" using AIR and SQLite
  * 
  * @author	Jens Krause [ www.websector.de/blog ]
- * 
+ * @author	Ben Reynolds [ likethewolf.net ]
  */
 package example.models.presentation
 {
@@ -19,6 +19,7 @@ package example.models.presentation
 		
 		[Bindable] public var selectedUser: UserVO;
 		[Bindable] public var userData: ArrayCollection;
+
 
 		// injected by MainModelMap
 		public var dispatcher : IEventDispatcher;
@@ -59,15 +60,33 @@ package example.models.presentation
 		{
 			var userEvent: UserEvent = new UserEvent( UserEvent.DELETE );
 			userEvent.userId = selectedUser.userId;
-			
 			dispatcher.dispatchEvent( userEvent );
 		}
 		
+		/**
+		 * @see prefetch parameter on the MainEventMap - limit records returned
+		 */
 		private function getAllUsers():void
 		{
-			dispatcher.dispatchEvent(new UserEvent(UserEvent.GET_ALL ) );
+			dispatcher.dispatchEvent( new UserEvent(UserEvent.GET_USERS ) );
 		}
 		
+		public function getNextUsers():void
+		{
+			// this is purely for demonstration purposes. It's actually really bad for the interface :)
+			dispatcher.dispatchEvent( new UserEvent(UserEvent.GET_NEXT ) );
+		}
 		
+		public function insertStrings(number:Number):void
+		{
+			var userEvent:UserEvent = new UserEvent(UserEvent.INSERT_STRINGS);
+			userEvent.number = number;
+			dispatcher.dispatchEvent( userEvent );
+		}
+		
+		public function insertStatements():void
+		{
+			dispatcher.dispatchEvent( new UserEvent(UserEvent.INSERT_STATEMENTS ) );
+		}
 	}
 }

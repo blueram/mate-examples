@@ -6,6 +6,7 @@
  */
 package example.models.domain
 {
+	import flash.data.SQLResult;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
@@ -27,6 +28,13 @@ package example.models.domain
 			
 			this.dispatchEvent( new Event('userDataChanged') );
 		}
+		public function addToUserData(data: SQLResult):void
+		{
+			if (data.data)
+				_userData.source = _userData.source.concat(data.data);			
+			this.dispatchEvent( new Event('userDataChanged') );
+		}
+		
 		
 		[Bindable (event='userDataChanged')]
 		public function get userData ():ArrayCollection
