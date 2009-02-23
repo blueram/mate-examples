@@ -17,3 +17,4 @@ History:
 
 10/26/08	- source moved to "mate-examples" on Google Code
 10/04/08	- v.0.1 published on WS-Blog (http://www.websector.de/blog)
+2008-02-23  - v.0.2 published
