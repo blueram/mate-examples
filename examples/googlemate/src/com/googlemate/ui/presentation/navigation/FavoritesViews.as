@@ -4,7 +4,6 @@ package com.googlemate.ui.presentation.navigation
 	import com.googlemate.model.vos.NavigationVO;
 	
 	import mx.collections.ArrayCollection;
-	import mx.resources.ResourceManager;
 	
 	/**
 	 * Favorites Navigation Views
