@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LocalEventMap xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="http://mate.asfusion.com/">
+
+	<mx:Script>
+		<![CDATA[
+			import com.googlemate.events.*;
+			import com.googlemate.ui.presentation.*;
+			import com.googlemate.ui.views.*;
+			import com.googlemate.ui.views.favorites.*;
+			
+			import mx.events.FlexEvent;
+		]]>
+	</mx:Script>
+
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- EventHandlers :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    
+    <!-- Initialize -->
+    <EventHandlers type="{ FlexEvent.PREINITIALIZE }">
+		<ObjectBuilder generator="{ FavoritesPresentationModel }" constructorArguments="{ scope.dispatcher }"/>
+	</EventHandlers>
+	
+	<!-- Navigation -->
+	<EventHandlers type="{ NavigationEvent.NAVIGATE_TO_VIEW }">
+		<MethodInvoker generator="{ FavoritesPresentationModel }" method="navigateToView" arguments="{ event }"/>
+	</EventHandlers>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Injectors :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	
+	<!-- Presentation Model / View -->
+	<Injectors targets="{ [ Favorites, FavoritesNavigation ] }">
+		<PropertyInjector targetKey="model" source="{ FavoritesPresentationModel }"/>
+	</Injectors>
+
+</LocalEventMap>

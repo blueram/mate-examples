@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <degrafa:Surface xmlns:mx="http://www.adobe.com/2006/mxml"
+                xmlns:degrafa="com.degrafa.*"
+                xmlns:paint="com.degrafa.paint.*"
+                xmlns:geometry="com.degrafa.geometry.*">
+    
+    <mx:Script>
+    	<![CDATA[
+	    	[Bindable] private var skinWidth:int;
+	    	[Bindable] private var skinHeight:int;
+	    	
+	    	override protected function measure():void
+	    	{
+	    		this.measuredMinWidth = 16;
+	    		this.measuredWidth = 16;
+	    		this.measuredMinHeight = 16;
+	    		this.measuredHeight = 16;
+	    	}
+	    	
+			/*-.........................................updateDisplayList..........................................*/
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+	
+				skinWidth = unscaledWidth;
+				skinHeight = unscaledHeight;
+			}
+    	]]>
+    </mx:Script>
+  
+    <!-- fills -->
+    <degrafa:fills>
+        <paint:SolidFill id="arrowFill" color="#818f9e"/>
+        <paint:SolidFill id="lightFill" color="#dceeff" alpha="0"/>
+        <paint:LinearGradientFill id="backgroundFill">
+          	<paint:GradientStop alpha="1" ratio="0" color="#dceeff"/>
+          	<paint:GradientStop alpha="1" ratio="0.9" color="#bdd8f3"/>
+        </paint:LinearGradientFill>
+    </degrafa:fills>
+    
+    <!-- strokes -->
+    <degrafa:strokes>
+        <paint:SolidStroke id="borderStroke" color="#b8cfe8" alpha="1" weight="1" pixelHinting="true"/>
+    </degrafa:strokes>
+    
+    <!-- shapes -->
+    <degrafa:graphicsData>
+    	<degrafa:GeometryGroup>
+    		<!-- background -->
+   			<geometry:RegularRectangle width="{skinWidth}" height="{skinHeight}" fill="{backgroundFill}"/>
+       		<!-- arrow -->
+       		<geometry:Polyline fill="{arrowFill}">
+            	<geometry:data>8,12 4,6 12,6 8,12</geometry:data>
+        	</geometry:Polyline>
+   			<!-- lines -->
+   			<geometry:VerticalLine y="-4" y1="16" stroke="{borderStroke}"/>
+   			<geometry:VerticalLine x="{skinWidth-1}" y="-4" y1="16" stroke="{borderStroke}"/>
+   			<geometry:HorizontalLine x="0" x1="{skinWidth}" y="{skinHeight-1}" stroke="{borderStroke}"/>
+   		</degrafa:GeometryGroup>
+    </degrafa:graphicsData>
+        
+	<!-- states -->
+    <degrafa:states>
+    	<mx:State name="up"/>
+        <mx:State name="down">
+        	<mx:SetProperty target="{arrowFill}" name="color" value="0x000000"/>
+        </mx:State>
+        <mx:State name="over">
+        	<mx:SetProperty target="{arrowFill}" name="color" value="0x555555"/>
+        </mx:State>
+        <mx:State name="disabled"/>
+    </degrafa:states>
+        
+</degrafa:Surface>  

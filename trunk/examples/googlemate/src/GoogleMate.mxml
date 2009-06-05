@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:mate="http://mate.asfusion.com/"
+	xmlns:maps="com.googlemate.maps.*"
+	xmlns:ui="com.googlemate.ui.*"
+	title="{ Constants.APPLICATION_TITLE }"
+	showFlexChrome="false"
+	layout="absolute"
+	autoExit="false">
+    
+    <mx:Script>
+        <![CDATA[
+            import com.googlemate.model.constants.Constants;
+        ]]>
+    </mx:Script>
+    
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Localization ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	
+	<mx:Metadata>
+		[ResourceBundle("GoogleMate")]
+	</mx:Metadata>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Styles ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	
+	<mx:Style source="/assets/styles/Styles.css"/>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Event Maps ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	
+	<!-- ApplicationPresentationModel in ApplicationMap closes the splash screen and opens the Main view -->
+	<maps:ApplicationMap/>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Views :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->		
+
+    <ui:Splash id="splashScreen" horizontalCenter="0" verticalCenter="0"/>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Debugger ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+	<!-- Remove for Release -->
+	<mate:Debugger level="{ Debugger.ALL }" />
+	
+</mx:WindowedApplication>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LocalEventMap xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="http://mate.asfusion.com/"
+	xmlns:air="de.websector.mate.extensions.air.*"
+	xmlns:google="com.googlemate.services.google.*">
+
+	<mx:Script>
+		<![CDATA[
+			import com.googlemate.events.*;
+			import com.googlemate.model.constants.*;
+			import com.googlemate.model.managers.*;
+			import com.googlemate.model.vos.*;
+			import com.googlemate.services.sqllite.*;
+			import com.googlemate.ui.presentation.*;
+			import com.googlemate.ui.views.*;
+			import com.googlemate.ui.views.common.components.*;
+			import com.googlemate.ui.views.favorites.*;
+			
+			import mx.events.FlexEvent;
+			
+			/**
+			 * sqlStatement
+			 */ 
+			[Bindable] private var sqlStatement:SQLStatement;
+
+			/**
+			 *  Set sqlStatement
+			 */
+			private function setSQLStatement( statement:SQLStatement ):void
+			{
+				sqlStatement = statement;
+			}
+		]]>
+	</mx:Script>
+
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- EventHandlers :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    
+    <!-- Initialize -->
+    <EventHandlers type="{ FlexEvent.PREINITIALIZE }">
+    	<ObjectBuilder generator="{ ImagesManager }"/>
+		<ObjectBuilder generator="{ ImagesPresentationModel }" constructorArguments="{ scope.dispatcher }"/>
+		<air:SQLServiceInvoker instance="{ sqlService }" sql="{ ImagesSQL.createImagesTable }">
+			 <air:resultHandlers>
+			 	<EventAnnouncer generator="{ FavoriteEvent }" type="{ FavoriteEvent.GET_IMAGES }"/>
+			 </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+
+	<!-- Search for Images -->
+	<EventHandlers type="{ SearchEvent.SEARCH_IMAGES }">
+		<MethodInvoker generator="{ ImagesManager }" method="initializeSearch" arguments="{ event }"/>
+		<google:ImageSearch> 
+			<Properties searchString="{ event.searchString }" startValue="{ event.searchStartIndex }" language="{ event.language }"/>
+			<google:resultHandlers>
+				<MethodInvoker generator="{ ImagesManager }" method="searchImagesResult" arguments="{ currentEvent.data }"/>
+				<MethodInvoker generator="{ ImagesPresentationModel }" method="showSearchResults"/>
+			</google:resultHandlers>
+		</google:ImageSearch>	
+	</EventHandlers>
+	
+	<!-- Get Images -->
+	<EventHandlers type="{ FavoriteEvent.GET_IMAGES }">
+		<air:SQLServiceInvoker instance="{ sqlService }" itemClass="{ ImageVO }" sql="{ ImagesSQL.getImages }">
+			<air:resultHandlers>
+				<MethodInvoker generator="{ ImagesManager }" method="getImagesResult" arguments="{ resultObject.data }"/>	
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!-- Add Image -->
+	<EventHandlers type="{ FavoriteEvent.ADD_IMAGE }">
+		<MethodInvoker generator="{ ImagesSQL }" method="addImage" arguments="{ event.imageVO }"/>
+		<InlineInvoker method="setSQLStatement" arguments="{ lastReturn }"/>
+		<air:SQLServiceInvoker instance="{ sqlService }" statement="{ sqlStatement }">
+			<air:resultHandlers>
+				<EventAnnouncer generator="{ FavoriteEvent }" type="{ FavoriteEvent.GET_IMAGES }"/>	
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!-- Delete Image -->
+	<EventHandlers type="{ FavoriteEvent.DELETE_IMAGE }">
+		<air:SQLServiceInvoker instance="{ sqlService }" statement="{ ImagesSQL.deleteImage }" parameters="{ [ event.id ] }">
+			<air:resultHandlers>
+				<EventAnnouncer generator="{ FavoriteEvent }" type="{ FavoriteEvent.GET_IMAGES }"/>	
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Injectors :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	
+	<!-- Manager / Presentation Model -->
+	<Injectors target="{ ImagesPresentationModel }">
+		<PropertyInjector targetKey="images" source="{ ImagesManager }" sourceKey="images"/>
+		<PropertyInjector targetKey="searchResults" source="{ ImagesManager }" sourceKey="searchResults"/>
+		<PropertyInjector targetKey="searchString" source="{ ImagesManager }" sourceKey="searchString"/>
+		<PropertyInjector targetKey="searchStartIndex" source="{ ImagesManager }" sourceKey="searchStartIndex"/>
+		<PropertyInjector targetKey="searchMaxItems" source="{ ImagesManager }" sourceKey="searchMaxItems"/>
+		<PropertyInjector targetKey="searchInProgress" source="{ ImagesManager }" sourceKey="searchInProgress"/>
+	</Injectors>
+	
+	<!-- Presentation Model / View -->
+	<Injectors targets="{ [ Images, ImagesTileList, ImageFavorites ] }">
+		<PropertyInjector targetKey="model" source="{ ImagesPresentationModel }"/>
+	</Injectors>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Services ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+	<air:SQLService id="sqlService"	databasePath="{ Constants.DB_PATH }" />
+	
+</LocalEventMap>

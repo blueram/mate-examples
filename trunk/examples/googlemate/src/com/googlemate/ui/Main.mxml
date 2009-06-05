@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:viewStackEffects="org.efflex.viewStackEffects.*"
+	xmlns:views="com.googlemate.ui.views.*"
+	xmlns:maps="com.googlemate.maps.*"
+	width="980" 
+	height="600"
+	visible="false"
+	layout="absolute" 
+	showStatusBar="false"
+	verticalScrollPolicy="off" 
+	horizontalScrollPolicy="off"
+	enabled="{ model.screenEnabled }" 
+	title="{ Constants.APPLICATION_TITLE }"
+	creationComplete="onCreationComplete()">
+	
+    <mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+            import com.googlemate.ui.presentation.MainPresentationModel;
+
+			import mx.effects.easing.*;
+			
+			/**
+			 * Main Presentation Model
+			 */
+			private var _model:MainPresentationModel;
+			
+			[Bindable(event="mainModelChange")]
+			public function get model():MainPresentationModel
+			{
+				return _model;
+			}
+		
+			public function set model( value:MainPresentationModel ):void
+			{
+				_model = value;
+				dispatchEvent( new Event("mainModelChange") );
+			}
+			
+			/**
+			 * On Creation Complete
+			 */
+            private function onCreationComplete():void
+            {
+            	var screenBounds:Rectangle = Screen.mainScreen.bounds;
+
+				// window position and state
+				nativeWindow.x = (screenBounds.width - nativeWindow.width) / 2;
+				nativeWindow.y = (screenBounds.height - nativeWindow.height) / 2;
+				nativeWindow.maximize();
+				
+				var icon:Loader = new Loader();
+            	var iconMenu:NativeMenu = new NativeMenu();
+            	
+            	var exitCommand:NativeMenuItem = iconMenu.addItem(new NativeMenuItem("Exit"));
+                exitCommand.addEventListener(Event.SELECT, function(event:Event):void {
+                    NativeApplication.nativeApplication.icon.bitmaps = [];
+                    NativeApplication.nativeApplication.exit();
+                });
+                
+				if (NativeApplication.supportsSystemTrayIcon) 
+				{
+                	icon.contentLoaderInfo.addEventListener(Event.COMPLETE, iconLoadComplete);
+                	icon.load(new URLRequest("assets/icons/icon_016.png"));
+                
+                	var systray:SystemTrayIcon = NativeApplication.nativeApplication.icon as SystemTrayIcon;
+                	systray.tooltip = Constants.APPLICATION_TITLE;
+                	systray.menu = iconMenu;
+            	}
+
+	            if (NativeApplication.supportsDockIcon)
+	            {
+	                icon.contentLoaderInfo.addEventListener(Event.COMPLETE,iconLoadComplete);
+	                icon.load(new URLRequest("assets/icons/icon_128.png"));
+	                var dock:DockIcon = NativeApplication.nativeApplication.icon as DockIcon; 
+	                dock.menu = iconMenu;
+	            }
+				
+				nativeWindow.visible = true;
+				
+				model.loadBlankContent();
+            }   
+
+			/**
+			 * Icon Load Complete
+			 */
+			private function iconLoadComplete(event:Event):void
+	        {
+	            NativeApplication.nativeApplication.icon.bitmaps = [event.target.content.bitmapData];
+	        }
+        
+            /**
+			 * Initialize Content
+			 */
+            private function initializeContent():void
+            {
+            	content.visible = false;
+            } 
+            
+            /**
+			 * Load Blank Content
+			 */
+            private function loadBlankContent():void
+            {
+            	if ( !content.visible && model )
+            	{
+            		model.loadBlankContent();
+            	} 
+            }    
+        ]]>
+    </mx:Script>
+    
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Event Maps ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	
+	<maps:MainMap dispatcher="{this}"/>
+	
+	<maps:LinksMap dispatcher="{this}"/>
+	<maps:ImagesMap dispatcher="{this}"/>
+	<maps:VideosMap dispatcher="{this}"/>
+	
+	<maps:FavoritesMap dispatcher="{this}"/>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Views :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->		
+    
+	<!-- Main Views -->
+    <mx:ViewStack
+    	top="{ Constants.HEADER_HEIGHT - 2 }"
+    	width="100%"
+    	height="100%"  
+    	creationPolicy="all"
+    	styleName="mainViewStack"
+    	selectedIndex="{ model.currentView }">
+    	
+    	<views:Credits hideEffect="viewStackHideEffect"/>
+    	<views:Links hideEffect="viewStackHideEffect" showEffect="viewStackShowEffect"/>
+    	<views:Images hideEffect="viewStackHideEffect" showEffect="viewStackShowEffect"/>
+    	<views:Videos hideEffect="viewStackHideEffect" showEffect="viewStackShowEffect"/>
+    	<views:Favorites hideEffect="viewStackHideEffect" showEffect="viewStackShowEffect"/>
+    	
+    </mx:ViewStack>
+    
+    <!-- Content -->
+    <views:Content id="content"
+    	top="{ Constants.HEADER_HEIGHT - 2 }"
+    	width="100%" 
+    	height="100%"
+    	showEffect="Fade"
+    	hideEffect="Fade" 
+    	visible="{ model.showContent }"
+    	effectEnd="loadBlankContent()"
+    	initialize="initializeContent()"
+    	creationComplete="loadBlankContent()"/>
+    
+    <!-- Header -->
+    <views:Header/>
+    
+    <!-- Effects -->
+    <viewStackEffects:List id="viewStackShowEffect" scaleDurationByChange="false" easingFunction="Exponential.easeOut"/>
+	<viewStackEffects:List id="viewStackHideEffect" scaleDurationByChange="false" easingFunction="Exponential.easeIn"/>
+	
+</mx:Window>

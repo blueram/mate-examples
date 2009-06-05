@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:controls="com.googlemate.ui.views.common.controls.*"
+	xmlns:components="com.googlemate.ui.views.common.components.*"
+	width="400" 
+	height="180">
+	
+	<mx:Metadata>
+		[Event(name="addFavorite",type="com.googlemate.events.FavoriteEvent")]
+		[Event(name="deleteFavorite",type="com.googlemate.events.FavoriteEvent")]
+	</mx:Metadata>
+	
+	<mx:Script>
+	<![CDATA[
+		import com.googlemate.events.FavoriteEvent;
+		import com.googlemate.model.constants.Constants;
+		import com.googlemate.model.vos.LinkVO;
+		import com.googlemate.ui.views.common.controls.GMTileList;
+
+		[Bindable] 
+		private var linkVO : LinkVO = new LinkVO();	
+		private var tileList : GMTileList;	
+
+		/**
+		 * override set data.
+		 */ 
+		override public function set data(value:Object):void 
+		{   
+			super.data = value;
+			
+ 			if ( value ) linkVO = value as LinkVO;	 
+ 			
+ 			tileList = owner as GMTileList;			
+    	}
+
+		/**
+		 * override updateDisplayList, position and size label and delete button.
+		 */ 
+		override protected function updateDisplayList( w:Number, h:Number ):void
+		{ 
+			super.updateDisplayList( w, h );
+			
+			var isHighlighted:Boolean = tileList.isItemHighlighted(data);
+			
+			// roll-over highlight
+			currentState = (isHighlighted ? "over" : "up");
+			
+			// add/delete buttons
+			buttons.addButtonEnabled = !linkVO.isFavorite;
+			buttons.showAddButton = (!isHighlighted && linkVO.isFavorite && !tileList.favorites)
+									|| (isHighlighted && !linkVO.isFavorite) ? true : false;	
+			buttons.showDeleteButton = (isHighlighted && linkVO.isFavorite) ? true : false;
+		}
+		
+		/**
+	     *  Add Favorite
+	     */
+	    private function addFavorite():void
+	    {
+	        var favoriteEvent:FavoriteEvent = new FavoriteEvent( FavoriteEvent.ADD_FAVORITE );
+	        favoriteEvent.linkVO = linkVO;
+	        dispatchEvent( favoriteEvent );
+	    }
+	    
+	    /**
+	     *  Delete Favorite
+	     */
+	    private function deleteFavorite():void
+	    {
+	        var favoriteEvent:FavoriteEvent = new FavoriteEvent( FavoriteEvent.DELETE_FAVORITE );
+	        favoriteEvent.linkVO = linkVO;
+	        dispatchEvent( favoriteEvent );
+	    }
+	]]>
+	</mx:Script>
+    
+    <!-- States -->
+	<mx:states>
+        <mx:State name="up">
+        	<mx:SetStyle target="{itemTile}" name="styleName" value="item"/>
+        </mx:State>
+        <mx:State name="over">
+        	<mx:SetStyle target="{itemTile}" name="styleName" value="itemHighlighted"/>
+        </mx:State>
+    </mx:states>
+	    
+	<!-- Tile -->
+	<mx:Canvas id="itemTile"
+		x="10"
+		y="10" 
+		width="377" 
+		height="160" 
+		styleName="item"
+		buttonMode="true" 
+		mouseChildren="false">
+	
+		<!-- Google Search Image -->
+		<mx:Image top="10" left="10" source="assets/images/google_tile.png"/>
+		
+		<!-- Title -->
+		<mx:Text 
+			top="10" 
+			left="158" 
+			width="200"
+			height="48" 
+			styleName="itemTitle" 
+			htmlText="{ linkVO.title }"/>
+		
+		<!-- Content -->	
+		<mx:Text
+			top="50" 
+			left="158" 
+			width="200" 
+			height="100"
+			styleName="itemContent"
+			htmlText="{ linkVO.content }"/>
+	
+		<!-- URL -->
+		<mx:Label
+			bottom="4"
+			left="20" 
+			styleName="itemURL"
+			truncateToFit="true"
+			text="{ linkVO.visibleUrl }"/>
+		
+	</mx:Canvas>
+	
+	<!-- Add/Delete Buttons -->
+	<components:AddDeleteButtons id="buttons" 
+		bottom="12" 
+		right="18"
+		addButtonStyleName="favoritesAddButton"
+		deleteButtonStyleName="favoritesDeleteButton"
+		addButtonToolTip="{ Constants.FAVORITES_ADD_LINK_TIP }"
+		deleteButtonToolTip="{ Constants.FAVORITES_DELETE_LINK_TIP }"
+		addItem="addFavorite()"
+		deleteItem="deleteFavorite()"/>
+
+</mx:Canvas>

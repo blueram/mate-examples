@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:controls="com.googlemate.ui.views.common.controls.*"
+	width="100%" 
+	height="{ Constants.HEADER_HEIGHT }"
+	styleName="mainHeader"
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off">
+	
+	<mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+            import com.googlemate.ui.presentation.MainPresentationModel;
+			
+			/**
+			 * Main Presentation Model
+			 */
+			private var _model:MainPresentationModel;
+			
+			[Bindable(event="mainModelChange")]
+			public function get model():MainPresentationModel
+			{
+				return _model;
+			}
+		
+			public function set model( value:MainPresentationModel ):void
+			{
+				_model = value;
+				dispatchEvent( new Event("mainModelChange") );
+			}   
+        ]]>
+    </mx:Script>
+	
+	<!-- Application Logo -->
+	<mx:Image source="{ Constants.APPLICATION_LOGO }"/>
+	
+	<mx:Spacer width="100%"/>
+	
+	<!-- Main Navigation Bar -->
+	<controls:GMToggleLinkBar
+		labelField="label"
+		tabChildren="false"
+		focusEnabled="false"
+		dataProvider="{ model.navigationItems }"
+		itemClick="model.navigateToItem( event )"/>
+	
+</mx:HBox>

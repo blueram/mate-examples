@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Surface xmlns:mx="http://www.adobe.com/2006/mxml"
+  	xmlns="http://www.degrafa.com/2007">
+    
+    <mx:Script>
+    	<![CDATA[
+    		[Bindable] private var skinWidth:int;
+	    	[Bindable] private var skinHeight:int;
+			
+			//.........................................updateDisplayList..........................................
+			/**
+			 * updateDisplayList
+			 */
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{			
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				if(unscaledWidth) skinWidth = unscaledWidth;
+				if(unscaledHeight) skinHeight = unscaledHeight;
+			}
+			
+			//.........................................measuredWidth..........................................
+			/**
+			 * measuredWidth
+			 */
+			override public function get measuredWidth():Number {
+				return skinWidth;
+			}
+			
+			//.........................................measuredHeight..........................................
+			/**
+			 * measuredHeight
+			 */
+			override public function get measuredHeight():Number {
+				return skinHeight;
+			}
+    	
+    	]]>
+    </mx:Script>
+   
+     <!-- states .............................................. -->
+     <states>
+     	<mx:State name="up">
+     		<mx:SetProperty target="{fill}" name="color" value="{getStyle('upBackgroundColor')}"/>
+        </mx:State>
+        <mx:State name="down">
+        	<mx:SetProperty target="{fill}" name="color" value="{getStyle('downBackgroundColor')}"/>
+        </mx:State>
+        <mx:State name="over">
+        	<mx:SetProperty target="{fill}" name="color" value="{getStyle('overBackgroundColor')}"/>
+        </mx:State>	
+        <mx:State name="disabled">
+        	<mx:SetProperty target="{fill}" name="color" value="{getStyle('disabledBackgroundColor')}"/>
+        	<mx:SetProperty target="{fill}" name="alpha" value="0.5"/>
+        </mx:State>
+     </states>
+     
+	<!-- fills .............................................. -->
+	<fills>
+	
+		<!-- background --> 	
+		<SolidFill id="fill" color="#64b8c2" />
+		
+    	<!-- highlight --> 
+    	<LinearGradientFill id="highlightGradient" angle="90">
+    		<GradientStop alpha="0.6" ratio="0" color="#ffffff"/>
+          	<GradientStop alpha="0.3" ratio="0.9" color="#ffffff"/>
+        </LinearGradientFill>
+         
+	</fills>
+    
+	<!-- shapes .............................................. -->
+    <graphicsData>
+        <GeometryGroup>
+        
+			<!-- background -->
+        	<RoundedRectangleComplex 
+        		x="0" y="-1"  
+           		width="{skinWidth}" 
+           		height="{skinHeight}"
+           		topLeftRadius="{getStyle('cornerRadius')}" 
+				topRightRadius="{getStyle('cornerRadius')}" 
+				bottomLeftRadius="{getStyle('cornerRadius')}" 
+				bottomRightRadius="{getStyle('cornerRadius')}" 
+           		fill="{fill}"/>
+           	
+			<!-- highlight -->					 
+        	<RoundedRectangleComplex 
+        		x="3" y="-1" 
+				width="{skinWidth-6}" 
+				height="{skinHeight/2}" 
+				topLeftRadius="{getStyle('cornerRadius')}" 
+				topRightRadius="{getStyle('cornerRadius')}" 
+				bottomLeftRadius="{getStyle('cornerRadius')}" 
+				bottomRightRadius="{getStyle('cornerRadius')}"
+           		fill="{highlightGradient}"/>
+        	
+        </GeometryGroup>
+	</graphicsData>
+
+    <!-- dropshadow .............................................. -->
+	<filters>
+		<mx:DropShadowFilter distance="1" alpha="1" angle="45" 
+			blurX="2" blurY="2" quality="3"/>
+	</filters>
+     
+</Surface>

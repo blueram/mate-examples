@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:controls="com.googlemate.ui.views.common.controls.*"
+	xmlns:components="com.googlemate.ui.views.common.components.*"
+	width="100%" 
+	height="100%">
+	
+	<mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+            import com.googlemate.ui.presentation.VideosPresentationModel;
+			
+			/**
+			 * Videos Presentation Model
+			 */
+			private var _model:VideosPresentationModel;
+			
+			[Bindable(event="videosModelChange")]
+			public function get model():VideosPresentationModel
+			{
+				return _model;
+			}
+		
+			public function set model( value:VideosPresentationModel ):void
+			{
+				_model = value;
+				dispatchEvent( new Event("videosModelChange") );
+			}   
+        ]]>
+    </mx:Script>
+
+	<!-- Videos -->
+	<controls:GMTileList
+		width="100%"
+		height="100%" 
+		favorites="true"
+		focusEnabled="false"
+		dataProvider="{ model.videos }"
+		itemClick="model.showVideo( event )"
+		deleteFavorite="model.deleteFavorite( event )"
+		itemRenderer="com.googlemate.ui.views.common.renderers.VideoItemRenderer"/>
+	
+	<!-- No Video Favorites -->
+	<components:NoResults
+		showEffect="Fade"
+		hideEffect="Fade"
+		visible="{ model.videos.length == 0 }"
+		includeInLayout="{ model.videos.length == 0 }"
+		message="{ Constants.NO_VIDEO_FAVORITES }"/>
+			
+</mx:Canvas>

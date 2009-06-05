@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LocalEventMap xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="http://mate.asfusion.com/"
+	xmlns:air="de.websector.mate.extensions.air.*"
+	xmlns:google="com.googlemate.services.google.*">
+
+	<mx:Script>
+		<![CDATA[
+			import com.googlemate.events.*;
+			import com.googlemate.model.constants.*;
+			import com.googlemate.model.managers.*;
+			import com.googlemate.model.vos.*;
+			import com.googlemate.services.sqllite.*;
+			import com.googlemate.ui.presentation.*;
+			import com.googlemate.ui.views.*;
+			import com.googlemate.ui.views.common.components.*;
+			import com.googlemate.ui.views.favorites.*;
+			
+			import mx.events.FlexEvent;
+			
+			/**
+			 * sqlStatement
+			 */ 
+			[Bindable] private var sqlStatement:SQLStatement;
+
+			/**
+			 *  Set sqlStatement
+			 */
+			private function setSQLStatement( statement:SQLStatement ):void
+			{
+				sqlStatement = statement;
+			}
+		]]>
+	</mx:Script>
+
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- EventHandlers :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    
+    <!-- Initialize -->
+    <EventHandlers type="{ FlexEvent.PREINITIALIZE }">
+    	<ObjectBuilder generator="{ VideosManager }"/>
+		<ObjectBuilder generator="{ VideosPresentationModel }" constructorArguments="{ scope.dispatcher }"/>
+		<air:SQLServiceInvoker instance="{ sqlService }" sql="{ VideosSQL.createVideosTable }">
+			 <air:resultHandlers>
+			 	<EventAnnouncer generator="{ FavoriteEvent }" type="{ FavoriteEvent.GET_VIDEOS }"/>
+			 </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+
+	<!-- Search for Videos -->
+	<EventHandlers type="{ SearchEvent.SEARCH_VIDEOS }">
+		<MethodInvoker generator="{ VideosManager }" method="initializeSearch" arguments="{ event }"/>
+		<google:VideoSearch> 
+			<Properties searchString="{ event.searchString }" startValue="{ event.searchStartIndex }" language="{ event.language }"/>
+			<google:resultHandlers>
+				<MethodInvoker generator="{ VideosManager }" method="searchVideosResult" arguments="{ currentEvent.data }"/>
+				<MethodInvoker generator="{ VideosPresentationModel }" method="showSearchResults"/>
+			</google:resultHandlers>
+		</google:VideoSearch>	
+	</EventHandlers>
+	
+	<!-- Get Videos -->
+	<EventHandlers type="{ FavoriteEvent.GET_VIDEOS }">
+		<air:SQLServiceInvoker instance="{ sqlService }" itemClass="{ VideoVO }" sql="{ VideosSQL.getVideos }">
+			<air:resultHandlers>
+				<MethodInvoker generator="{ VideosManager }" method="getVideosResult" arguments="{ resultObject.data }"/>	
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!-- Add Video -->
+	<EventHandlers type="{ FavoriteEvent.ADD_VIDEO }">
+		<MethodInvoker generator="{ VideosSQL }" method="addVideo" arguments="{ event.videoVO }"/>
+		<InlineInvoker method="setSQLStatement" arguments="{ lastReturn }"/>
+		<air:SQLServiceInvoker instance="{ sqlService }" statement="{ sqlStatement }">
+			<air:resultHandlers>
+				<EventAnnouncer generator="{ FavoriteEvent }" type="{ FavoriteEvent.GET_VIDEOS }"/>	
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!-- Delete Video -->
+	<EventHandlers type="{ FavoriteEvent.DELETE_VIDEO }">
+		<air:SQLServiceInvoker instance="{ sqlService }" statement="{ VideosSQL.deleteVideo }" parameters="{ [ event.id ] }">
+			<air:resultHandlers>
+				<EventAnnouncer generator="{ FavoriteEvent }" type="{ FavoriteEvent.GET_VIDEOS }"/>	
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Injectors :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	
+	<!-- Manager / Presentation Model -->
+	<Injectors target="{ VideosPresentationModel }">
+		<PropertyInjector targetKey="videos" source="{ VideosManager }" sourceKey="videos"/>
+		<PropertyInjector targetKey="searchResults" source="{ VideosManager }" sourceKey="searchResults"/>
+		<PropertyInjector targetKey="searchString" source="{ VideosManager }" sourceKey="searchString"/>
+		<PropertyInjector targetKey="searchStartIndex" source="{ VideosManager }" sourceKey="searchStartIndex"/>
+		<PropertyInjector targetKey="searchMaxItems" source="{ VideosManager }" sourceKey="searchMaxItems"/>
+		<PropertyInjector targetKey="searchInProgress" source="{ VideosManager }" sourceKey="searchInProgress"/>
+	</Injectors>
+	
+	<!-- Presentation Model / View -->
+	<Injectors targets="{ [ Videos, VideosTileList, VideoFavorites ] }">
+		<PropertyInjector targetKey="model" source="{ VideosPresentationModel }"/>
+	</Injectors>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Services ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+	<air:SQLService id="sqlService"	databasePath="{ Constants.DB_PATH }"/>
+	
+</LocalEventMap>

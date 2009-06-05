@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="{ Constants.SUB_HEADER_HEIGHT }"
+	styleName="search"
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off">
+	
+	<mx:Metadata>
+		[Event(name="search",type="flash.events.Event")]
+	</mx:Metadata>
+	
+	<mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+        	
+			import flash.events.Event;
+			
+			// ----------------------------------------------------------------------------
+			// Public Properties
+			// ----------------------------------------------------------------------------
+			
+			/**
+			 * Searching Message
+			 */
+			private var _searchingMessage:String = "";
+			
+			[Bindable(event="searchingMessageChange")]
+			public function get searchingMessage():String
+			{
+				return _searchingMessage;
+			}
+		
+			public function set searchingMessage( value:String ):void
+			{
+				_searchingMessage = value;
+				dispatchEvent( new Event("searchingMessageChange") );
+			}
+			
+			/**
+			 * Search Type
+			 */
+			private var _searchType:String;
+			
+			[Bindable(event="searchTypeChange")]
+			public function get searchType():String
+			{
+				return _searchType;
+			}
+		
+			public function set searchType( value:String ):void
+			{
+				_searchType = value;
+				dispatchEvent( new Event("searchTypeChange") );
+			}
+			
+			/**
+			 * Search String
+			 */
+			private var _searchString:String = "";
+			
+			[Bindable(event="searchStringChange")]
+			public function get searchString():String
+			{
+				return _searchString;
+			}
+		
+			public function set searchString( value:String ):void
+			{
+				_searchString = value;
+				dispatchEvent( new Event("searchStringChange") );
+			}
+			
+			/**
+			 * Search Max Items
+			 */
+			private var _searchMaxItems:int = Constants.MIN_SEARCH_ITEMS;
+			
+			[Bindable(event="searchMaxItemsChange")]
+			public function get searchMaxItems():int
+			{
+				return _searchMaxItems;
+			}
+		
+			public function set searchMaxItems( value:int ):void
+			{
+				_searchMaxItems = value;
+				dispatchEvent( new Event("searchMaxItemsChange") );
+			}
+			
+			/**
+			 * Search Start Index
+			 */
+			private var _searchStartIndex:int = 0;
+			
+			[Bindable(event="searchStartIndexChange")]
+			public function get searchStartIndex():int
+			{
+				return _searchStartIndex;
+			}
+		
+			public function set searchStartIndex( value:int ):void
+			{
+				_searchStartIndex = value;
+				dispatchEvent( new Event("searchStartIndexChange") );
+			}
+			
+			/**
+			 * Search in Progress
+			 */
+			private var _searchInProgress:Boolean = false;
+			
+			[Bindable(event="searchInProgressChange")]
+			public function get searchInProgress():Boolean
+			{
+				return _searchInProgress;
+			}
+		
+			public function set searchInProgress( value:Boolean ):void
+			{
+				_searchInProgress = value;
+				dispatchEvent( new Event("searchInProgressChange") );
+				
+				if ( !searchInProgress )
+				{
+					setInputFocus();
+				}
+			}
+		
+			// ----------------------------------------------------------------------------
+			// Public Methods
+			// ----------------------------------------------------------------------------
+			
+			/**
+			 * Search
+			 */
+			public function search():void
+			{
+				if ( !searchInProgress && searchString != "" )
+				{
+					// local only
+					searchInProgress = true;
+					
+					var event:Event = new Event( "search" );
+					dispatchEvent( event );
+				}
+			}
+
+			/**
+			 * Set Input Focus
+			 */
+			public function setInputFocus():void
+			{
+				searchStringInput.setFocus();
+				searchStringInput.selectionBeginIndex = searchStringInput.text.length + 1;
+				searchStringInput.selectionEndIndex = searchStringInput.text.length + 1;
+			}
+        ]]>
+    </mx:Script>
+    
+    <!-- Seach Parameters -->
+    <mx:HBox  
+		width="100%" 
+		height="36"
+		showEffect="Fade"
+		verticalAlign="middle"
+		verticalScrollPolicy="off"
+		horizontalScrollPolicy="off"
+		styleName="searchParameters"
+		visible="{ !searchInProgress }"
+		includeInLayout="{ !searchInProgress }">
+	
+		<mx:Spacer width="20%"/>
+		
+	    <!-- Seach Type -->
+	    <mx:Label 
+	    	text="{ searchType }: " 
+	    	styleName="searchType"/>
+	    
+	    <!-- Search String Input -->
+	    <mx:TextInput id="searchStringInput"
+			width="100%"
+	    	height="24"
+	    	focusAlpha="0"
+	    	text="{ searchString }"
+	    	styleName="searchInput"
+	    	filters="{ [innerDropShadow] }"
+	    	change="{ searchString = searchStringInput.text }"
+	    	enter="search()"/>
+				
+		<mx:Spacer width="4"/>
+		
+	    <!-- Search Button -->
+	    <mx:Button id="searchButton"
+			height="22" 
+			buttonMode="true"
+			focusEnabled="false"
+			styleName="searchButton"
+			label="{ Constants.SEARCH }"
+			click="search()"/>
+
+		<mx:Spacer width="20"/>
+		
+		<mx:Label 
+	    	text="{ Constants.ITEMS }: " 
+	    	styleName="searchType"/>
+	    	
+		<!-- Max Item to Return -->
+		<mx:NumericStepper id="searchMaxItemsInput"
+			height="23"
+			focusAlpha="0"
+			buttonMode="true"
+			value="{ searchMaxItems }"
+			filters="{ [innerDropShadow] }"
+			minimum="{ Constants.MIN_SEARCH_ITEMS }"
+			maximum="{ Constants.MAX_SEARCH_ITEMS }"
+			change="searchMaxItems = searchMaxItemsInput.value"
+			keyFocusChange="search()"/>
+
+		<mx:Spacer width="20%"/>
+		
+	</mx:HBox>
+			
+	<!-- Search Progress Bar -->
+	<mx:ProgressBar id="progressBar"
+		top="12"
+		width="400"
+		horizontalCenter="0"
+		indeterminate="true"
+		labelPlacement="left"
+		label="{ searchingMessage }"
+		visible="{ searchInProgress }"
+		includeInLayout="{ searchInProgress }"
+		filters="{ [innerDropShadow] }"
+		styleName="searchProgressBar"
+		showEffect="Fade"/>
+	
+	<!-- Inner Dropshadow -->
+	<mx:DropShadowFilter id="innerDropShadow" 
+		inner="true"
+		color="#1648AE"
+		distance="3"
+		alpha=".8"
+		angle="45" 
+		blurX="2" 
+		blurY="2"
+		quality="3"/>
+				
+</mx:Canvas>

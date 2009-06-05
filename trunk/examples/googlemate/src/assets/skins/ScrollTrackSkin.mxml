@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <degrafa:Surface xmlns:mx="http://www.adobe.com/2006/mxml"
+                xmlns:degrafa="com.degrafa.*"
+                xmlns:paint="com.degrafa.paint.*"
+                xmlns:geometry="com.degrafa.geometry.*">
+    
+    <mx:Script>
+    	<![CDATA[
+    	[Bindable] private var skinWidth:int;
+    	[Bindable] private var skinHeight:int;
+    	
+    	override protected function measure():void
+    	{
+    		this.measuredMinWidth = 16;
+    		this.measuredWidth = 16;
+    	}
+    	
+		/*-.........................................updateDisplayList..........................................*/
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+			skinWidth = unscaledWidth;
+			skinHeight = unscaledHeight;
+		}
+		
+    	]]>
+    </mx:Script>
+    
+    <degrafa:states>
+    	<mx:State name="up"/>
+        <mx:State name="down"/>
+        <mx:State name="over"/>
+        <mx:State name="disabled"/>
+    </degrafa:states>
+
+    
+        <!-- Creating fills. -->
+        <degrafa:fills>
+            <paint:SolidFill color="#e0edf9" id="solidFill" />
+            <paint:LinearGradientFill id="hightlightGradient">
+              	<paint:GradientStop alpha="1" ratio="0" color="#dceeff"/>
+              	<paint:GradientStop alpha="1" ratio="0.9" color="#bdd8f3"/>
+            </paint:LinearGradientFill>
+        </degrafa:fills>
+        
+        <!-- Creating Strokes. -->
+        <degrafa:strokes>
+            <paint:SolidStroke id="trackBorder" color="#b8cfe8"  alpha="1" weight="1"   pixelHinting="true"/>
+        </degrafa:strokes>
+        
+        <!-- Creating a Geometry Group. -->
+        <degrafa:graphicsData>
+        	<degrafa:GeometryGroup id="group">
+           		<geometry:RegularRectangle fill="{hightlightGradient}" width="{skinWidth}" height="{skinHeight}" />
+           		<geometry:RoundedRectangleComplex y="16"
+           					bottomLeftRadius="7"  bottomRightRadius="7" fill="{solidFill}" 
+           					topRightRadius="7" topLeftRadius="7" width="{skinWidth}" height="{skinHeight - 16*2}"/>
+           		
+           		<geometry:VerticalLine stroke="{trackBorder}" x="0" y="0" y1="{skinHeight}" />
+           		<geometry:VerticalLine stroke="{trackBorder}" x="{skinWidth-1}" y="0" y1="{skinHeight}" />
+       		</degrafa:GeometryGroup>
+
+        </degrafa:graphicsData>
+        
+        <degrafa:filters>
+        	<mx:DropShadowFilter alpha="0.1" distance="5" angle="45" blurX="5" blurY="5" quality="3" inner="true"  />
+        </degrafa:filters>
+        
+</degrafa:Surface>

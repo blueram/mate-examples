@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EventMap xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="http://mate.asfusion.com/">
+
+	<mx:Script>
+		<![CDATA[
+			import com.googlemate.ui.presentation.*;
+			
+			import mx.events.FlexEvent;
+		]]>
+	</mx:Script>
+
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- EventHandlers :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+	<!-- Initialize -->
+	<EventHandlers type="{ FlexEvent.PREINITIALIZE }">
+		<!-- ApplicationPresentationModel closes the Splash screen and opens the Main view -->
+		<ObjectBuilder generator="{ ApplicationPresentationModel }"/>
+	</EventHandlers>
+
+</EventMap>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:controls="com.googlemate.ui.views.common.controls.*"
+	width="100%"
+	height="100%">
+	
+	<mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+            import com.googlemate.ui.presentation.LinksPresentationModel;
+			
+			/**
+			 * Links Presentation Model
+			 */
+			private var _model:LinksPresentationModel;
+			
+			[Bindable(event="linksModelChange")]
+			public function get model():LinksPresentationModel
+			{
+				return _model;
+			}
+		
+			public function set model( value:LinksPresentationModel ):void
+			{
+				_model = value;
+				dispatchEvent( new Event("linksModelChange") );
+			}	    
+        ]]>
+    </mx:Script>
+    
+    <controls:GMTileList
+		width="100%"
+		height="100%"
+		focusEnabled="false"
+		dataProvider="{ model.searchResults }"
+		itemClick="model.showLink( event )"
+		addFavorite="model.addFavorite( event )"
+		deleteFavorite="model.deleteFavorite( event )"
+		itemRenderer="com.googlemate.ui.views.common.renderers.LinkItemRenderer"/>
+				
+</mx:Canvas>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="100%"
+	styleName="applicationCredits">
+	
+	<mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+        	import com.googlemate.ui.presentation.MainPresentationModel;
+
+			/**
+			 * Main Presentation Model
+			 */
+			private var _model:MainPresentationModel;
+			
+			[Bindable(event="mainModelChange")]
+			public function get model():MainPresentationModel
+			{
+				return _model;
+			}
+		
+			public function set model( value:MainPresentationModel ):void
+			{
+				_model = value;
+				dispatchEvent( new Event("mainModelChange") );
+			}   
+        ]]>
+    </mx:Script>
+    
+    <mx:VBox horizontalCenter="0" verticalCenter="0" horizontalAlign="center" verticalGap="0">
+    	
+    	<!-- Application Name -->
+    	<mx:Label text="{ Constants.APPLICATION_NAME }" styleName="applicationName"/>
+		
+		<!-- Application Version -->
+		<mx:Label text="{ Constants.APPLICATION_VERSION }" styleName="applicationVersion"/>
+		
+		<mx:Spacer height="12"/>
+		
+		<!-- Powered By -->		
+		<mx:Label text="{ Constants.POWERED_BY }" styleName="applicationPoweredBy"/>
+				
+		<!-- Application Framework Logo -->
+		<mx:Image 
+			buttonMode="true"
+			source="{ Constants.APPLICATION_FRAMEWORK_LOGO }"
+			toolTip="{ Constants.APPLICATION_FRAMEWORK_URL }"
+			click="model.showHTMLContent( Constants.APPLICATION_FRAMEWORK_URL )"/>
+	
+		<!-- Application Product Logo -->
+		<mx:Image 
+			buttonMode="true"
+			source="{ Constants.APPLICATION_PRODUCT_LOGO }"
+			toolTip="{ Constants.APPLICATION_PRODUCT_URL }"
+			click="model.showHTMLContent( Constants.APPLICATION_PRODUCT_URL )"/>
+		
+		<!-- Application Author and Author Logo -->
+		<mx:HBox 
+			buttonMode="true"
+			horizontalGap="0"
+			verticalAlign="bottom" 
+			mouseChildren="false"
+			toolTip="{ Constants.APPLICATION_AUTHOR_URL }"
+			click="model.showHTMLContent( Constants.APPLICATION_AUTHOR_URL )">
+			
+			<!-- Application Author -->
+			<mx:Label text="{ Constants.APPLICATION_AUTHOR }" styleName="applicationAuthor"/>
+				
+			<!-- Application Author Logo -->
+			<mx:Image source="{ Constants.APPLICATION_AUTHOR_LOGO }"/>
+	
+		</mx:HBox>		
+			
+    </mx:VBox>
+			
+</mx:Canvas>
