@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LocalEventMap xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="http://mate.asfusion.com/"
+	xmlns:air="de.websector.mate.extensions.air.*"
+	xmlns:google="com.googlemate.services.google.*">
+
+	<mx:Script>
+		<![CDATA[
+			import com.googlemate.events.*;
+			import com.googlemate.model.constants.*;
+			import com.googlemate.model.managers.*;
+			import com.googlemate.model.vos.*;
+			import com.googlemate.services.sqllite.*;
+			import com.googlemate.ui.presentation.*;
+			import com.googlemate.ui.views.*;
+			import com.googlemate.ui.views.common.components.*;
+			import com.googlemate.ui.views.favorites.*;
+			
+			import mx.events.FlexEvent;
+			
+			/**
+			 * sqlStatement
+			 */ 
+			[Bindable] private var sqlStatement:SQLStatement;
+
+			/**
+			 *  Set sqlStatement
+			 */
+			private function setSQLStatement( statement:SQLStatement ):void
+			{
+				sqlStatement = statement;
+			}
+		]]>
+	</mx:Script>
+
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- EventHandlers :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    
+    <!-- Initialize -->
+    <EventHandlers type="{ FlexEvent.PREINITIALIZE }">
+    	<ObjectBuilder generator="{ LinksManager }"/>
+		<ObjectBuilder generator="{ LinksPresentationModel }" constructorArguments="{ scope.dispatcher }"/>
+		<air:SQLServiceInvoker instance="{ sqlService }" sql="{ LinksSQL.createLinksTable }">
+			 <air:resultHandlers>
+			 	<EventAnnouncer generator="{ FavoriteEvent }" type="{ FavoriteEvent.GET_LINKS }"/>
+			 </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+
+	<!-- Search for Links -->
+	<EventHandlers type="{ SearchEvent.SEARCH_LINKS }">
+		<MethodInvoker generator="{ LinksManager }" method="initializeSearch" arguments="{ event }" />
+		<google:LinkSearch> 
+			<Properties searchString="{ event.searchString }" startValue="{ event.searchStartIndex }" language="{ event.language }"/>
+			<google:resultHandlers>
+				<MethodInvoker generator="{ LinksManager }" method="searchLinksResult" arguments="{ currentEvent.data }"/>
+				<MethodInvoker generator="{ LinksPresentationModel }" method="showSearchResults"/>
+			</google:resultHandlers>
+		</google:LinkSearch>	
+	</EventHandlers>
+	
+	<!-- Get Links -->
+	<EventHandlers type="{ FavoriteEvent.GET_LINKS }">
+		<air:SQLServiceInvoker instance="{ sqlService }" itemClass="{ LinkVO }" sql="{ LinksSQL.getLinks }">
+			<air:resultHandlers>
+				<MethodInvoker generator="{ LinksManager }" method="getLinksResult" arguments="{ resultObject.data }"/>	
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!-- Add Link -->
+	<EventHandlers type="{ FavoriteEvent.ADD_LINK }">
+		<MethodInvoker generator="{ LinksSQL }" method="addLink" arguments="{ event.linkVO }"/>
+		<InlineInvoker method="setSQLStatement" arguments="{ lastReturn }"/>
+		<air:SQLServiceInvoker instance="{ sqlService }" statement="{ sqlStatement }">
+			<air:resultHandlers>
+				<EventAnnouncer generator="{ FavoriteEvent }" type="{ FavoriteEvent.GET_LINKS }"/>	
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!-- Delete Link -->
+	<EventHandlers type="{ FavoriteEvent.DELETE_LINK }">
+		<air:SQLServiceInvoker instance="{ sqlService }" statement="{ LinksSQL.deleteLink }" parameters="{ [ event.id ] }">
+			<air:resultHandlers>
+				<EventAnnouncer generator="{ FavoriteEvent }" type="{ FavoriteEvent.GET_LINKS }"/>	
+	        </air:resultHandlers>
+		</air:SQLServiceInvoker>
+	</EventHandlers>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Injectors :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	
+	<!-- Manager / Presentation Model -->
+	<Injectors target="{ LinksPresentationModel }">
+		<PropertyInjector targetKey="links" source="{ LinksManager }" sourceKey="links"/>
+		<PropertyInjector targetKey="searchResults" source="{ LinksManager }" sourceKey="searchResults"/>
+		<PropertyInjector targetKey="searchString" source="{ LinksManager }" sourceKey="searchString"/>
+		<PropertyInjector targetKey="searchStartIndex" source="{ LinksManager }" sourceKey="searchStartIndex"/>
+		<PropertyInjector targetKey="searchMaxItems" source="{ LinksManager }" sourceKey="searchMaxItems"/>
+		<PropertyInjector targetKey="searchInProgress" source="{ LinksManager }" sourceKey="searchInProgress"/>
+	</Injectors>
+	
+	<!-- Presentation Model / View -->
+	<Injectors targets="{ [ Links, LinksTileList, LinkFavorites ] }">
+		<PropertyInjector targetKey="model" source="{ LinksPresentationModel }"/>
+	</Injectors>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Services ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+	<air:SQLService id="sqlService"	databasePath="{ Constants.DB_PATH }"/>
+	
+</LocalEventMap>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:viewStackEffects="org.efflex.viewStackEffects.*"
+	xmlns:favorites="com.googlemate.ui.views.favorites.*" 
+	width="100%" 
+	height="100%">
+	
+	<mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+            import com.googlemate.ui.presentation.FavoritesPresentationModel;
+			
+			import mx.effects.easing.*;
+			
+			/**
+			 * Favorites Presentation Model
+			 */
+			private var _model:FavoritesPresentationModel;
+			
+			[Bindable(event="favoritesModelChange")]
+			public function get model():FavoritesPresentationModel
+			{
+				return _model;
+			}
+		
+			public function set model( value:FavoritesPresentationModel ):void
+			{
+				_model = value;
+				dispatchEvent( new Event("favoritesModelChange") );
+			}   
+        ]]>
+    </mx:Script>
+    
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Views :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->		
+    
+    <!-- Favorites Body -->
+    <mx:HBox top="{ Constants.SUB_HEADER_HEIGHT - 1 }" width="100%" height="100%" horizontalGap="-1">
+    	
+    	<!-- Favorites Navigation -->
+	    <favorites:FavoritesNavigation/>
+	    
+		<!-- Favorites Views -->
+	    <mx:ViewStack
+	    	width="100%"
+	    	height="100%"
+	    	creationPolicy="all"
+	    	styleName="favoritesViewStack"
+	    	selectedIndex="{ model.currentView }">
+	    	
+	    	<favorites:LinkFavorites hideEffect="viewStackHideEffect" showEffect="viewStackShowEffect"/>
+	    	<favorites:ImageFavorites hideEffect="viewStackHideEffect" showEffect="viewStackShowEffect"/>
+	    	<favorites:VideoFavorites hideEffect="viewStackHideEffect" showEffect="viewStackShowEffect"/>
+	    	
+	    </mx:ViewStack>
+    
+    </mx:HBox>
+
+	<!-- Favorites Header -->
+    <mx:Canvas width="100%" height="{ Constants.SUB_HEADER_HEIGHT }" styleName="favoritesHeader"/>
+    	
+	<!-- Effects -->
+    <viewStackEffects:List id="viewStackShowEffect" direction="vertical" easingFunction="Exponential.easeOut "/>
+	<viewStackEffects:List id="viewStackHideEffect" direction="vertical" easingFunction="Exponential.easeIn"/>
+		
+</mx:Canvas>

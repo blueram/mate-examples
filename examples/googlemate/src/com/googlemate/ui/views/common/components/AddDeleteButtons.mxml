@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:Metadata>
+		[Event(name="addItem",type="flash.events.Event")]
+		[Event(name="deleteItem",type="flash.events.Event")]
+	</mx:Metadata>
+	
+	<mx:Script>
+        <![CDATA[        				
+			import flash.events.Event;
+			
+			// ----------------------------------------------------------------------------
+			// Public Properties
+			// ----------------------------------------------------------------------------
+			
+			[Bindable] public var addButtonEnabled : Boolean = true;
+			[Bindable] public var showAddButton : Boolean = false;
+			[Bindable] public var addButtonStyleName : String = "";
+			[Bindable] public var addButtonToolTip : String = "";
+			
+			[Bindable] public var showDeleteButton : Boolean = false;
+			[Bindable] public var deleteButtonStyleName : String = "";			
+			[Bindable] public var deleteButtonToolTip : String = "";
+			
+			// ----------------------------------------------------------------------------
+			// Public Methods
+			// ----------------------------------------------------------------------------
+			
+			/**
+			 * Add Item
+			 */
+			public function addItem():void
+			{
+				var event:Event = new Event( "addItem" );
+				dispatchEvent( event );
+			}
+
+			/**
+			 * Delete Item
+			 */
+			public function deleteItem():void
+			{
+				var event:Event = new Event( "deleteItem" );
+				dispatchEvent( event );
+			}
+        ]]>
+    </mx:Script>
+
+	<!-- Delete -->
+	<mx:Button
+    	buttonMode="true"
+    	focusEnabled="false"
+		visible="{ showDeleteButton }"
+		styleName="{ deleteButtonStyleName }"
+		toolTip="{ deleteButtonToolTip }"
+		click="deleteItem()"/>
+
+	<!-- Add -->
+	<mx:Button
+    	focusEnabled="false"
+		visible="{ showAddButton }"
+		includeInLayout="{ showAddButton }"
+		enabled="{ addButtonEnabled }"
+		buttonMode="{ addButtonEnabled }"
+		styleName="{ addButtonStyleName }"
+		toolTip="{ addButtonToolTip }"
+		click="addItem()"/>
+
+</mx:Canvas>

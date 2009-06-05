@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="100%"
+	styleName="noResults">
+	
+	<mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+ 
+        	/**
+			 * Message
+			 */
+			private var _message:String = "";
+			
+			[Bindable(event="messageChange")]
+			public function get message():String
+			{
+				return _message;
+			}
+		
+			public function set message( value:String ):void
+			{
+				_message = value;
+				dispatchEvent( new Event("messageChange") );
+			} 
+        ]]>
+    </mx:Script>
+    
+    <mx:VBox horizontalCenter="0" verticalCenter="-20" horizontalAlign="center" verticalGap="16">
+    	
+    	<!-- Application Logo -->
+		<mx:Image source="{ Constants.APPLICATION_LOGO }"/>
+		
+		<!-- Message -->
+		<mx:Label
+			text="{ message }" 
+			styleName="noResultsMessage"/>	
+			
+    </mx:VBox>
+			
+</mx:Canvas>

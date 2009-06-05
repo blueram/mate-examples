@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="500"
+	height="280"
+	backgroundImage="{ Constants.APPLICATION_SPLASH_SCREEN_IMAGE }"
+	creationCompleteEffect="Fade">
+    
+     <mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+        ]]>
+    </mx:Script>
+
+	<!-- Application Logo -->
+	<mx:Image 
+		top="26" 
+		left="34" 
+		source="{ Constants.APPLICATION_LOGO_BIG }"
+		creationCompleteEffect="Fade"/>
+		
+	<!-- Application Name -->
+	<mx:Label
+		width="100%" 
+		top="152"
+		left="34"
+		right="20"
+		textAlign="center" 
+		text="{ Constants.APPLICATION_NAME }"
+		styleName="applicationName"
+		creationCompleteEffect="Fade"/>
+		
+	<!-- Application Version -->	
+	<mx:Label 
+		width="100%"
+		top="177"
+		left="34"
+		right="20" 
+		textAlign="center"
+		text="{ Constants.APPLICATION_VERSION }"
+		styleName="applicationVersion"
+		creationCompleteEffect="Fade"/>
+
+	<!-- Application Product Logo -->
+	<mx:Image 
+		bottom="24" 
+		left="30" 
+		source="{ Constants.APPLICATION_PRODUCT_LOGO }"
+		creationCompleteEffect="Fade"/>
+	
+	<!-- Application Author -->
+	<mx:Label 
+		bottom="28" 
+		right="80" 
+		text="{ Constants.APPLICATION_AUTHOR }"
+		styleName="applicationAuthor"
+		creationCompleteEffect="Fade"/>
+				
+	<!-- Application Author Logo -->
+	<mx:Image 
+		bottom="30" 
+		right="34"
+		width="48" 
+		height="48" 
+		source="{ Constants.APPLICATION_AUTHOR_LOGO }"
+		creationCompleteEffect="Fade"/>
+
+</mx:Canvas>

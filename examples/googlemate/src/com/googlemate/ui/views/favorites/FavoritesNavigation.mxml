@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:controls="com.googlemate.ui.views.common.controls.*"
+	width="150" 
+	height="100%"
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off"
+	styleName="favoritesNavigation">
+	
+	<mx:Script>
+        <![CDATA[
+            import com.googlemate.ui.presentation.FavoritesPresentationModel;
+            import com.googlemate.ui.presentation.navigation.FavoritesViews;
+            
+            import mx.controls.LinkButton;
+			
+			/**
+			 * Favorites Presentation Model
+			 */
+			private var _model:FavoritesPresentationModel;
+			
+			[Bindable(event="favoritesModelChange")]
+			public function get model():FavoritesPresentationModel
+			{
+				return _model;
+			}
+		
+			public function set model( value:FavoritesPresentationModel ):void
+			{
+				_model = value;
+				dispatchEvent( new Event("favoritesModelChange") );
+			}   
+			
+			/**
+			 * Set First Link Disabled
+			 */
+			public function setFirstLinkDisabled():void
+			{
+				if ( model && model.currentView == FavoritesViews.LINKS_VIEW )
+				{
+					linkBar.enableLink( linkBar.getChildAt( FavoritesViews.LINKS_VIEW ) as LinkButton, false );
+				}
+			} 
+        ]]>
+    </mx:Script>
+
+	<!-- Favorites Navigation -->
+	<controls:GMToggleLinkBar id="linkBar"
+		labelField="label"
+		tabChildren="false"
+		direction="vertical"
+		focusEnabled="false"
+		selectedIndex="{ model.currentView }"
+		updateComplete="setFirstLinkDisabled()"
+		dataProvider="{ model.navigationItems }"
+		itemClick="model.navigateToItem( event )"/>
+	
+</mx:HBox>

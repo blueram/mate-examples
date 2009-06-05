@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	styleName="content"
+	verticalGap="0">
+	
+	<mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+            import com.googlemate.ui.presentation.MainPresentationModel;
+
+			/**
+			 * Main Presentation Model
+			 */
+			private var _model:MainPresentationModel;
+			
+			[Bindable(event="mainModelChange")]
+			public function get model():MainPresentationModel
+			{
+				return _model;
+			}
+		
+			public function set model( value:MainPresentationModel ):void
+			{
+				_model = value;
+				dispatchEvent( new Event("mainModelChange") );
+			}  
+        ]]>
+    </mx:Script>
+    
+    <mx:HBox width="100%" height="{ Constants.SUB_HEADER_HEIGHT - 2 }" styleName="contentHeader">
+    	
+    	<!-- Hide Content and Return -->
+    	<mx:Button
+    		buttonMode="true"
+    		focusEnabled="false"
+	    	label="{ Constants.HIDE_CONTENT_AND_RETURN }" 
+	    	click="model.hideContentView()"/>
+
+    	<!-- Open Content in Browser -->
+    	<mx:Button
+    		buttonMode="true"
+    		focusEnabled="false"
+	    	label="{ Constants.OPEN_CONTENT_IN_BROWSER }"
+	    	click="{ model.openBrowserWindow( model.location ) }"/>
+    	
+    </mx:HBox>   
+
+	<!-- HTML Content -->
+	<mx:HTML 
+		width="100%"
+		height="100%"
+		focusEnabled="false"
+		liveScrolling="true"
+		styleName="contentHTML"
+		location="{ model.location }"/>
+		
+</mx:VBox>

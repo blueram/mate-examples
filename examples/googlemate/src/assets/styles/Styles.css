@@ -1,0 +1,427 @@
+/* CSS file */
+Application, WindowedApplication, Window
+{
+	background-color: #FFFFFF;
+	background-disabled-color: #333333;
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 0;
+	padding-right: 0;
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	font-family: "Verdana";
+}
+
+/* ------------------------------------------*/
+/* Global */
+/* ------------------------------------------*/
+
+HScrollBar
+{
+	down-arrow-skin: ClassReference("assets.skins.ScrollDownArrowSkin");
+	up-arrow-skin: ClassReference("assets.skins.ScrollUpArrowSkin");
+	track-skin: ClassReference("assets.skins.ScrollTrackSkin");
+	thumb-skin: ClassReference("assets.skins.ScrollThumbSkin");
+	track-color: #f3f3f3;
+}
+
+VScrollBar
+{
+	down-arrow-skin: ClassReference("assets.skins.ScrollDownArrowSkin");
+	up-arrow-skin: ClassReference("assets.skins.ScrollUpArrowSkin");
+	track-skin: ClassReference("assets.skins.ScrollTrackSkin");
+	thumb-skin: ClassReference("assets.skins.ScrollThumbSkin");
+	track-color: #BFDCFF;
+	up-background-color: #BFDCFF;
+	over-background-color: #8ABFFF;
+	down-background-color: #EFEFEF;
+	disabled-background-color: #CCCCCC;
+	border-thickness: 1;
+    border-color: #0066DD;
+}
+
+/* ------------------------------------------*/
+/* CONTROLS */
+/* ------------------------------------------*/
+
+Button
+{
+	skin: ClassReference("assets.skins.ButtonSkin");
+	up-background-color: #BFDCFF;
+	over-background-color: #8ABFFF;
+	down-background-color: #DDDDDD;
+	disabled-background-color: #CCCCCC;
+	text-roll-over-color: #333333;
+	text-selected-color: #000000;
+	disabled-color: #666666;
+	color: #333333;
+	corner-radius: 10;
+}
+
+LinkBar 
+{
+	text-align: left;
+	separator-width: 0;
+	font-weight: bold;
+	font-size: 12;
+	color: #0066DD;
+	text-roll-over-color: #F4C300;
+	text-selected-color: #00CC00;
+	disabled-color: #000000;
+}
+
+LinkButton
+{
+	skin: ClassReference("assets.skins.LinkButtonSkin");
+	text-decoration: underline;
+	text-align: left;
+	color: #0066DD;
+	font-size: 12;
+	text-roll-over-color: #53A0FF;
+	text-selected-color: #666666;
+	disabled-color: #000000;
+}
+
+NumericStepper
+{
+	up-arrow-skin: ClassReference("assets.skins.NumericStepperUpArrowSkin");
+	down-arrow-skin: ClassReference("assets.skins.NumericStepperDownArrowSkin");
+	icon-color: #333333;
+	border-thickness:1;
+    border-color: #0066DD;
+	color: #000000;
+	font-size: 13;
+	font-weight: bold;
+	corner-radius: 8;
+	padding-top: 4;
+	padding-left:4;
+}
+
+TileList
+{
+	border-thickness: 1;
+    border-color: #0066DD;
+    background-color: #FFFFFF;
+    background-disabled-color: #FFFFFF;
+}
+
+ToolTip
+{
+	border-skin: ClassReference("assets.skins.ToolTipSkin");
+	border-style: "toolTip";
+    border-thickness: 1;
+    border-color: #0066DD;      
+    corner-radius: 8;  
+	padding-top: 4;
+	color: #333333;
+	font-weight: bold;
+	font-size: 11;
+	font-grid-fit-type: subpixel;
+	font-anti-alias-type: advanced;
+    fill-colors: #CEE4FF, #CEE4FF;  
+    fill-alphas: 1, 1;
+    fill-colors-ratios: 255, 255;
+}
+
+/* ------------------------------------------*/
+/* APPLICATION CREDITS  */
+/* ------------------------------------------*/
+
+.applicationCredits 
+{
+	background-color: #FFFFFF;
+}
+
+.applicationTitle
+{
+	color: #000000;
+	font-size: 54;
+	font-weight: bold;
+}
+
+.applicationName
+{
+	color: #000000;
+	font-size: 18;
+	font-weight: bold;
+}
+
+.applicationVersion
+{
+	color: #1648AE;
+	font-size: 11;
+	font-weight: bold;
+}
+
+.applicationPoweredBy
+{
+	color: #333333;
+	font-size: 16;
+	font-weight: bold;
+}
+
+.applicationAuthor
+{
+	color: #333333;
+	font-size: 10;
+	font-weight: bold;
+	padding-bottom: -2;
+}
+
+/* ------------------------------------------*/
+/* MAIN */
+/* ------------------------------------------*/
+
+.mainHeader
+{
+	padding-bottom: 2;
+	padding-right: 30;
+	vertical-align: middle;
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	background-color: #FFFFFF;
+}
+
+.mainHeaderSeperator
+{
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	background-color: #CEE4FF;
+}
+
+.mainViewStack
+{
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+}
+
+/* ------------------------------------------*/
+/* CONTENT */
+/* ------------------------------------------*/
+
+.content
+{
+	padding-top: 1;
+	padding-bottom: 0;
+	padding-left: 0;
+	padding-right: 0;
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	background-color: #CEE4FF;
+}
+
+.contentHeader
+{
+	padding-top: 8;
+	horizontal-align: center;
+	horizontal-gap: 20;
+}
+
+.contentHTML
+{
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 0;
+	padding-right: 0;
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	background-color: #FFFFFF;
+}
+
+/* ------------------------------------------*/
+/* SEARCH */
+/* ------------------------------------------*/
+
+.search
+{
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	background-color: #CEE4FF;
+}
+
+.searchParameters
+{
+	padding-top: 6;
+	padding-left: 8;
+}
+
+.searchType
+{
+	color: #333333;
+	font-size: 12;
+	font-weight: bold;
+	font-style: italic;
+	padding-top: 1;
+}
+
+.searchInput
+{
+	color: #000000;
+	font-size: 12;
+	font-weight: bold;
+	padding-left: 3;
+	padding-top: 1;
+}
+
+.searchButton
+{
+	icon: Embed( source="/assets/icons/magnifier.png" );
+}
+
+.searchProgressBar
+{
+	color: #333333;
+	font-size: 12;
+	font-weight: bold;
+	font-style: italic;
+	bar-color: #0066DD;
+	track-height: 12;
+	vertical-align: middle;
+}
+
+/* ------------------------------------------*/
+/* SEARCHING */
+/* ------------------------------------------*/
+
+.searching 
+{
+	padding-top: -2;
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	background-color: #FFFFFF;
+}
+
+.searchingMessage
+{
+	color: #333333;
+	font-size: 14;
+	font-weight: bold;
+}
+
+/* ------------------------------------------*/
+/* NO RESULTS */
+/* ------------------------------------------*/
+
+.noResults 
+{
+	padding-top: -2;
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	background-color: #FFFFFF;
+}
+
+.noResultsMessage
+{
+	color: #333333;
+	font-size: 14;
+	font-weight: bold;
+}
+
+/* ------------------------------------------*/
+/* FAVORITES */
+/* ------------------------------------------*/
+
+.favoritesHeader
+{
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	background-color: #CEE4FF;
+}
+
+.favoritesNavigation 
+{
+	padding-top: 10;
+	padding-left: 10;
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	background-color: #FFFFFF;
+}
+
+.favoritesAddButton
+{
+	up-skin: Embed( source="/assets/icons/flag_plus.png" );
+	over-skin: Embed( source="/assets/icons/flag_plus_over.png" );
+	down-skin: Embed( source="/assets/icons/flag.png" );
+	disabled-skin: Embed( source="/assets/icons/flag.png" );
+}
+
+.favoritesDeleteButton
+{
+	up-skin: Embed( source="/assets/icons/flag_minus.png" );
+	over-skin: Embed( source="/assets/icons/flag_minus_over.png" );
+	down-skin: Embed( source="/assets/icons/flag_minus.png" );
+}
+
+/* ------------------------------------------*/
+/* ITEM RENDERER ITEMS */
+/* ------------------------------------------*/
+
+.item
+{
+	borderSkin: ClassReference("assets.skins.TileListItemRendererSkin");
+	border-style: solid;
+	border-thickness: 1;
+	border-color: #0066DD;
+	background-color: #FFFFFF;
+	corner-radius: 8;
+}
+
+.itemHighlighted
+{
+	borderSkin: ClassReference("assets.skins.TileListItemRendererSkin");
+	border-style: solid;
+	border-thickness: 3;
+	border-color: #0066DD;
+	background-color: #FFFFFF;
+	corner-radius: 8;
+}
+
+.itemTitle
+{
+	font-weight: bold;
+	font-size: 14;	
+	text-align: left;
+	color: #000000;
+}
+
+.itemURL
+{
+	font-weight: bold;
+	text-align: left;	
+}
+
+.itemContent
+{
+	font-size: 12;
+	border-style: none;
+	background-alpha: 0;
+	text-align: left;	
+	color: #666666;
+}
+
+/* ------------------------------------------*/
+/* FONTS */
+/* ------------------------------------------*/
+
+@font-face {
+  	font-family:"Verdana";
+	src:url("/assets/fonts/verdana.ttf");
+}
+
+@font-face {
+    font-family:"Verdana";
+    font-weight:bold;
+    src:url("/assets/fonts/verdana_bold.ttf");
+    advanced-anti-aliasing: true;
+}

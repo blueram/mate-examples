@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LocalEventMap xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="http://mate.asfusion.com/">
+
+	<mx:Script>
+		<![CDATA[
+			import com.googlemate.events.*;
+			import com.googlemate.ui.Main;
+			import com.googlemate.model.managers.*;
+			import com.googlemate.ui.presentation.*;
+			import com.googlemate.ui.views.*;
+			
+			import mx.events.FlexEvent;
+		]]>
+	</mx:Script>
+
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- EventHandlers :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+    
+    <!-- Initialize -->
+    <EventHandlers type="{ FlexEvent.PREINITIALIZE }">
+		<ObjectBuilder generator="{ MainPresentationModel }" constructorArguments="{ scope.dispatcher }"/>
+	</EventHandlers>
+	
+	<!-- Disable Screen -->
+	<EventHandlers type="{ MainEvent.DISABLE_SCREEN }">
+		<MethodInvoker generator="{ MainPresentationModel }" method="disableScreen"/>
+	</EventHandlers>
+	
+	<!-- Enable Screen -->
+	<EventHandlers type="{ MainEvent.ENABLE_SCREEN }">
+		<MethodInvoker generator="{ MainPresentationModel }" method="enableScreen"/>
+	</EventHandlers>
+	
+	<!-- Navigation -->
+	<EventHandlers type="{ NavigationEvent.NAVIGATE_TO_VIEW }">
+		<MethodInvoker generator="{ MainPresentationModel }" method="navigateToView" arguments="{ event }"/>
+	</EventHandlers>
+	
+	<!-- Show Content View -->
+	<EventHandlers type="{ NavigationEvent.SHOW_CONTENT_VIEW }">
+		<MethodInvoker generator="{ MainPresentationModel }" method="showContentView" arguments="{ event }"/>
+	</EventHandlers>
+	
+	<!-- Hide Content View -->
+	<EventHandlers type="{ NavigationEvent.HIDE_CONTENT_VIEW }">
+		<MethodInvoker generator="{ MainPresentationModel }" method="hideContentView"/>
+	</EventHandlers>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	<!-- Injectors :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+	
+	<!-- Presentation Model / View -->
+	<Injectors targets="{ [ Main, Header, Credits, Content ] }">
+		<PropertyInjector targetKey="model" source="{ MainPresentationModel }"/>
+	</Injectors>
+
+</LocalEventMap>

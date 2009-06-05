@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/1.5">
+
+	<filename>GoogleMate</filename>
+
+    <id>GoogleMate</id>
+    	
+	<version>version 1.0</version>
+	
+	<initialWindow>
+
+        <content>[This value will be overwritten by Flex Builder in the output app.xml]</content>
+
+        <systemChrome>none</systemChrome>
+
+        <transparent>true</transparent>
+		
+        <minimizable>false</minimizable>
+
+        <maximizable>false</maximizable>
+
+        <resizable>false</resizable>
+
+        <width>500</width>
+
+        <height>280</height>
+
+    </initialWindow>
+    
+    <icon>
+
+        <image16x16>assets/icons/icon_016.png</image16x16>
+
+        <image32x32>assets/icons/icon_032.png</image32x32>
+
+        <image48x48>assets/icons/icon_048.png</image48x48>
+
+        <image128x128>assets/icons/icon_128.png</image128x128>
+
+    </icon>
+    
+</application>

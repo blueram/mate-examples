@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:components="com.googlemate.ui.views.common.components.*"
+	xmlns:controls="com.googlemate.ui.views.common.controls.*"
+	width="100%" 
+	height="100%"
+	verticalGap="-1"
+	show="simpleSearch.setInputFocus()">
+	
+	<mx:Script>
+        <![CDATA[
+        	import com.googlemate.model.constants.Constants;
+            import com.googlemate.ui.presentation.ImagesPresentationModel;
+			
+			/**
+			 * Images Presentation Model
+			 */
+			private var _model:ImagesPresentationModel;
+			
+			[Bindable(event="imagesModelChange")]
+			public function get model():ImagesPresentationModel
+			{
+				return _model;
+			}
+		
+			public function set model( value:ImagesPresentationModel ):void
+			{
+				_model = value;
+				dispatchEvent( new Event("imagesModelChange") );
+			}	    
+        ]]>
+    </mx:Script>
+    
+	<!-- Search Parameters -->
+	<components:SimpleSearch id="simpleSearch"
+		searchingMessage="{ Constants.SEARCHING_FOR_IMAGES }"
+		searchType="{ Constants.IMAGES_TIP }"
+		searchString="{ model.searchString }"
+		searchMaxItems="{ model.searchMaxItems }"
+		searchInProgress="{ model.searchInProgress }"
+		search="model.search( event )"/>
+	
+	<!-- Search Results Views -->
+    <mx:ViewStack width="100%" height="100%" selectedIndex="{ model.currentView }">
+    	
+		<components:NoResults message="{ Constants.NO_IMAGE_SEARCH_RESULTS }"/>
+		<components:Searching hideEffect="Fade" message="{ Constants.SEARCHING_FOR_IMAGES }"/>
+		<components:ImagesTileList/>
+
+    </mx:ViewStack>
+			
+</mx:VBox>
