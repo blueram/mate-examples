@@ -129,7 +129,7 @@ package com.googlemate.ui.presentation
 		// ----------------------------------------------------------------------------
 		
 		/**
-		 * Search Enabled
+		 * Screen Enabled
 		 */
 		private var _screenEnabled:Boolean = true;
 		
