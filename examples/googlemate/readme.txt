@@ -13,9 +13,11 @@ In order for the project code to function correctly, the compiler settings must
 be updated, after the project is imported into FB or Eclipse.  After the project
 has been imported, go to Project -> Properties -> Flex Compiler
 
-Change the Additional compiler arguments to:
--locale en_US -source-path=${DOCUMENTS}/GoogleMate/locale/{locale}
+1. Change the Additional compiler arguments to:
+   -locale en_US -source-path=${DOCUMENTS}/GoogleMate/locale/{locale}
 
-If the new project was named something other than GoogleMate, replace
-that part of the source path to the name of the project.  This is necessary
-in order for the compiler to know where the localization files are located.
+   If the new project was named something other than GoogleMate, replace
+   that part of the source path to the name of the project.  This is necessary
+   in order for the compiler to know where the localization files are located.
+   
+2. Select "Use a specific SDK: Flex 3.2 (or higher)
