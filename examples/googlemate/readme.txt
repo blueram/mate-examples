@@ -20,4 +20,4 @@ has been imported, go to Project -> Properties -> Flex Compiler
    that part of the source path to the name of the project.  This is necessary
    in order for the compiler to know where the localization files are located.
    
-2. Select "Use a specific SDK: Flex 3.2 (or higher)
+2. Select "Use a specific SDK:" Flex 3.2 (or higher)
