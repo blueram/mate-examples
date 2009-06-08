@@ -63,7 +63,6 @@
 	
 	<EventHandlers type="{ AuthorizationEvent.LOGOUT }">
 		<MethodInvoker generator="{ SessionManager }" method="closeSession" />
-		<MethodInvoker generator="{ LoginPresentationModel }" method="clearSession"/>
 	</EventHandlers>
 	
 	<!-- Injectors ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -73,6 +72,7 @@
 	</Injectors>
 	
 	<Injectors target="{ LoginPresentationModel }">
-		<ListenerInjector eventType="{ AuthorizationEvent.FAILED }" method="loginFailedHandler"  />
+		<ListenerInjector eventType="{ AuthorizationEvent.FAILED }" method="loginFailedHandler" />
+		<ListenerInjector eventType="{ AuthorizationEvent.LOGOUT }" method="clearSession" />
 	</Injectors>
 </EventMap>

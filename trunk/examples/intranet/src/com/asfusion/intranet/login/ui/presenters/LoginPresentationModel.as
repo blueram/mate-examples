@@ -120,7 +120,7 @@ package com.asfusion.intranet.login.ui.presenters
 		}
 		
 		//..................clearSession....................
-		public function clearSession():void
+		public function clearSession( event:Event = null):void
 		{
 			_state = LOGIN_STATE;
 			dispatchEvent( new Event( "stateChange" ) );
