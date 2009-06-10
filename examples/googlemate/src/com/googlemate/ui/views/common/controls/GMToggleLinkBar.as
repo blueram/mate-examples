@@ -25,12 +25,22 @@ package com.googlemate.ui.views.common.controls
 	    {
 	    	var newLink:Button = Button(super.createNavItem(label, icon));
 	    	
-	    	enableLink( newLink as LinkButton );
+	    	setLinkEnabled( newLink as LinkButton );
 
 	    	return newLink;
 	    }
 	    
 	    /**
+	     *  commitProperties
+	     */
+	    override protected function commitProperties():void
+	    {
+	        super.commitProperties();
+	
+			disableSelectedLink( selectedIndex );
+	    }
+    
+    	/**
 	     *  clickHandler
 	     */
 	    override protected function clickHandler(event:MouseEvent):void
@@ -39,30 +49,40 @@ package com.googlemate.ui.views.common.controls
 	        
 	        var index:int = getChildIndex(Button(event.currentTarget));
 	        
-	        // enable all
+	        disableSelectedLink( index );
+	    }
+	    
+    	/**
+	     *  disableSelectedLink
+	     */
+	    public function disableSelectedLink( index:int ):void
+	    {
+	    	// enable all
 	        for (var i:int = 0; i < numChildren; i++)
 			{
 				if (getChildAt(i) is LinkButton)
 				{
-					enableLink( getChildAt(i) as LinkButton );
+					setLinkEnabled( getChildAt(i) as LinkButton );
 				}
 			}
 			
-			// disable clicked link
-			enableLink( getChildAt(index) as LinkButton, false );
+			// disable selected link
+			setLinkEnabled( getChildAt(index) as LinkButton, false );
 	    }
 	    
 	    /**
-	     *  enableLink
+	     *  setLinkEnabled
 	     */
-	    public function enableLink( link:LinkButton, enable:Boolean=true ):void
-	    {		
-	    	link.enabled = enable;
-	    	link.buttonMode = enable;
-	    	link.mouseEnabled = enable;
-	    	link.focusEnabled = false;
-	    	link.setStyle("textDecoration", (enable ? "underline" : "none") );
-	    }
-	    
+	    public function setLinkEnabled( link:LinkButton, enable:Boolean=true ):void
+	    {
+	    	if ( link )
+	    	{
+	    		link.enabled = enable;
+		    	link.buttonMode = enable;
+		    	link.mouseEnabled = enable;
+		    	link.focusEnabled = false;
+		    	link.setStyle("textDecoration", (enable ? "underline" : "none") );
+	    	}			
+	    } 
 	}
 }
