@@ -30,17 +30,6 @@
 				_model = value;
 				dispatchEvent( new Event("favoritesModelChange") );
 			}   
-			
-			/**
-			 * Set First Link Disabled
-			 */
-			public function setFirstLinkDisabled():void
-			{
-				if ( model && model.currentView == FavoritesViews.LINKS_VIEW )
-				{
-					linkBar.enableLink( linkBar.getChildAt( FavoritesViews.LINKS_VIEW ) as LinkButton, false );
-				}
-			} 
         ]]>
     </mx:Script>
 
@@ -51,7 +40,6 @@
 		direction="vertical"
 		focusEnabled="false"
 		selectedIndex="{ model.currentView }"
-		updateComplete="setFirstLinkDisabled()"
 		dataProvider="{ model.navigationItems }"
 		itemClick="model.navigateToItem( event )"/>
 	
