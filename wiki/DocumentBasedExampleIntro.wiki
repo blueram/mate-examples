@@ -5,6 +5,8 @@
 
 The code for this application is available at [http://mate-examples.googlecode.com/svn/trunk/examples/documentbased/ /trunk/examples/documentbased/]. Both the code and this document was written by [http://blog.iconara.net/ Theo Hultberg/Iconara].
 
+Jelle van Wieringen has expanded the application to include saving to Amazon SimpleDB, you can find a live demo at http://www.otemba.org/examples/flex/TheoHultberg/Main.html, and the code at https://otemba.svn.sourceforge.net/svnroot/otemba/flex/ExampleDocumentbased.
+
 = Introduction =
 
 Initially my goal when writing this application was to show how to work with the new LocalEventMap feature of Mate, but it evolved to something a little bigger. The application is a work in progress, but in its current form it shows how to
