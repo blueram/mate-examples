@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:mate="http://mate.asfusion.com/"
+	title="Employee Login" 
+	currentState="{ model.state }">
+
+	<mx:Script>
+	    <![CDATA[
+	    	import com.cafetownsend.ui.presenters.LoginPresentationModel;
+			
+			[Bindable]
+			public var model:LoginPresentationModel;
+			
+			private function login():void 
+			{
+				model.login( username.text, password.text );
+			}
+			
+	    ]]>
+	</mx:Script>
+	
+	<!-- GUI ______________________________________________________________________ -->
+	
+	<mx:Form id="loginForm" defaultButton="{ loginBtn }">
+	  	<mx:FormItem label="Username:" required="true">
+	   		<mx:TextInput id="username"
+	   			text="{ model.clearFields }"
+	   			errorString="{ model.userNameErrorString }"/>
+	   	</mx:FormItem>
+	   	
+	   	<mx:FormItem label="Password:" required="true">
+	   		<mx:TextInput id="password" 
+	   			text="{ model.clearFields }"
+	   			errorString="{ model.passwordErrorString }"
+	   			displayAsPassword="true" />
+	   	</mx:FormItem>
+	   	
+	   	<mx:FormItem direction="horizontal" verticalGap="15" paddingTop="20">
+	   		<mx:Button id="loginBtn" label="Login" click="login()"/>
+	   	</mx:FormItem>
+	</mx:Form>
+	
+	<mx:Label htmlText="Username: Flex   Password: Mate" width="100%"/>
+	
+	<!-- States ______________________________________________________________________ -->
+	
+	<mx:states>
+		<mx:State name="{ LoginPresentationModel.MESSAGE_STATE }">
+			<mx:AddChild relativeTo="{loginForm}" position="before">
+				<mx:Text text="Invalid login information, please try again"/>
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
+
+</mx:Panel>
