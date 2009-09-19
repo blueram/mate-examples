@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" 
+	title="Employee List" 
+	xmlns:model="com.cafetownsend.model.*">
+
+	<mx:Script> 
+		<![CDATA[
+			import com.cafetownsend.ui.presenters.EmployeeListPresentationModel;
+			import com.cafetownsend.model.vos.Employee;	
+			
+			[Bindable]
+			public var model:EmployeeListPresentationModel;
+			
+			// format the names that are displayed in the List
+			public function properName( employee : Object ) : String 
+			{
+				return Employee(employee).lastname + ", " +  Employee(employee).firstname;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	
+	<!-- GUI ______________________________________________________________________ -->
+	
+	<mx:HBox>
+		<mx:Button label="Add New Employee" click="model.addNewEmployee()" />
+		<mx:Button label="Logout" click="model.logout()" />
+	</mx:HBox>
+
+	<mx:List id="employees_li" 
+		selectedIndex="{ model.selectedEmployeeIndex }"
+		dataProvider="{ model.employees }" 
+		labelFunction="properName"
+		change="model.updateEmployee( employees_li.selectedItem as Employee )" 
+		width="100%" />
+
+</mx:Panel>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Cafe Townsend MVC Tutorial
+    Converted to Mate -  by Laura Arguello
+    
+    This is released under a Creative Commons license.
+    http://creativecommons.org/licenses/by/2.5/
+-->
+
+<mx:Application
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	layout="vertical"
+	xmlns:views="com.cafetownsend.ui.views.*" 
+	xmlns:maps="com.cafetownsend.maps.*" 
+	viewSourceURL="srcview/index.html">
+	
+
+	<!-- Styles______________________________________________________ -->
+	
+	<mx:Style source="/assets/styles/main.css" />
+	
+	
+	<!-- Event Maps __________________________________________________ -->
+	
+	<maps:MainEventMap />
+
+	<!-- Views _______________________________________________________ -->
+	
+	<views:MainUI />
+
+</mx:Application>

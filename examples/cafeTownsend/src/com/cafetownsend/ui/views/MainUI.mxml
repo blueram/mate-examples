@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:views="com.cafetownsend.ui.views.*" 
+	xmlns:mate="http://mate.asfusion.com/" height="100%">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.cafetownsend.ui.presenters.MainUIPresentationModel;
+			
+			[Bindable]
+			public var model:MainUIPresentationModel;
+		]]>
+	</mx:Script>
+	
+	<!-- GUI ______________________________________________________________________ -->
+	
+	<mx:Image source="assets/images/header.jpg" width="700" />
+	<mx:HBox styleName="mainBody" width="700" height="100%">
+	<mx:ViewStack id="viewStack" selectedIndex="{ model.stackIndex }" resizeToContent="true">
+		<views:Login />
+		<views:EmployeeList />
+		<views:EmployeeDetail />
+	</mx:ViewStack>
+	</mx:HBox>
+</mx:VBox>

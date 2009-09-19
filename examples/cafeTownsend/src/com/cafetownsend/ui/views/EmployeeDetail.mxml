@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:mate="http://mate.asfusion.com/"
+	title="Employee Details" 
+	xmlns:model="com.cafetownsend.model.vos.*">
+
+	<mx:Script>
+		<![CDATA[
+			import com.cafetownsend.ui.presenters.EmployeeDetailPresentationModel;
+	    	import mx.events.ValidationResultEvent;
+			import mx.controls.Alert;
+            import mx.events.CloseEvent;
+            import com.cafetownsend.events.*;
+            import mx.validators.Validator;
+			
+			[Bindable]
+			public var model:EmployeeDetailPresentationModel;
+
+			// the delete button's click event is an Alert asking them to verify the delete
+			// the Alert's closeHandler is directed here to be mutated into an event if the answer was OK
+			private function deleteEmployee( closeEvent:CloseEvent ) : void 
+			{
+				// was the Alert event an OK
+				if ( closeEvent.detail == Alert.OK ) 
+				{
+                	model.deleteEmployee();
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	
+	
+	<!-- GUI ______________________________________________________________________ -->
+	
+	<mx:Button label="&lt;&lt; Back" click="model.cancelEmployeeEdits()" />
+	<mx:Form defaultButton="{submit}">
+		<mx:FormItem label="First Name:"  required="true">
+			<mx:TextInput id="firstname"
+				errorString="{ model.firstnameErrorString }"
+				text="{ model.selectedEmployee.firstname}"
+				change="model.updateFirstName( firstname.text )" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Last Name:"  required="true">
+			<mx:TextInput id="lastname" 
+				errorString="{ model.lastNameErrorString }"
+				text="{model.selectedEmployee.lastname}" 
+				change="model.updateLastName( lastname.text )"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Start Date:">
+			<mx:DateField id="startdate" 
+				selectedDate="{model.selectedEmployee.startdate}"
+				change="model.updateStartDate( startdate.selectedDate )" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Email:"  required="true">
+			<mx:TextInput id="email"
+				 errorString="{ model.emailErrorString }"
+				 text="{model.selectedEmployee.email}"
+				 change="model.updateEmail( email.text )"/>
+		</mx:FormItem>
+		
+		<mx:FormItem direction="horizontal">
+			<mx:Button label="Submit" 
+				click="model.saveEmployee( )" 
+				id="submit" />
+				
+			<mx:Button label="Delete"
+				click="Alert.show(	'Are you sure you want to delete this employee?',
+									null,
+									Alert.OK | Alert.CANCEL,
+									this,
+									deleteEmployee,
+									null,
+									Alert.OK );" />
+		</mx:FormItem>
+	</mx:Form>
+	
+</mx:Panel>
