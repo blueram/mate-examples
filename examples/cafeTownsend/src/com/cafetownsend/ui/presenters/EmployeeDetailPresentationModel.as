@@ -8,7 +8,13 @@ package com.cafetownsend.ui.presenters
 	import flash.events.IEventDispatcher;
 
 	public class EmployeeDetailPresentationModel extends EventDispatcher
-	{ 
+	{
+		
+		// -------------------------------------------------------
+		// Setters and getters
+		// -------------------------------------------------------
+		
+		// selectedEmployee ...................................................
 		private var tempEmployee:Employee;
 		private var _selectedEmployee:Employee = null;
 		
@@ -55,6 +61,9 @@ package com.cafetownsend.ui.presenters
 			return _emailErrorString;
 		}
 		
+		// -------------------------------------------------------
+		// Contructor
+		// -------------------------------------------------------
 		
 		private var dispatcher:IEventDispatcher
 		public function EmployeeDetailPresentationModel( dispatcher:IEventDispatcher)
@@ -62,6 +71,12 @@ package com.cafetownsend.ui.presenters
 			this.dispatcher = dispatcher;
 		}
 		
+		
+		// -------------------------------------------------------
+		// Public methods
+		// -------------------------------------------------------
+		
+		// cancelEmployeeEdits ...................................................
 		public function cancelEmployeeEdits() : void 
 		{
 			var event:EmployeeEvent = new EmployeeEvent(EmployeeEvent.CANCEL_EDIT);
@@ -70,6 +85,8 @@ package com.cafetownsend.ui.presenters
 			dispatcher.dispatchEvent(event);
 		}
 		
+		
+		// deleteEmployee ...................................................
 		public function deleteEmployee( ) : void 
 		{
 			// broadcast the event
@@ -79,15 +96,7 @@ package com.cafetownsend.ui.presenters
 			dispatcher.dispatchEvent(event);
 		}
 		
-		private function isValid( employee:Employee ):Boolean
-		{
-			_firstnameErrorString = ( employee.firstname ) ? "" : "First Name is a required field.";
-			_lastNameErrorString  = ( employee.lastname  ) ? "" : "Last Name is a required field.";
-			_emailErrorString  	  = ( employee.email     ) ? "" : "Email is a required field.";
-			dispatchEvent( new Event( "validationChange" ) );
-			return ( employee.firstname  &&  employee.lastname && employee.email );
-		}
-		
+		// saveEmployee ...................................................
 		public function saveEmployee( ):void
 		{
 			if( isValid( tempEmployee ) )
@@ -119,6 +128,21 @@ package com.cafetownsend.ui.presenters
 		public function updateStartDate( date:Date ):void
 		{
 			tempEmployee.startdate = date;
+		}
+		
+		
+		// -------------------------------------------------------
+		// Private methods
+		// -------------------------------------------------------
+		
+		//  isValid ...................................................
+		private function isValid( employee:Employee ):Boolean
+		{
+			_firstnameErrorString = ( employee.firstname ) ? "" : "First Name is a required field.";
+			_lastNameErrorString  = ( employee.lastname  ) ? "" : "Last Name is a required field.";
+			_emailErrorString  	  = ( employee.email     ) ? "" : "Email is a required field.";
+			dispatchEvent( new Event( "validationChange" ) );
+			return ( employee.firstname  &&  employee.lastname && employee.email );
 		}
 	}
 }

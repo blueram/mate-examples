@@ -9,9 +9,16 @@ package com.cafetownsend.ui.presenters
 
 	public class LoginPresentationModel extends EventDispatcher
 	{
+		// -------------------------------------------------------
+		// Public constants
+		// -------------------------------------------------------
 		public static const MESSAGE_STATE:String = "messageState";
 		public static const DEFULT_STATE:String = "";
 		
+		
+		// -------------------------------------------------------
+		// Setters and getters
+		// -------------------------------------------------------
 		//  loginStatus ...................................................
 		public function set loginStatus( status:String ):void
 		{
@@ -63,12 +70,20 @@ package com.cafetownsend.ui.presenters
 			return "";
 		}
 		
-		//  Constructor  ..........................................................
+		// -------------------------------------------------------
+		// Contructor
+		// -------------------------------------------------------
+		
 		private var dispatcher:IEventDispatcher;
 		public function LoginPresentationModel( dispatcher:IEventDispatcher )
 		{
 			this.dispatcher = dispatcher;
 		}
+		
+		
+		// -------------------------------------------------------
+		// Public methods
+		// -------------------------------------------------------
 		
 		//  login  ..........................................................
 		public function login( userName:String, password:String ):void
@@ -81,6 +96,11 @@ package com.cafetownsend.ui.presenters
 				dispatcher.dispatchEvent( event );
 			}
 		}
+		
+		
+		// -------------------------------------------------------
+		// Private methods
+		// -------------------------------------------------------
 		
 		//  isValid  ..........................................................
 		private function isValid( userName:String, password:String ):Boolean

@@ -7,17 +7,15 @@
 	<mx:Script>
 		<![CDATA[
 			import com.cafetownsend.ui.presenters.EmployeeDetailPresentationModel;
-	    	import mx.events.ValidationResultEvent;
 			import mx.controls.Alert;
             import mx.events.CloseEvent;
-            import com.cafetownsend.events.*;
-            import mx.validators.Validator;
 			
 			[Bindable]
 			public var model:EmployeeDetailPresentationModel;
 
 			// the delete button's click event is an Alert asking them to verify the delete
-			// the Alert's closeHandler is directed here to be mutated into an event if the answer was OK
+			// the Alert's closeHandler is directed here to be mutated into a method in 
+			// the presentation model if the answer was OK
 			private function deleteEmployee( closeEvent:CloseEvent ) : void 
 			{
 				// was the Alert event an OK
@@ -34,7 +32,7 @@
 	<!-- GUI ______________________________________________________________________ -->
 	
 	<mx:Button label="&lt;&lt; Back" click="model.cancelEmployeeEdits()" />
-	<mx:Form defaultButton="{submit}">
+	<mx:Form defaultButton="{ submit }">
 		<mx:FormItem label="First Name:"  required="true">
 			<mx:TextInput id="firstname"
 				errorString="{ model.firstnameErrorString }"
@@ -51,7 +49,7 @@
 		
 		<mx:FormItem label="Start Date:">
 			<mx:DateField id="startdate" 
-				selectedDate="{model.selectedEmployee.startdate}"
+				selectedDate="{ model.selectedEmployee.startdate }"
 				change="model.updateStartDate( startdate.selectedDate )" />
 		</mx:FormItem>
 		

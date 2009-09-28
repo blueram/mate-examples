@@ -12,7 +12,11 @@ package com.cafetownsend.ui.presenters
 
 	public class EmployeeListPresentationModel extends EventDispatcher
 	{
+		// -------------------------------------------------------
+		// Setters and getters
+		// -------------------------------------------------------
 		
+		// employees ...................................................
 		private var _employees:ArrayCollection = null;
 		[Bindable(Event="employeesChange")]
 		public function set employees( list:ArrayCollection ):void
@@ -25,6 +29,7 @@ package com.cafetownsend.ui.presenters
 			return _employees;
 		}
 		
+		// selectedEmployeeIndex ...................................................
 		private var _selectedEmployeeIndex:int = -1;
 		[Bindable(Event="employeeIndexChange")]
 		public function get selectedEmployeeIndex():int
@@ -32,13 +37,19 @@ package com.cafetownsend.ui.presenters
 			return _selectedEmployeeIndex;
 		}
 		
+		// -------------------------------------------------------
+		// Contructor
+		// -------------------------------------------------------
+		
 		private var dispatcher:IEventDispatcher;
 		public function EmployeeListPresentationModel( dispatcher:IEventDispatcher ):void
 		{
 			this.dispatcher = dispatcher;
 		}
 		
-		// mutate the add new employee button's click event
+		// -------------------------------------------------------
+		// Public methods
+		// -------------------------------------------------------
 		public function addNewEmployee() : void 
 		{
 			var event:EmployeeEvent = new EmployeeEvent( EmployeeEvent.ADD );
@@ -48,7 +59,7 @@ package com.cafetownsend.ui.presenters
 			clearSelectedEmployee();
 		}
 		
-		// mutate the List's change event
+		// updateEmployee ...................................................
 		public function updateEmployee( employee:Employee ) : void 
 		{
 			// boardcast an event that contains the selectedItem from the List
@@ -60,6 +71,8 @@ package com.cafetownsend.ui.presenters
 			clearSelectedEmployee();
 		}
 		
+		
+		// logout ...................................................
 		// send logout event
 		public function logout() : void 
 		{
@@ -67,6 +80,9 @@ package com.cafetownsend.ui.presenters
 			dispatcher.dispatchEvent(event);
 		}
 		
+		// -------------------------------------------------------
+		// Private methods
+		// -------------------------------------------------------
 		private function clearSelectedEmployee():void
 		{
 			dispatchEvent( new Event( "employeeIndexChange" ) );
