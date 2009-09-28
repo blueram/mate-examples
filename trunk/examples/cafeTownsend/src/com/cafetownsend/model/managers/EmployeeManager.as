@@ -9,11 +9,11 @@ package com.cafetownsend.model.managers
 	
 	public class EmployeeManager extends EventDispatcher 
 	{
-		/*-.........................................Properties..........................................*/
+		//.........................................Properties..........................................
 		
 		private var _employeeList:ArrayCollection;
 		
-		/*-.........................................Setters and Getters..........................................*/
+		//.........................................Setters and Getters..........................................
 		
 		[Bindable (event="employeeListChanged")]
 		public function get employeeList():ArrayCollection
@@ -29,7 +29,7 @@ package com.cafetownsend.model.managers
 			return _employee;
 		}
 		
-		/*-.........................................Methods..........................................*/
+		//.........................................Methods..........................................
 		
 		// -----------------------------------------------------------
 		public function saveEmpoyeeList(employees:Array):void 

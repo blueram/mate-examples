@@ -6,7 +6,7 @@ package com.cafetownsend.events
 
 	public class EmployeeEvent extends Event
 	{
-		/*-.........................................Constants..........................................*/
+		//.........................................Constants..........................................
 		
 		public static const ADD: String 		= "addEmployeeEvent";
 		public static const SELECT: String 		= "selectEmployeeEvent";
@@ -14,11 +14,11 @@ package com.cafetownsend.events
 		public static const SAVE: String 		= "saveEmployeeEvent";
 		public static const CANCEL_EDIT: String = "cancelEditEmployeeEvent";
 		
-		/*-.........................................Properties..........................................*/
+		//.........................................Properties..........................................
 		public var employee:Employee;
 		
 		
-		/*-.........................................Constructor..........................................*/
+		//.........................................Constructor..........................................
 		
 		public function EmployeeEvent(type:String, bubbles:Boolean=true, cancelable:Boolean=false)
 		{

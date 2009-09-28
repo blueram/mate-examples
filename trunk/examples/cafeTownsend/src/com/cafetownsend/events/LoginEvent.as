@@ -4,18 +4,18 @@ package com.cafetownsend.events
 
 	public class LoginEvent extends Event
 	{
-		/*-.........................................Constants..........................................*/
+		//.........................................Constants..........................................
 		
 		public static const LOGIN: String 			= "loginEvent";
 		public static const LOGOUT: String 			= "logoutEvent";
 		public static const LOGIN_SUCCESSFUL:String = "loginSuccessfulEvent";
 		
 		
-		/*-.........................................Properties..........................................*/
+		//.........................................Properties..........................................
 		public var username : String;
 		public var password : String;
 
-		/*-.........................................Constructor..........................................*/
+		//.........................................Constructor..........................................
 		
 		public function LoginEvent(type:String, bubbles:Boolean=true, cancelable:Boolean=false)
 		{

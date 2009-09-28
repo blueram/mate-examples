@@ -5,7 +5,7 @@ package com.cafetownsend.model.managers
 	public class EmployeeParser
 	{
 		
-		/*-.........................................Methods..........................................*/
+		//.........................................Methods..........................................
 		
 		public function loadEmployeesFromXML(employees:XML):Array 
 		{

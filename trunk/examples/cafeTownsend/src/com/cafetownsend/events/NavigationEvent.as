@@ -6,13 +6,13 @@ package com.cafetownsend.events
 
 	public class NavigationEvent extends Event
 	{
-		/*-.........................................Constants..........................................*/
+		//.........................................Constants..........................................
 		
 		public static const EMPLOYEE_LIST: String 	=	"employeeListNavigationEvent";
 		public static const EMPLOYEE_DETAIL: String = "editEmployeeNavigationEvent"
 		public static const LOGIN: String 			= "loginNavigationEvent";
 		
-		/*-.........................................Constructor..........................................*/	
+		//.........................................Constructor..........................................
 		public function NavigationEvent(type:String, bubbles:Boolean=true, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
