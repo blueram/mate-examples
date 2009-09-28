@@ -25,7 +25,7 @@
 			
 			<!-- server fault -->
 			<faultHandlers>
-				<CallBack method="handleFault" arguments="{fault.faultetail}"/>
+				<CallBack method="handleFault" arguments="{fault.faultDetail}"/>
 			</faultHandlers>
 			
 		</RemoteObjectInvoker>
