@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="95" 
+	xmlns:mate="http://mate.asfusion.com/" resizeEffect="Resize">
+	
+	<mx:Script>
+		<![CDATA[
+			import styleLoader.events.StyleLoaderEvent;
+			
+			public function loadedSuccessful( ):void
+			{
+				currentState = 'complete';
+			}
+			
+			public function loadFail( ):void
+			{
+				currentState = 'error';
+			}
+			
+			private function comboBoxchangeHandler():void
+			{
+				var event:StyleLoaderEvent = new StyleLoaderEvent( StyleLoaderEvent.STYLE_CHANGE );
+				event.url = comboBox.selectedItem.data;
+				dispatchEvent( event );
+			}
+		]]>
+	</mx:Script>
+	
+
+	<!-- Model __________________________________________________________________________________ -->
+	
+	<mx:Array id="dataProvider">
+		<mx:Object data="assets/css/Aqua.swf" label="Blue"/>
+		<mx:Object data="assets/css/Red.swf" label="Red"/>
+		<mx:Object data="assets/css/unknown.swf" label="Unknown style"/>
+	</mx:Array>
+	
+
+	<!-- Views __________________________________________________________________________________ -->
+	
+	<mx:ComboBox id="comboBox" x="144" y="10" dataProvider="{dataProvider}" prompt="Choose one" 
+				change="comboBoxchangeHandler();"/>
+	<mx:Label id="labelField" x="15" y="12" text="Choose your theme:"/>
+
+	
+	<!-- States __________________________________________________________________________________ -->
+	<mx:states>
+		<mx:State name="complete">
+			<mx:RemoveChild target="{comboBox}" />
+			<mx:SetProperty target="{labelField}" name="text" value="Now, it looks much better :)" />
+			<mx:SetProperty target="{this}" name="filters" value="{[new DropShadowFilter(4,45,0,0.3)]}" />
+		</mx:State>
+		
+		<mx:State name="error">
+			<mx:AddChild position="lastChild">
+				<mx:Label x="15" y="47" text="Style could not be loaded :(" color="#E60000" fontWeight="bold"/>
+			</mx:AddChild>
+			<mx:SetProperty name="height" value="119"/>
+		</mx:State>
+	</mx:states>
+	
+	
+</mx:Panel>
