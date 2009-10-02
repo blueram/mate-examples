@@ -1,0 +1,29 @@
+/****************************************************************************************************************
+                                             MX COMPONENTS                                                      *
+*****************************************************************************************************************
+*/
+Application {
+	background-color: 		"-45deg #330000 #550000 #330000";
+	background-image: 		Embed("/images/designer.png");
+	background-repeat: 		repeat;
+	background-position: 	center;
+	background-blend: 		multiply;
+	borderSkin: 			ClassReference("com.degrafa.skins.CSSSkin");
+	fontSize: 12;
+	color: #000000;
+}
+
+Panel{
+	headerHeight:45;
+	borderSkin: ClassReference("com.degrafa.skins.CSSSkin");
+	background-repeat:repeat;
+	background-image:Embed(source='images/panel_bg.png');
+	border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-left-radius: 8px;
+	paddingTop:45; /*8*/
+	paddingLeft:8;
+	paddingRight:8;
+	paddingBottom:8;
+}

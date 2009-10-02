@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	xmlns:views="styleLoader.views.*" 
+	xmlns:maps="styleLoader.maps.*" viewSourceURL="srcview/index.html">
+	
+	<!-- Event Maps __________________________________________________ -->
+	<maps:MainMap />
+	
+	
+	<!-- Views _______________________________________________________ -->
+	
+	<views:MainView verticalCenter="0"  horizontalCenter="0"/>
+	
+</mx:Application>
