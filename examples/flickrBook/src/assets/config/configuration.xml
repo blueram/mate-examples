@@ -1,0 +1,6 @@
+<flickr>
+	<url>http://api.flickr.com/services/rest/</url>
+	<api_key>ENTER YOUR API KEY HERE</api_key>
+	<user></user>
+	<tags>Adobe flex</tags>
+</flickr>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:views="com.flickrBook.ui.views.*" 
+	xmlns:controls="flexlib.controls.*" 
+	xmlns:mate="http://mate.asfusion.com/" 
+	xmlns:qs="qs.controls.*">
+
+	<mx:Script>
+		<![CDATA[
+			import com.flickrBook.events.SearchEvent;
+			private function interestingnessHandler():void
+			{
+				dispatchEvent( new SearchEvent( SearchEvent.INTERESTINGNESS ) );
+			}
+			
+			private function search():void
+			{
+				var event:SearchEvent = new SearchEvent( SearchEvent.PREPARE );
+				event.tags = tagsInput.text;
+				event.user = userInput.text;
+				dispatchEvent( event );
+			}
+		]]>
+	</mx:Script>
+
+
+	<!-- GUI ________________________________________________________________________ -->
+	
+	<mx:HBox styleName="topBar" width="100%" height="55" >
+	
+		<mx:Button label="Interestingness" click="interestingnessHandler();" />
+		<mx:VRule height="100%" />
+		
+		<mx:Image source="@Embed(source='/assets/images/tag_icon.png')"/>
+		<controls:PromptingTextInput id="tagsInput" prompt="Search for Tags" enter="search();"/>
+		<mx:VRule height="100%" />
+		
+		<mx:Image source="@Embed(source='/assets/images/user_icon.png')" />
+		<controls:PromptingTextInput id="userInput" prompt="Search for User" enter="search();"/>
+		<mx:VRule height="100%" />
+		
+		<mx:Button label="Search" click="search();"/>
+	</mx:HBox>
+	
+	<views:PhotoViewer id="photoViewer" width="310" height="100%" y="55" right="0" />
+	
+	<mx:Canvas width="100%" height="100%" left="0" right="310" top="55">
+		<qs:SuperImage source="{photoViewer.list.selectedItem.urlMedium}"  verticalCenter="0" horizontalCenter="0"/>
+	</mx:Canvas>
+</mx:Canvas>
