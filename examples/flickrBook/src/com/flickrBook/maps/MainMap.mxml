@@ -20,7 +20,7 @@
 	<EventHandlers type="{FlexEvent.PREINITIALIZE}">
 		<HTTPServiceInvoker method="GET" resultFormat="e4x"  url="assets/config/configuration.xml" >
 			<resultHandlers>
-				<MethodInvoker generator="{Config}" method="readConfig" arguments="{[resultObject, data]}" cache="false"/>
+				<MethodInvoker generator="{Config}" method="readConfig" arguments="{[ resultObject, data ]}" cache="none"/>
 				
 				<MethodInvoker generator="{FlickrHelper}" method="prepareSearch" arguments="{[data.user, data.tags]}">
 					<Properties dispatcher="{scope.dispatcher}"/>
@@ -60,7 +60,7 @@
 		<HTTPServiceInvoker instance="{flickrService}" url="{Config.API_URL}" >
 			<Request method="flickr.photos.search" api_key="{Config.API_KEY}" user_id="{event.userID}" tags="{event.tags}" page="{event.page}" />
 			<resultHandlers>
-				<MethodInvoker generator="{FlickrParser}"	method="parseXML" 	arguments="{resultObject}" cache="false"/>
+				<MethodInvoker generator="{FlickrParser}"	method="parseXML" 	arguments="{resultObject}" cache="none"/>
 				<MethodInvoker generator="{PhotoManager}" 	method="setPhotos" 	arguments="{lastReturn}" />
 			</resultHandlers>
 		</HTTPServiceInvoker>
@@ -73,7 +73,7 @@
 		<HTTPServiceInvoker instance="{flickrService}" url="{Config.API_URL}">
 			<Request method="flickr.interestingness.getList" api_key="{Config.API_KEY}" />
 			<resultHandlers>
-				<MethodInvoker generator="{FlickrParser}"	method="parseXML" 	arguments="{resultObject}" cache="false"/>
+				<MethodInvoker generator="{FlickrParser}"	method="parseXML" 	arguments="{resultObject}" cache="none"/>
 				<MethodInvoker generator="{PhotoManager}" 	method="setPhotos" 	arguments="{lastReturn}" />
 			</resultHandlers>
 		</HTTPServiceInvoker>
