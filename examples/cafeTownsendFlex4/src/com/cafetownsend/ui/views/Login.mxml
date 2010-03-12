@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel 
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	xmlns:mate="http://mate.asfusion.com/"
+	currentState="{ model.state }"
+	title="Employee Login" 
+	addedToStage="panel1_addedToStageHandler(event)"
+	removedFromStage="panel1_removedFromStageHandler(event)"
+	>
+	
+	
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import com.cafetownsend.ui.presenters.LoginPresentationModel;
+			
+			private var _model:LoginPresentationModel;
+			
+
+			[Bindable]
+			public function get model():LoginPresentationModel
+			{
+				return _model;
+			}
+
+			public function set model(value:LoginPresentationModel):void
+			{
+				_model = value;
+			}
+
+			private function login():void 
+			{
+				model.login( username.text, password.text );
+			}
+			
+
+			protected function panel1_addedToStageHandler(event:Event):void
+			{
+				trace();
+			}
+
+
+			protected function panel1_removedFromStageHandler(event:Event):void
+			{
+				trace();
+				// TODO Auto-generated method stub
+			}
+
+		]]>
+	</fx:Script>
+	
+	
+	<s:layout>
+		<s:VerticalLayout 
+			paddingTop="10" paddingBottom="10"
+			paddingRight="10" paddingLeft="10"
+			/>
+	</s:layout>
+	
+	
+	
+	<!-- States ______________________________________________________________________ -->
+	
+	<s:states>
+		<s:State name="default" /> <!-- LoginPresentationModel.DEFULT_STATE  -->
+		<s:State name="messageState" /> <!-- LoginPresentationModel.MESSAGE_STATE  -->
+	</s:states>
+	
+	
+	<!-- GUI ______________________________________________________________________ -->
+	
+	<s:Label 
+		width="100%"
+		includeIn="messageState"
+		text="Invalid login information, please try again"
+		/>
+	
+	<mx:Form 
+		id="loginForm" 
+		defaultButton="{ loginBtn }"
+		>
+		
+		<mx:FormItem 
+			label="Username:" 
+			required="true"
+			>
+			
+			<s:TextInput 
+				id="username"
+				text="{ model.clearFields }"
+				errorString="{ model.userNameErrorString }"
+				/>
+		</mx:FormItem>
+		
+		<mx:FormItem 
+			label="Password:" 
+			required="true"
+			>
+			<s:TextInput 
+				id="password" 
+				text="{ model.clearFields }"
+				errorString="{ model.passwordErrorString }"
+				displayAsPassword="true" 
+				/>
+		</mx:FormItem>
+		
+		<mx:FormItem 
+			direction="horizontal" 
+			verticalGap="15" paddingTop="20"
+			>
+			<s:Button 
+				id="loginBtn" 
+				label="Login" 
+				click="login()"
+				/>
+		</mx:FormItem>
+	</mx:Form>
+	
+	<s:Label 
+		width="100%"
+		textAlign="center"
+		text="Username: Flex   Password: Mate" 
+		/>
+	
+
+	
+</s:Panel>

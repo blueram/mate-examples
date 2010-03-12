@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Cafe Townsend MVC Tutorial
+Converted to Mate -  by Laura Arguello 
+Modified for using Flex 4 - by Jens Krause // www.websector.de
+
+This is released under a Creative Commons license.
+http://creativecommons.org/licenses/by/2.5/
+
+-->
+
+<s:Application
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:views="com.cafetownsend.ui.views.*" 
+	xmlns:maps="com.cafetownsend.maps.*" 
+	viewSourceURL="srcview/index.html"
+	>
+	
+	<s:layout>
+		<s:VerticalLayout 
+			horizontalAlign="center" 
+			/>
+	</s:layout>
+	
+	<fx:Declarations>
+		
+		<!-- Event Maps __________________________________________________ -->
+		
+		<maps:MainEventMap />	
+		
+	</fx:Declarations>
+	
+	
+	<!-- Styles______________________________________________________ -->	
+	
+	<fx:Style source="/assets/styles/main.css" />	
+	
+	
+	<!-- Views _______________________________________________________ -->
+	
+	<views:MainUI
+		id="mainBody"
+		/>
+	
+</s:Application>

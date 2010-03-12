@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EventMap
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns="http://mate.asfusion.com/"
+	>
+	
+	<fx:Script>
+		<![CDATA[
+		
+		import mx.events.FlexEvent;
+		import com.cafetownsend.model.constants.*;
+		import mx.events.*;
+		import com.cafetownsend.events.*;
+		import com.cafetownsend.model.managers.*;
+		import com.cafetownsend.ui.views.*;
+		import com.cafetownsend.ui.presenters.*;
+		
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		
+		<!-- ======================================================================================== -->
+		<!-- Config -->
+		<!-- _________________________________________________________________________________________ -->	
+		
+		
+		<!-- InjectorSettings ___________________________________________________________ -->	
+		
+		<!-- Inject properties to any views as soon as possible listening to FlexEvent.PREINITIALIZE -->
+		
+		<InjectorSettings
+			eventType="{ FlexEvent.PREINITIALIZE }"
+			/>
+		
+		
+		<!-- Services   Note: you can have an external file if you have more services -->
+		
+		<s:HTTPService id="employeesService" url="assets/data/Employees.xml" resultFormat="e4x" />
+		
+		
+		<!-- ======================================================================================== -->
+		<!-- Events -->
+		<!-- _________________________________________________________________________________________ -->		
+		
+		<!-- FlexEvent.APPLICATION_COMPLETE ___________________________________________________________ -->
+		
+		<EventHandlers type="{FlexEvent.APPLICATION_COMPLETE}">
+			
+			<HTTPServiceInvoker instance="{employeesService}">
+				<resultHandlers>
+					<MethodInvoker generator="{EmployeeParser}" 
+								   method="loadEmployeesFromXML" arguments="{resultObject}" />
+					
+					<MethodInvoker generator="{EmployeeManager}" method="saveEmpoyeeList" arguments="{lastReturn}" />	
+				</resultHandlers>
+			</HTTPServiceInvoker>
+			
+		</EventHandlers>
+		
+		<!-- LoginEvent.LOGIN ________________________________________________________________________ -->
+		
+		<!-- Loging in, normally this would send a server request, but we are making it simple here  -->
+		<EventHandlers type="{LoginEvent.LOGIN}">
+			<MethodInvoker generator="{ AuthorizationManager }" method="login" arguments="{[event.username, event.password]}" />
+			<MethodInvoker generator="{ NavigationManager }" method="updateAfterLogin" arguments="{ lastReturn }"/>
+		</EventHandlers>
+		
+		<!-- EmployeeEvent.SELECT _____________________________________________________________________ -->
+		
+		<EventHandlers type="{EmployeeEvent.SELECT}">
+			<MethodInvoker generator="{EmployeeManager}" method="selectEmployee" arguments="{event.employee}"/>
+			<MethodInvoker generator="{ NavigationManager }" method="updatePath" arguments="{ Navigation.EMPLOYEE_DETAIL }"/>
+		</EventHandlers>
+		
+		<!-- EmployeeEvent.DELETE ____________________________________________________________________ -->
+		
+		<EventHandlers type="{EmployeeEvent.DELETE}">
+			<MethodInvoker generator="{EmployeeManager}" method="deleteEmployee" arguments="{event.employee}"/>
+			<!-- assume everything was ok, make employee list show up -->
+			<MethodInvoker generator="{ NavigationManager }" method="updatePath" arguments="{ Navigation.EMPLOYEE_LIST }"/>
+		</EventHandlers>
+		
+		<!-- EmployeeEvent.SAVE _______________________________________________________________________ -->
+		
+		<EventHandlers type="{EmployeeEvent.SAVE}">
+			<MethodInvoker generator="{EmployeeManager}" method="saveEmployee" arguments="{event.employee}"/>
+			<!-- assume everything was ok, make employee list show up -->
+			<MethodInvoker generator="{ NavigationManager }" method="updatePath" arguments="{ Navigation.EMPLOYEE_LIST }"/>
+		</EventHandlers>
+		
+		<!-- EmployeeEvent.CANCEL_EDIT __________________________________________________________________ -->
+		
+		<EventHandlers type="{EmployeeEvent.CANCEL_EDIT}">
+			<!-- assume everything was ok, make employee list show up -->
+			<MethodInvoker generator="{ NavigationManager }" method="updatePath" arguments="{ Navigation.EMPLOYEE_LIST }"/>
+		</EventHandlers>
+		
+		<!-- EmployeeEvent.ADD _________________________________________________________________________ -->
+		
+		<EventHandlers type="{EmployeeEvent.ADD}">
+			<EventAnnouncer generator="{EmployeeEvent}" type="{EmployeeEvent.SELECT}">
+				<Properties employee="{event.employee}"/>
+			</EventAnnouncer>
+		</EventHandlers>
+		
+		<!-- LoginEvent.LOGOUT _________________________________________________________________________ -->
+		<EventHandlers type="{LoginEvent.LOGOUT}">
+			<MethodInvoker generator="{ AuthorizationManager }" method="logout"/>
+			<MethodInvoker generator="{ NavigationManager }" method="updatePath" arguments="{ Navigation.LOGIN }"/>
+		</EventHandlers>
+		
+		
+		
+		<!-- ======================================================================================== -->
+		<!-- Injectors -->
+		<!-- _________________________________________________________________________________________ -->
+		
+		<!-- MainUI + MainUIPresentationModel __________________________________________________________________ -->
+		
+		<Injectors target="{ MainUI }" >
+			<ObjectBuilder 
+				generator="{ MainUIPresentationModel }" 
+				/>
+			<PropertyInjector 
+				targetKey="model" 
+				source="{ lastReturn }"
+				/>
+		</Injectors>
+		
+		
+		<Injectors target="{ MainUIPresentationModel }" >
+			<PropertyInjector targetKey="navigationPath" source="{ NavigationManager }" sourceKey="navigationPath"/>
+		</Injectors>
+		
+		
+		<!-- EmployeeDetail + EmployeeDetailPresentationModel __________________________________________________________________ -->
+		
+		<Injectors target="{EmployeeDetail}" >
+			<ObjectBuilder 
+				generator="{ EmployeeDetailPresentationModel }" 
+				constructorArguments="{ scope.dispatcher }"
+				/>
+			<PropertyInjector targetKey="model" source="{ lastReturn } " />
+		</Injectors>
+		
+		
+		<Injectors target="{ EmployeeDetailPresentationModel }" >
+			<PropertyInjector 
+				targetKey="selectedEmployee" 
+				source="{ EmployeeManager }" 
+				sourceKey="employee" />
+		</Injectors>
+		
+		<!-- EmployeeList + EmployeeListPresentationModel __________________________________________________________________ -->
+		
+		<Injectors target="{ EmployeeList }">
+			<ObjectBuilder 
+				generator="{ EmployeeListPresentationModel }" 
+				constructorArguments="{ scope.dispatcher }"
+				/>
+			<PropertyInjector 
+				targetKey="model" 
+				source="{ lastReturn }" 
+				/>
+		</Injectors>
+		
+		<Injectors target="{ EmployeeListPresentationModel }">
+			<PropertyInjector targetKey="employees" source="{EmployeeManager}" sourceKey="employeeList" />
+		</Injectors>
+		
+		<!-- Login + LoginPresentationModel __________________________________________________________________ -->
+		
+		<Injectors target="{ Login }" >
+			<ObjectBuilder 
+				generator="{ LoginPresentationModel }" 
+				constructorArguments="{ scope.dispatcher }"
+				/>
+			<PropertyInjector targetKey="model" source="{ lastReturn }" />
+		</Injectors>
+		
+		<Injectors target="{ LoginPresentationModel }" >
+			<PropertyInjector targetKey="loginStatus" source="{ AuthorizationManager }" sourceKey="status" />
+		</Injectors>
+		
+		
+		
+	</fx:Declarations>
+	
+</EventMap>
