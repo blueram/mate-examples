@@ -1,0 +1,38 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace views "com.cafetownsend.ui.views.*";
+
+
+
+s|Application {
+	backgroundColor: #000000;
+}
+
+mx|Alert {
+	backgroundColor: #FFFFFF;
+	color: #000000;
+}
+
+
+views|MainUI {
+	horizontalAlign : center;	
+}
+
+.mainBody {
+	backgroundColor: #FFFFFF;
+	paddingTop: 20;
+	horizontalAlign : center;	
+}
+
+
+mx|Form, s|Label, s|TextInput { 
+	   color: #000000;
+	   font-weight: normal;
+}
+
+mx|FormItem, s|List { 
+	   font-weight: bold;
+	   text-align: left;
+}
+
