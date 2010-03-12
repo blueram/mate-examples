@@ -1,0 +1,15 @@
+#summary Cafe Townsend using Flex 4
+
+== Installation notes ==
+
+ * Use [http://opensource.adobe.com/wiki/display/flexsdk/Download+Flex+4 latest Flex SDK]. The example is tested using [http://opensource.adobe.com/wiki/display/flexsdk/download?build=4.1.0.14696&pkgtype=1 Flex 4.1.0.14696]
+
+ * Add "-use-network=false" as a compiler attribute to avoid security errors loading xml data, such as _'cannot access local resource assets/data/Employees.xml. Only local-with-filesystem and trusted local SWF files may access local resources.'_ 
+
+Have fun!
+
+== Authors ==
+
+Laura Arguello [http://www.asfusion.com/]
+
+Jens Krause: [http://www.websector.de/ www.websector.de/]
