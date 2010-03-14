@@ -10,6 +10,7 @@ package com.cafetownsend.events
 		
 		public static const ADD: String 		= "addEmployeeEvent";
 		public static const SELECT: String 		= "selectEmployeeEvent";
+		public static const EDIT: String 		= "editEmployeeEvent";
 		public static const DELETE: String 		= "deleteEmployeeEvent";
 		public static const SAVE: String 		= "saveEmployeeEvent";
 		public static const CANCEL_EDIT: String = "cancelEditEmployeeEvent";

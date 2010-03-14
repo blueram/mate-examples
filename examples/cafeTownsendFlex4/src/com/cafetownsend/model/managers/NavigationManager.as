@@ -8,7 +8,7 @@ package com.cafetownsend.model.managers
 	public class NavigationManager extends EventDispatcher
 	{
 		
-		private var _navigationPath:String;
+		private var _navigationPath:String = Navigation.LOGIN;
 		
 		[Bindable(Event="navigationChange")]
 		public function get navigationPath():String

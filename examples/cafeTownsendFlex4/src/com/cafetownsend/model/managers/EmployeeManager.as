@@ -48,18 +48,32 @@ package com.cafetownsend.model.managers
 		// -----------------------------------------------------------
 		public function deleteEmployee (employee:Employee):void 
 		{
-			var index:int = _employeeList.getItemIndex(employee);
-			if( index >= 0 )
+			
+			var i:int = 0;
+			var max: int = _employeeList.length;
+			var storedEmployee: Employee;
+			
+			for (i; i < max; i++) 
 			{
-				_employeeList.removeItemAt( index );
+				storedEmployee = _employeeList.getItemAt( i ) as Employee;
+				
+				if( storedEmployee.emp_id == employee.emp_id )
+				{
+					employeeList.removeItemAt( i );	
+					break;
+				}
 			}
+
+			
 			// clear out the selected employee just in case
-			selectEmployee(null);
+			selectEmployee( null );
 		}
 
 		// -----------------------------------------------------------
-		public function saveEmployee (employee:Employee) : void {
-
+		// -----------------------------------------------------------
+		public function saveEmployee (employee:Employee) : void 
+		{
+			
 			// assume the edited fields are not an existing employee, but a new employee
 			// and set the ArrayCollection index to -1, which means this employee is not in our existing
 			// employee list anywhere
@@ -74,18 +88,18 @@ package com.cafetownsend.model.managers
 					dpIndex = i;
 				}
 			}
-
+			
 			// if it was an existing employee already in the ArrayCollection
 			if ( dpIndex >= 0 ) {
 				// update that employee's values
 				(employeeList.getItemAt(dpIndex) as Employee).copyFrom(employee);
 			}
-			// otherwise, if it didn't match any existing employees
+				// otherwise, if it didn't match any existing employees
 			else 
 			{
 				// add the temp employee to the ArrayCollection
 				var tempEmployee:Employee = new Employee();
-					tempEmployee.copyFrom(employee);
+				tempEmployee.copyFrom(employee);
 				employeeList.addItem(tempEmployee);
 			}
 			

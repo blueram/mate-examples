@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer 
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	styleName="navContainer"
+	>
+	
+	
+	<fx:Script> 
+		<![CDATA[
+			import com.cafetownsend.model.vos.Employee;
+			import com.cafetownsend.ui.presenters.EmployeeListPresentationModel;	
+			
+			[Bindable]
+			public var model:EmployeeListPresentationModel;
+			
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:HGroup
+		height="100%"
+		left="20" right="20"
+		verticalAlign="middle"
+		>
+		
+		
+		<s:Button 
+			label="Create" 
+			styleName="navButton"
+			click="model.addNewEmployee()" 
+			/>
+		
+		<s:Button 
+			label="Edit" 
+			styleName="navButton"
+			click="model.editEmployee()" 
+			enabled="{ model.hasSelecetdEmployee }"
+			/>
+		
+		<s:Button 
+			label="Delete" 
+			styleName="navButton"
+			click="model.askForDeletingEmployee()" 
+			enabled="{ model.hasSelecetdEmployee }"
+			/>
+	</s:HGroup>
+	
+</s:BorderContainer>

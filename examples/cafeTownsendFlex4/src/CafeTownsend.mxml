@@ -16,33 +16,30 @@ http://creativecommons.org/licenses/by/2.5/
 	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:views="com.cafetownsend.ui.views.*" 
 	xmlns:maps="com.cafetownsend.maps.*" 
-	viewSourceURL="srcview/index.html"
+	viewSourceURL="http://code.google.com/p/mate-examples/source/browse/trunk/examples/cafeTownsendFlex4/src/"
 	>
 	
 	<s:layout>
 		<s:VerticalLayout 
 			horizontalAlign="center" 
+			verticalAlign="middle"
 			/>
 	</s:layout>
 	
 	<fx:Declarations>
 		
-		<!-- Event Maps __________________________________________________ -->
-		
+		<!-- Event Maps __________________________________________________ -->		
 		<maps:MainEventMap />	
 		
 	</fx:Declarations>
 	
 	
-	<!-- Styles______________________________________________________ -->	
-	
+	<!-- Styles______________________________________________________ -->		
 	<fx:Style source="/assets/styles/main.css" />	
 	
 	
-	<!-- Views _______________________________________________________ -->
-	
+	<!-- Views _______________________________________________________ -->	
 	<views:MainUI
-		id="mainBody"
 		/>
 	
 </s:Application>

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Panel 
+<s:Group 
 	xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:mx="library://ns.adobe.com/flex/mx" 
 	xmlns:model="com.cafetownsend.model.*"
-	title="Employee List" 
 	>
-
+	
 	<fx:Script> 
 		<![CDATA[
 			import com.cafetownsend.ui.presenters.EmployeeListPresentationModel;
@@ -14,37 +13,22 @@
 			
 			[Bindable]
 			public var model:EmployeeListPresentationModel;
-			
-			// format the names that are displayed in the List
-			public function properName( employee : Object ) : String 
-			{
-				return Employee(employee).lastname + ", " +  Employee(employee).firstname;
-			}
+
 			
 		]]>
 	</fx:Script>
 	
-	<s:layout>
-		<s:VerticalLayout 
-			paddingTop="10" paddingBottom="10"
-			paddingRight="10" paddingLeft="10"
-			/>
-	</s:layout>
 	
 	<!-- GUI ______________________________________________________________________ -->
 	
-	<s:HGroup>
-		<s:Button label="Add New Employee" click="model.addNewEmployee()" />
-		<s:Button label="Logout" click="model.logout()" />
-	</s:HGroup>
-
 	<s:List 
 		id="employees_li" 
 		selectedIndex="{ model.selectedEmployeeIndex }"
 		dataProvider="{ model.employees }" 
-		labelFunction="properName"
-		change="model.updateEmployee( employees_li.selectedItem as Employee )" 
-		width="100%" 
+		change="model.selectEmployee( employees_li.selectedItem as Employee )" 
+		width="100%" height="100%"
+		borderVisible="false"
+		itemRenderer="com.cafetownsend.ui.components.EmployeesListItemRenderer"
 		/>
-
-</s:Panel>
+	
+</s:Group>

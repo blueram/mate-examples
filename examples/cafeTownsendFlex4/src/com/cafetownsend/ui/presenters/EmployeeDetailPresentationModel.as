@@ -3,10 +3,13 @@ package com.cafetownsend.ui.presenters
 	import com.cafetownsend.events.EmployeeEvent;
 	import com.cafetownsend.model.vos.Employee;
 	
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-
+	
+	import spark.components.Application;
+	
 	public class EmployeeDetailPresentationModel extends EventDispatcher
 	{
 		
@@ -15,24 +18,46 @@ package com.cafetownsend.ui.presenters
 		// -------------------------------------------------------
 		
 		// selectedEmployee ...................................................
-		private var tempEmployee:Employee;
+		
 		private var _selectedEmployee:Employee = null;
 		
-		[Bindable(Event="employeeChange")]
-		public function set selectedEmployee( employee:Employee ):void
-		{
-			_selectedEmployee = employee;
-			if( employee )
-			{
-				tempEmployee = new Employee();
-				tempEmployee.copyFrom( employee );
-			}
-			dispatchEvent( new Event("employeeChange") );
-		}
 		public function get selectedEmployee( ):Employee
 		{
 			return _selectedEmployee;
 		}
+
+		public function set selectedEmployee( employee:Employee ):void
+		{
+			if( employee != null )
+			{
+				_selectedEmployee = employee;
+				
+				if( employee != null )
+					tempEmployee.copyFrom( _selectedEmployee );
+
+			}
+		}
+		
+		private var _tempEmployee:Employee = new Employee();
+		
+		[Bindable(Event="tempEmployeeChange")]	
+		public function get tempEmployee( ):Employee
+		{
+			return _tempEmployee;
+		}
+		
+		public function set tempEmployee( employee:Employee ):void
+		{
+			if( _tempEmployee !== employee )
+			{
+				_tempEmployee = employee;
+				
+				this.dispatchEvent( new Event('tempEmployeeChange') );
+				
+			}
+		}
+
+
 		
 		//  firstnameErrorString ...................................................
 		private var _firstnameErrorString:String = "";
@@ -61,6 +86,16 @@ package com.cafetownsend.ui.presenters
 			return _emailErrorString;
 		}
 		
+		protected function clearValidationMessages():void 
+		{
+			_firstnameErrorString
+			= _lastNameErrorString
+			= _emailErrorString
+			= '';
+			
+			dispatchEvent( new Event( "validationChange" ) );
+		}
+		
 		// -------------------------------------------------------
 		// Contructor
 		// -------------------------------------------------------
@@ -79,35 +114,32 @@ package com.cafetownsend.ui.presenters
 		// cancelEmployeeEdits ...................................................
 		public function cancelEmployeeEdits() : void 
 		{
+			clearValidationMessages();
+			
 			var event:EmployeeEvent = new EmployeeEvent(EmployeeEvent.CANCEL_EDIT);
-			event.employee = selectedEmployee;
-				
-			dispatcher.dispatchEvent(event);
-		}
-		
-		
-		// deleteEmployee ...................................................
-		public function deleteEmployee( ) : void 
-		{
-			// broadcast the event
-			var event:EmployeeEvent = new EmployeeEvent(EmployeeEvent.DELETE);
-			event.employee =  selectedEmployee;
+			event.employee = null;
 			
 			dispatcher.dispatchEvent(event);
 		}
+		
 		
 		// saveEmployee ...................................................
 		public function saveEmployee( ):void
 		{
 			if( isValid( tempEmployee ) )
 			{
-				// to make it here the fields must have been valid
-				// broadcast the event
-				var event:EmployeeEvent = new EmployeeEvent(EmployeeEvent.SAVE);
-				event.employee = tempEmployee;
-						
-				dispatcher.dispatchEvent(event);
+				clearValidationMessages();
+				
+				var event:EmployeeEvent = new EmployeeEvent( EmployeeEvent.SAVE );
+				event.employee = new Employee().copyFrom( _tempEmployee );
+				
+				dispatcher.dispatchEvent(event);				
 			}
+			else
+			{
+				this.dispatchEvent( new Event("validationChange") );
+			}
+			
 		}
 		
 		public function updateFirstName( firstName:String ):void
@@ -138,11 +170,15 @@ package com.cafetownsend.ui.presenters
 		//  isValid ...................................................
 		private function isValid( employee:Employee ):Boolean
 		{
-			_firstnameErrorString = ( employee.firstname ) ? "" : "First Name is a required field.";
-			_lastNameErrorString  = ( employee.lastname  ) ? "" : "Last Name is a required field.";
-			_emailErrorString  	  = ( employee.email     ) ? "" : "Email is a required field.";
-			dispatchEvent( new Event( "validationChange" ) );
-			return ( employee.firstname  &&  employee.lastname && employee.email );
+			var validFirstname: Boolean = employee.firstname != null && employee.firstname != "";
+			var validLastname: Boolean = employee.lastname != null && employee.lastname != "";
+			var validEmail: Boolean = employee.email != null && employee.email != "";
+			
+			_firstnameErrorString = ( validFirstname ) ? "" : "First Name is a required field.";
+			_lastNameErrorString  = ( validLastname ) ? "" : "Last Name is a required field.";
+			_emailErrorString  	  = ( validEmail ) ? "" : "Email is a required field.";
+			
+			return ( validFirstname  &&  employee.lastname && employee.email );
 		}
 	}
 }

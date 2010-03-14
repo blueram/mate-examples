@@ -94,6 +94,12 @@ package com.cafetownsend.ui.presenters
 				event.username = userName;
 				event.password = password;
 				dispatcher.dispatchEvent( event );
+				
+				dispatchEvent( new Event( "validationChange" ) );
+			}
+			else
+			{
+				loginStatus = Authorization.FAILED;
 			}
 		}
 		
@@ -105,12 +111,19 @@ package com.cafetownsend.ui.presenters
 		//  isValid  ..........................................................
 		private function isValid( userName:String, password:String ):Boolean
 		{
-			_userNameErrorString = ( userName != null && userName != "" ) ? "" : "Username is a required field.";
-			_passwordErrorString = ( password != null && password != "" ) ? "" : "Password is a required field.";
+			var validUser: Boolean = userName != null && userName.length;
+			var validPasswort: Boolean = password != null && password.length;
+			
+			_userNameErrorString = ( validUser ) ? "" : "Username is a required field.";
+			_passwordErrorString = ( validPasswort ) ? "" : "Password is a required field.";
 			
 			dispatchEvent( new Event( "validationChange" ) );
 			
-			return ( userName != null && userName != "" && password != null && password != ""  );
+			return ( validUser  &&  validPasswort );
+
 		}
+		
+
+		
 	}
 }
