@@ -4,35 +4,136 @@
 @namespace views "com.cafetownsend.ui.views.*";
 
 
+global
+{
+	font-family: 'Arial';
+	color: #654030;	
+	font-size: 15;
+	font-weight: normal;
+}
+
+
+.mainButton
+{
+	skinClass: ClassReference('com.cafetownsend.skins.MainButtonSkin');
+	color: #FFFFFF;
+	background-color: #653F30;
+	border-weight: 3;
+	border-color: #FFFFFF;
+}
+
+
+.mainButton:over,
+.mainButton:down
+{
+	
+	color: #653F30;
+	background-color: #FFFFFF;
+	border-color: #653F30;
+}
+
+.logoutButton
+{
+	skinClass: ClassReference('com.cafetownsend.skins.MainButtonSkin');
+	color: #FFFFFF;
+	background-color: #CCCCCC;
+	border-weight: 3;
+	border-color: #FFFFFF;
+}
+
+
+.logoutButton:over,
+.logoutButton:down
+{
+	
+	background-color: #653F30;
+	border-color: #FFFFFF;
+}
+
+
+.navButton
+{
+	skinClass: ClassReference('com.cafetownsend.skins.NavButtonSkin');
+	color: #653F30;
+	border-color: #653F30;
+}
+
+
+.navButton:over,
+.navButton:down,
+{
+	border-color: #000000;
+	color: #000000;
+}
+
+.employeesItemRenderer
+{	
+	font-size: 17;
+	color: #653F30;
+}
+
+
+
+.employeesItemRenderer:selected,
+.employeesItemRenderer:hovered
+{	
+	color: #FFFFFF;
+}
+
+
+
+
+s|Label{
+	
+	color: #654030;	
+	font-size: 15;
+}
 
 s|Application {
-	backgroundColor: #000000;
+	backgroundColor: #FFF;
 }
 
 mx|Alert {
+	font-weight:normal;
 	backgroundColor: #FFFFFF;
-	color: #000000;
+	color: #654030;
 }
+
 
 
 views|MainUI {
 	horizontalAlign : center;	
 }
 
-.mainBody {
-	backgroundColor: #FFFFFF;
-	paddingTop: 20;
-	horizontalAlign : center;	
+.navContainer {
+	backgroundColor: #CAEDFF;
+	border-visible: false;
 }
 
 
-mx|Form, s|Label, s|TextInput { 
-	   color: #000000;
-	   font-weight: normal;
+mx|FormItem,
+mx|Label
+{ 
+	color: #654030;
 }
 
-mx|FormItem, s|List { 
-	   font-weight: bold;
-	   text-align: left;
+s|List { 
+	roll-over-color: #654030;
+	selection-color: #654030;
+	textSelectedColor: #FFFFFF;
+	textRollOverColor: #FFFFFF;
 }
 
+s|TextInput {
+	color: #654030;
+	borderColor: #654030;
+	font-weight: normal;
+}
+
+
+#loginErrorTxt
+{
+	color: #FF0033;
+	font-size: 13;
+	font-weight: normal;	
+}

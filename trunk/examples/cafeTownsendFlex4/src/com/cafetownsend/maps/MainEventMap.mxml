@@ -8,13 +8,14 @@
 	<fx:Script>
 		<![CDATA[
 		
-		import mx.events.FlexEvent;
-		import com.cafetownsend.model.constants.*;
-		import mx.events.*;
 		import com.cafetownsend.events.*;
+		import com.cafetownsend.model.constants.*;
 		import com.cafetownsend.model.managers.*;
-		import com.cafetownsend.ui.views.*;
 		import com.cafetownsend.ui.presenters.*;
+		import com.cafetownsend.ui.views.*;
+		
+		import mx.events.*;
+		import mx.events.FlexEvent;
 		
 		]]>
 	</fx:Script>
@@ -72,6 +73,11 @@
 		
 		<EventHandlers type="{EmployeeEvent.SELECT}">
 			<MethodInvoker generator="{EmployeeManager}" method="selectEmployee" arguments="{event.employee}"/>
+		</EventHandlers>
+
+		<!-- EmployeeEvent.EDIT _____________________________________________________________________ -->
+		
+		<EventHandlers type="{EmployeeEvent.EDIT}">
 			<MethodInvoker generator="{ NavigationManager }" method="updatePath" arguments="{ Navigation.EMPLOYEE_DETAIL }"/>
 		</EventHandlers>
 		
@@ -94,6 +100,7 @@
 		<!-- EmployeeEvent.CANCEL_EDIT __________________________________________________________________ -->
 		
 		<EventHandlers type="{EmployeeEvent.CANCEL_EDIT}">
+			<MethodInvoker generator="{EmployeeManager}" method="selectEmployee" arguments="{ event.employee }" />
 			<!-- assume everything was ok, make employee list show up -->
 			<MethodInvoker generator="{ NavigationManager }" method="updatePath" arguments="{ Navigation.EMPLOYEE_LIST }"/>
 		</EventHandlers>
@@ -101,7 +108,8 @@
 		<!-- EmployeeEvent.ADD _________________________________________________________________________ -->
 		
 		<EventHandlers type="{EmployeeEvent.ADD}">
-			<EventAnnouncer generator="{EmployeeEvent}" type="{EmployeeEvent.SELECT}">
+			<MethodInvoker generator="{EmployeeManager}" method="selectEmployee" arguments="{ event.employee }" />
+			<EventAnnouncer generator="{EmployeeEvent}" type="{EmployeeEvent.EDIT }">
 				<Properties employee="{event.employee}"/>
 			</EventAnnouncer>
 		</EventHandlers>
@@ -123,6 +131,7 @@
 		<Injectors target="{ MainUI }" >
 			<ObjectBuilder 
 				generator="{ MainUIPresentationModel }" 
+				constructorArguments="{ scope.dispatcher }"
 				/>
 			<PropertyInjector 
 				targetKey="model" 
@@ -136,9 +145,27 @@
 		</Injectors>
 		
 		
+		<!-- Employees + EmployeesPresentationModel __________________________________________________________________ -->
+		
+		<Injectors targets="{ [ Employees, EmployeesNavigation ] }" >
+			<ObjectBuilder 
+				generator="{ EmployeesPresentationModel }" 
+				constructorArguments="{ scope.dispatcher }"
+				/>
+			<PropertyInjector targetKey="model" source="{ lastReturn } " />
+		</Injectors>
+		
+		
+		<Injectors target="{ EmployeesPresentationModel }" >
+			<PropertyInjector 
+				targetKey="navigationPath" 
+				source="{ NavigationManager }" 
+				sourceKey="navigationPath"/>
+		</Injectors>
+
 		<!-- EmployeeDetail + EmployeeDetailPresentationModel __________________________________________________________________ -->
 		
-		<Injectors target="{EmployeeDetail}" >
+		<Injectors targets="{[ EmployeeDetail, EmployeeDetailNavigation ] }" >
 			<ObjectBuilder 
 				generator="{ EmployeeDetailPresentationModel }" 
 				constructorArguments="{ scope.dispatcher }"
@@ -156,7 +183,7 @@
 		
 		<!-- EmployeeList + EmployeeListPresentationModel __________________________________________________________________ -->
 		
-		<Injectors target="{ EmployeeList }">
+		<Injectors targets="{ [ EmployeeList, EmployeeListNavigation ] }">
 			<ObjectBuilder 
 				generator="{ EmployeeListPresentationModel }" 
 				constructorArguments="{ scope.dispatcher }"
@@ -169,6 +196,7 @@
 		
 		<Injectors target="{ EmployeeListPresentationModel }">
 			<PropertyInjector targetKey="employees" source="{EmployeeManager}" sourceKey="employeeList" />
+			<PropertyInjector targetKey="selectedEmployee" source="{EmployeeManager}" sourceKey="employee" />
 		</Injectors>
 		
 		<!-- Login + LoginPresentationModel __________________________________________________________________ -->

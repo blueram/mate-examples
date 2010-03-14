@@ -8,11 +8,11 @@ package com.cafetownsend.ui.presenters
 	import flash.events.IEventDispatcher;
 
 	
-	public class MainUIPresentationModel extends EventDispatcher
+	public class EmployeesPresentationModel extends EventDispatcher
 	{
 		public static const CURRENTSTATE_CHANGE_EVENT:String = "currentStateChange";
 		
-		private var _currentState:String = Navigation.LOGIN;
+		private var _currentState:String;
 
 		
 		// -------------------------------------------------------
@@ -20,16 +20,9 @@ package com.cafetownsend.ui.presenters
 		// -------------------------------------------------------
 		
 		private var dispatcher:IEventDispatcher;
-		public function MainUIPresentationModel( dispatcher:IEventDispatcher ):void
+		public function EmployeesPresentationModel( dispatcher:IEventDispatcher ):void
 		{
 			this.dispatcher = dispatcher;
-		}
-		
-		
-		public function logout() : void 
-		{
-			var event:LoginEvent = new LoginEvent( LoginEvent.LOGOUT );
-			dispatcher.dispatchEvent(event);
 		}
 		
 		
@@ -42,8 +35,8 @@ package com.cafetownsend.ui.presenters
 		public function set navigationPath(path:String):void
 		{
 			//
-			// get the first path value only
-			var value: String = path.split("/")[0];
+			// get the second path value only
+			var value: String = path.split("/")[1];
 				
 			if (_currentState != value) {			
 				_currentState = value;
