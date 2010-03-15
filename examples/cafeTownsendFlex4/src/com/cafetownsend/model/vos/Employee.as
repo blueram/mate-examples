@@ -28,16 +28,33 @@ package com.cafetownsend.model.vos
 		}
 		
 		/*-.........................................Methods..........................................*/
-		public function copyFrom(newEmployee:Employee): Employee 
+		
+		public function copyFrom(newEmployee:Employee):void 
 		{
 			this.emp_id = newEmployee.emp_id;
 			this.email = newEmployee.email;
 			this.firstname = newEmployee.firstname;
 			this.lastname = newEmployee.lastname;
-			this.startdate = newEmployee.startdate;
+			this.startdate = newEmployee.startdate;			
+		}
+		
+		public function clone():Employee 
+		{
+			var employee: Employee = new Employee();
 			
-			return this;
+			employee.emp_id = this.emp_id;
+			employee.email = this.email;
+			employee.firstname = this.firstname;
+			employee.lastname = this.lastname;
+			employee.startdate = this.startdate;
 			
+			return employee;
+			
+		}
+		
+		public function isEmpty():Boolean
+		{
+			return this.firstname == '' && this.lastname == '' && this.email == '';
 		}
 	}
 }

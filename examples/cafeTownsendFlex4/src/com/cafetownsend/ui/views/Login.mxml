@@ -59,7 +59,7 @@
 			required="true"
 			height="25"
 			>
-			
+
 			<s:TextInput 
 				id="username"
 				width="200" height="25"

@@ -13,19 +13,19 @@ package com.cafetownsend.ui.presenters
 	import mx.controls.Alert;
 	import mx.core.FlexGlobals;
 	import mx.events.CloseEvent;
-
+	
 	
 	public class EmployeeListPresentationModel extends EventDispatcher
 	{
-
+		
 		// -------------------------------------------------------
 		// Setters and getters
 		// -------------------------------------------------------
 		
 		// employees ...................................................
 		private var _employees:ArrayCollection = null;
-
-
+		
+		
 		[Bindable(Event="employeesChange")]
 		public function set employees( list:ArrayCollection ):void
 		{
@@ -38,7 +38,7 @@ package com.cafetownsend.ui.presenters
 		}
 		
 		// selectedEmployeeIndex ...................................................
-
+		
 		[Bindable(Event="selectedEmployeeChanged")]
 		public function get selectedEmployeeIndex():int
 		{
@@ -60,15 +60,15 @@ package com.cafetownsend.ui.presenters
 			
 			return -1;
 		}
-
 		
-
+		
+		
 		[Bindable(Event="selectedEmployeeChanged")]
 		public function get hasSelecetdEmployee():Boolean
 		{
 			return selectedEmployee != null;
 		}
-
+		
 		
 		
 		// selectedEmployee ...................................................		
@@ -92,7 +92,7 @@ package com.cafetownsend.ui.presenters
 		}		
 		
 		// -------------------------------------------------------
-		// Contructor
+		// Constructor
 		// -------------------------------------------------------
 		
 		private var dispatcher:IEventDispatcher;
@@ -108,9 +108,9 @@ package com.cafetownsend.ui.presenters
 		{
 			var event:EmployeeEvent = new EmployeeEvent( EmployeeEvent.ADD );
 			event.employee = new Employee();
-				
+			
 			dispatcher.dispatchEvent( event );
-
+			
 		}
 		
 		// selectEmployee ...................................................
@@ -119,45 +119,29 @@ package com.cafetownsend.ui.presenters
 			// boardcast an event that contains the selectedItem from the List
 			var event:EmployeeEvent = new EmployeeEvent( EmployeeEvent.SELECT );
 			event.employee = employee;
-				
+			
 			dispatcher.dispatchEvent( event );
 		}
-
+		
 		// editEmployee ...................................................
 		public function editEmployee() : void 
 		{
 			// boardcast an event that contains the selectedItem from the List
 			var event:EmployeeEvent = new EmployeeEvent( EmployeeEvent.EDIT );
 			event.employee = selectedEmployee;
-				
+			
 			dispatcher.dispatchEvent( event );
-
-		}
-
-		// deleteEmployee ...................................................
-		public function askForDeletingEmployee( ) : void 
-		{
-			Alert.show(	'Are you sure you want to delete this employee?',
-				null,
-				Alert.OK | Alert.CANCEL,
-				FlexGlobals.topLevelApplication as Sprite,
-				deleteEmployee,
-				null,
-				Alert.OK );
+			
 		}
 		
-		protected function deleteEmployee( closeEvent:CloseEvent ) : void 
+		// deleteEmployee ...................................................
+		
+		public function deleteEmployee() : void 
 		{
-			// was the Alert event an OK
-			if ( closeEvent.detail == Alert.OK ) 
-			{
-				// broadcast the event
-				var event:EmployeeEvent = new EmployeeEvent(EmployeeEvent.DELETE);
-				event.employee =  new Employee().copyFrom( selectedEmployee );
-				
-				dispatcher.dispatchEvent( event );
-
-			}
+			// broadcast the event
+			var event:EmployeeEvent = new EmployeeEvent(EmployeeEvent.DELETE);		
+			dispatcher.dispatchEvent( event );
+			
 		}
 		
 		
@@ -168,6 +152,6 @@ package com.cafetownsend.ui.presenters
 			var event:LoginEvent = new LoginEvent(LoginEvent.LOGOUT);
 			dispatcher.dispatchEvent(event);
 		}
-
+		
 	}
 }

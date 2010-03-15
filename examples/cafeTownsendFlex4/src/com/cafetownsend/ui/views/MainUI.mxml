@@ -26,7 +26,7 @@
 		]]>
 	</fx:Script>
 	
-
+	
 	
 	<!-- States ______________________________________________________________________ -->
 	
@@ -43,6 +43,7 @@
 			fromState="*" toState="login"		
 			>
 			<s:Fade
+				duration="{ EffectConstants.DURATION }"
 				startDelay="{ EffectConstants.DURATION }"
 				target="{ loginView }"
 				/>
@@ -52,9 +53,12 @@
 			autoReverse="true"
 			fromState="login" toState="loggedIn"		
 			>
-			<s:Parallel>
+			
+			<s:Parallel
+				>						
 				<s:Resize 
 					target="{ this }"
+					startDelay="200"
 					heightTo="{ HEIGHT_MAX }"
 					duration="{ EffectConstants.DURATION }"
 					easer="{ EffectConstants.EASE }"
@@ -65,42 +69,42 @@
 					duration="{ EffectConstants.DURATION }"
 					easer="{ EffectConstants.EASE }"
 					/>
-				<s:Move
-					target="{ employeeNav }"
-					startDelay="{ EffectConstants.DURATION }"
-					duration="{ EffectConstants.DURATION }"
-					easer="{ EffectConstants.EASE }"
-					/>
 				<s:Fade
+					duration="{ EffectConstants.DURATION }"
 					startDelay="{ 2 * EffectConstants.DURATION }"
 					target="{ employeesView }"
+					effectStart="employeesView.employeesNav.hideListNav()"
+					effectEnd="employeesView.employeesNav.showListNav()"
 					/>
 			</s:Parallel>
+			
+			
 		</s:Transition>
 		<s:Transition 
 			autoReverse="true"
 			fromState="loggedIn" toState="login"
 			>
 			<s:Parallel>
+				<s:Fade
+					duration="{ EffectConstants.DURATION }"
+					target="{ employeesView }"
+					/>
 				<s:Move
 					target="{ bLogout }"
 					duration="{ EffectConstants.DURATION }"
+					startDelay="{ EffectConstants.DURATION }"
 					easer="{ EffectConstants.EASE }"
-					/>
-				<s:Move
-					target="{ employeeNav }"
-					duration="{ EffectConstants.DURATION }"
-					easer="{ EffectConstants.EASE }"
-					/>			
+					/>	
 				<s:Resize
 					target="{ this }"
 					heightTo="{ HEIGHT_MIN }"
 					duration="{ EffectConstants.DURATION }"
-					startDelay="{ EffectConstants.DURATION }"
+					startDelay="{ 2 * EffectConstants.DURATION }"
 					easer="{ EffectConstants.EASE }"
 					/>
 				<s:Fade
-					startDelay="{ EffectConstants.DURATION }"
+					duration="{ EffectConstants.DURATION }"
+					startDelay="{ 3 * EffectConstants.DURATION }"
 					target="{ loginView }"
 					/>
 			</s:Parallel>
@@ -151,44 +155,6 @@
 			
 		</s:filters>
 		
-		<!-- Header ______________________________________________________________________ -->
-		
-		<s:Group
-			id="header"
-			width="100%" 
-			height="130"
-			height.loggedIn="180"
-			>
-			
-			<!-- 
-			EmployeeNavigation is an extra view component and encapsulated from any EmployeeViews to animate it. 
-			-->
-			<views:EmployeesNavigation
-				id="employeeNav"
-				width="405" height="50"
-				y="65" y.loggedIn="125"
-				includeInLayout.login="false"		
-				/>
-			
-			
-			<s:BitmapImage 
-				source="@Embed('assets/images/header.png')"
-				width="405" height="128"
-				>
-				<s:filters>
-					<s:DropShadowFilter 
-						id="shadow"
-						alpha="0.40" 
-						angle="90" 
-						color="0" 
-						distance="3" 
-						quality="50"
-						/>
-				</s:filters>
-			</s:BitmapImage>
-			
-		</s:Group>
-		
 		
 		<!-- ViewContainter ______________________________________________________________________ -->
 		
@@ -212,6 +178,24 @@
 			
 			
 		</s:Group>
+		
+		<!-- Header (on top) ______________________________________________________________________ -->
+		
+		<s:BitmapImage 
+			source="@Embed('assets/images/header.png')"
+			width="405" height="128"
+			>
+			<s:filters>
+				<s:DropShadowFilter 
+					id="shadow"
+					alpha="0.40" 
+					angle="90" 
+					color="0" 
+					distance="3" 
+					quality="50"
+					/>
+			</s:filters>
+		</s:BitmapImage>
 		
 	</s:BorderContainer>
 	

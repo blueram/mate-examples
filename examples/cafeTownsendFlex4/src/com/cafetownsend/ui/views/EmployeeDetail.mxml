@@ -7,9 +7,6 @@
 	xmlns:model="com.cafetownsend.model.vos.*"
 	verticalGap="10"
 	>
-
-	
-	
 	
 	<fx:Script>
 		<![CDATA[
@@ -17,15 +14,12 @@
 			
 			[Bindable]
 			public var model:EmployeeDetailPresentationModel;
-
-
+		
 		]]>
 	</fx:Script>
+
 	
-	
-	
-	<!-- GUI ______________________________________________________________________ -->
-	
+	<!-- GUI ______________________________________________________________________ -->	
 	
 	<mx:FormItem label="First Name:"  required="true">
 		<s:TextInput 
@@ -70,15 +64,17 @@
 		direction="horizontal"
 		paddingTop="10"
 		>
-		<s:Button label="Submit" 
-				  styleName="navButton"
-				  click="model.saveEmployee( )" 
-				  id="submit" />
+		<s:Button 
+			label="Submit" 
+			styleName="navButton"
+			click="model.saveEmployee( )" 
+			id="submit" />
 		
 		<s:Button 
-			label="Cancel"
+			label="Delete" 
 			styleName="navButton"
-			click="model.cancelEmployeeEdits()"
+			click="model.deleteEmployee()"
+			enabled="{ model.selectedEmployeeCanBeDeleted }"
 			/>
 	</mx:FormItem>
 </mx:Form>
