@@ -20,33 +20,6 @@
 			
 			public static const HEIGHT:int = 60;
 
-			
-			/** 
-			 *
-			 * 	Just a helper method to animate list nav on first run.
-			 *	It's called in parallel transitions from MainViewUI   
-			*/
-			public function showListNav():void 
-			{
-					
-				var effect: Move = new Move( employeeListNav );
-				effect.easer = EffectConstants.EASE;
-				effect.yTo = 0;
-				effect.duration = EffectConstants.DURATION
-				effect.play();
-			}
-
-			/** 
-			 *
-			 * Just a helper method to reset list nav y position on first run.
-			 * It's called in parallel transitions from MainViewUI 
-			 *	
-			 */
-			public function hideListNav():void 
-			{
-				employeeListNav.y = -EmployeesNavigation.HEIGHT;
-			}
-
 		]]>
 	</fx:Script>
 	
