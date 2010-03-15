@@ -33,7 +33,7 @@ package com.cafetownsend.ui.presenters
 				_selectedEmployee = employee;
 				
 				if( employee != null )
-					tempEmployee.copyFrom( _selectedEmployee );
+					tempEmployee = _selectedEmployee.clone();
 
 			}
 		}
@@ -58,6 +58,11 @@ package com.cafetownsend.ui.presenters
 		}
 
 
+		[Bindable(Event="tempEmployeeChange")]	
+		public function get selectedEmployeeCanBeDeleted( ):Boolean
+		{
+			return !selectedEmployee.isEmpty();
+		}
 		
 		//  firstnameErrorString ...................................................
 		private var _firstnameErrorString:String = "";
@@ -86,18 +91,10 @@ package com.cafetownsend.ui.presenters
 			return _emailErrorString;
 		}
 		
-		protected function clearValidationMessages():void 
-		{
-			_firstnameErrorString
-			= _lastNameErrorString
-			= _emailErrorString
-			= '';
-			
-			dispatchEvent( new Event( "validationChange" ) );
-		}
+
 		
 		// -------------------------------------------------------
-		// Contructor
+		// Constructor
 		// -------------------------------------------------------
 		
 		private var dispatcher:IEventDispatcher
@@ -131,7 +128,7 @@ package com.cafetownsend.ui.presenters
 				clearValidationMessages();
 				
 				var event:EmployeeEvent = new EmployeeEvent( EmployeeEvent.SAVE );
-				event.employee = new Employee().copyFrom( _tempEmployee );
+				event.employee = _tempEmployee.clone();
 				
 				dispatcher.dispatchEvent(event);				
 			}
@@ -140,6 +137,15 @@ package com.cafetownsend.ui.presenters
 				this.dispatchEvent( new Event("validationChange") );
 			}
 			
+		}
+		
+		// deleteEmployee ...................................................
+		
+		public function deleteEmployee() : void 
+		{
+			// broadcast the event
+			var event:EmployeeEvent = new EmployeeEvent(EmployeeEvent.DELETE);
+			dispatcher.dispatchEvent( event );	
 		}
 		
 		public function updateFirstName( firstName:String ):void
@@ -178,7 +184,17 @@ package com.cafetownsend.ui.presenters
 			_lastNameErrorString  = ( validLastname ) ? "" : "Last Name is a required field.";
 			_emailErrorString  	  = ( validEmail ) ? "" : "Email is a required field.";
 			
-			return ( validFirstname  &&  employee.lastname && employee.email );
+			return ( validFirstname  &&  validLastname && validEmail );
+		}
+		
+		protected function clearValidationMessages():void 
+		{
+			_firstnameErrorString
+			= _lastNameErrorString
+				= _emailErrorString
+				= '';
+			
+			dispatchEvent( new Event( "validationChange" ) );
 		}
 	}
 }

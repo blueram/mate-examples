@@ -1,11 +1,17 @@
 package com.cafetownsend.model.managers
 {
+	import com.cafetownsend.events.NavigationEvent;
 	import com.cafetownsend.model.vos.Employee;
 	
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 	
 	import mx.collections.ArrayCollection;
+	import mx.controls.Alert;
+	import mx.core.FlexGlobals;
+	import mx.events.CloseEvent;
 	
 	public class EmployeeManager extends EventDispatcher 
 	{
@@ -46,27 +52,49 @@ package com.cafetownsend.model.managers
 		}
 		
 		// -----------------------------------------------------------
-		public function deleteEmployee (employee:Employee):void 
+		
+		
+		public function deleteEmployee( ) : void 
 		{
-			
-			var i:int = 0;
-			var max: int = _employeeList.length;
-			var storedEmployee: Employee;
-			
-			for (i; i < max; i++) 
+			Alert.show(	'Are you sure you want to delete this employee?',
+				null,
+				Alert.OK | Alert.CANCEL,
+				FlexGlobals.topLevelApplication as Sprite,
+				deleteEmployeeConfirmed,
+				null,
+				Alert.OK );
+		}
+		
+		
+		protected function deleteEmployeeConfirmed ( event: CloseEvent ):void 
+		{
+			// was the Alert event an OK
+			if ( event.detail == Alert.OK ) 
 			{
-				storedEmployee = _employeeList.getItemAt( i ) as Employee;
 				
-				if( storedEmployee.emp_id == employee.emp_id )
+				var i:int = 0;
+				var max: int = _employeeList.length;
+				var storedEmployee: Employee;
+				
+				for (i; i < max; i++) 
 				{
-					employeeList.removeItemAt( i );	
-					break;
+					storedEmployee = _employeeList.getItemAt( i ) as Employee;
+					
+					if( storedEmployee.emp_id == employee.emp_id )
+					{
+						// remove employee from list
+						employeeList.removeItemAt( i );	
+						break;
+					}
 				}
+				
+				// clear out the selected employee just in case
+				selectEmployee( null );
+				
+				//
+				// change view state back to employee list
+				_dispatcher.dispatchEvent( new NavigationEvent( NavigationEvent.EMPLOYEE_LIST ) );
 			}
-
-			
-			// clear out the selected employee just in case
-			selectEmployee( null );
 		}
 
 		// -----------------------------------------------------------
@@ -92,20 +120,30 @@ package com.cafetownsend.model.managers
 			// if it was an existing employee already in the ArrayCollection
 			if ( dpIndex >= 0 ) {
 				// update that employee's values
-				(employeeList.getItemAt(dpIndex) as Employee).copyFrom(employee);
+				( employeeList.getItemAt(dpIndex) as Employee ).copyFrom(employee);
 			}
 				// otherwise, if it didn't match any existing employees
 			else 
 			{
 				// add the temp employee to the ArrayCollection
-				var tempEmployee:Employee = new Employee();
-				tempEmployee.copyFrom(employee);
-				employeeList.addItem(tempEmployee);
+				employeeList.addItem( employee.clone() );
 			}
 			
 			// clear out the selected employee
 			selectEmployee(null);
 			
 		}
+		
+		/**
+		 * The EmployerManager uses an injected dispatcher to dispatch events to the local controller
+		 */
+		private var _dispatcher : IEventDispatcher;
+
+		public function set dispatcher( value : IEventDispatcher ) : void {
+			_dispatcher = value;
+		}
+
+		
+		
 	}
 }

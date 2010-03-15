@@ -4,7 +4,8 @@
 	xmlns:s="library://ns.adobe.com/flex/spark" 
 	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:views="com.cafetownsend.ui.views.*"
-	currentState="{ model.currentState }"
+	xmlns:maps="com.cafetownsend.maps.*"
+	currentState="{ model.currentState }" 
 	>
 	
 	
@@ -14,11 +15,21 @@
 			import com.cafetownsend.ui.presenters.EmployeesPresentationModel;
 			
 			[Bindable]
-			public var model: EmployeesPresentationModel;
-			
+			public var model: EmployeesPresentationModel;			
 			
 		]]>
 	</fx:Script>
+	
+	
+
+	<fx:Declarations>	
+		
+		<!-- Declaring EmployeesEventMap __________________________________________________ -->		
+		<maps:EmployeesEventMap 
+			dispatcher="{ this } "
+			/>	
+		
+	</fx:Declarations>
 	
 	
 	<!-- States ______________________________________________________________________ -->
@@ -28,7 +39,7 @@
 		<s:State name="employeeDetail" />
 	</s:states>
 	
-	
+	<!-- Transistions ______________________________________________________________________ -->	
 	<s:transitions>
 		<s:Transition 
 			autoReverse="true"
@@ -60,6 +71,11 @@
 	
 	
 	<!-- GUI ______________________________________________________________________ -->
+	
+	<views:EmployeesNavigation
+		id="employeesNav"
+		width="405" height="50"
+		/>
 	
 	
 	<views:EmployeeList 

@@ -7,6 +7,6 @@ package com.cafetownsend.model.constants
 	{
 		public static const DURATION:int = 400;
 		
-		public static const EASE: IEaser = new Power( 0.20 );
+		public static const EASE: IEaser = new Power( 0.30 );
 	}
 }
