@@ -1,6 +1,20 @@
 #summary Cafe Townsend using Flex 4
 
-== Installation notes ==
+
+== Screen shots == 
+
+All screen shots linked to the live example: 
+[http://www.websector.de/blog/2010/03/12/mate-cafe-townsend-example-updated-for-using-flex-4/]
+
+[http://www.websector.de/blog/2010/03/12/mate-cafe-townsend-example-updated-for-using-flex-4/ http://mate-examples.googlecode.com/svn/trunk/wiki/images/cafeTownsend1.png]
+
+[http://www.websector.de/blog/2010/03/12/mate-cafe-townsend-example-updated-for-using-flex-4/ http://mate-examples.googlecode.com/svn/trunk/wiki/images/cafeTownsend2.png]
+
+[http://www.websector.de/blog/2010/03/12/mate-cafe-townsend-example-updated-for-using-flex-4/ http://mate-examples.googlecode.com/svn/trunk/wiki/images/cafeTownsend3.png]
+
+
+
+== Some installation notes ==
 
  * Use [http://opensource.adobe.com/wiki/display/flexsdk/Download+Flex+4 latest Flex SDK]. The example is tested using [http://opensource.adobe.com/wiki/display/flexsdk/download?build=4.1.0.14696&pkgtype=1 Flex 4.1.0.14696]
 
@@ -8,8 +22,10 @@
 
 Have fun!
 
-== Authors ==
+== Credits ==
 
-Laura Arguello [http://www.asfusion.com/]
+Original Cairngorm Cafe Townsend example (which is the mother of all Cafe Townsend examples) by Darren Houle [http://cairngormdocs.org/blog/?p=19 "Cafe Townsend Multi-View Contact Management"]
 
-Jens Krause: [http://www.websector.de/ www.websector.de/]
+Original Flex 3 example: Laura Arguello [http://www.asfusion.com/ www.asfusion.com]
+
+Modified Flex 4 example: Jens Krause: [http://www.websector.de/ www.websector.de]
