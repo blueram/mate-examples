@@ -54,8 +54,13 @@
 			fromState="login" toState="loggedIn"		
 			>
 			
-			<s:Parallel
-				>						
+			<s:Sequence
+				>				
+				<mx:SetPropertyAction
+					target="{ employeesView }"
+					name="visible"
+					value="false"
+					/>
 				<s:Resize 
 					target="{ this }"
 					startDelay="200"
@@ -63,20 +68,19 @@
 					duration="{ EffectConstants.DURATION }"
 					easer="{ EffectConstants.EASE }"
 					/>
-				<s:Move
-					target="{ bLogout }"
-					startDelay="{ EffectConstants.DURATION }"
-					duration="{ EffectConstants.DURATION }"
-					easer="{ EffectConstants.EASE }"
-					/>
-				<s:Fade
-					duration="{ EffectConstants.DURATION }"
-					startDelay="{ 2 * EffectConstants.DURATION }"
-					target="{ employeesView }"
-					effectStart="employeesView.employeesNav.hideListNav()"
-					effectEnd="employeesView.employeesNav.showListNav()"
-					/>
-			</s:Parallel>
+				<s:Parallel>
+					<s:Move
+						target="{ bLogout }"
+						duration="{ EffectConstants.DURATION }"
+						easer="{ EffectConstants.EASE }"
+						/>					
+					<s:Fade
+						duration="{ EffectConstants.DURATION }"
+						effectStart="employeesView.visible = true"
+						target="{ employeesView }"
+						/>
+				</s:Parallel>
+			</s:Sequence>
 			
 			
 		</s:Transition>
@@ -84,30 +88,36 @@
 			autoReverse="true"
 			fromState="loggedIn" toState="login"
 			>
-			<s:Parallel>
-				<s:Fade
-					duration="{ EffectConstants.DURATION }"
-					target="{ employeesView }"
-					/>
-				<s:Move
-					target="{ bLogout }"
-					duration="{ EffectConstants.DURATION }"
-					startDelay="{ EffectConstants.DURATION }"
-					easer="{ EffectConstants.EASE }"
-					/>	
+			<s:Sequence
+				>
+				<s:Parallel>
+					<mx:SetPropertyAction
+						target="{ loginView }"
+						name="visible"
+						value="false"
+						/>
+					<s:Fade
+						duration="{ EffectConstants.DURATION }"
+						target="{ employeesView }"
+						/>
+					<s:Move
+						target="{ bLogout }"
+						duration="{ EffectConstants.DURATION }"
+						easer="{ EffectConstants.EASE }"
+						/>	
+				</s:Parallel>
 				<s:Resize
 					target="{ this }"
 					heightTo="{ HEIGHT_MIN }"
 					duration="{ EffectConstants.DURATION }"
-					startDelay="{ 2 * EffectConstants.DURATION }"
 					easer="{ EffectConstants.EASE }"
 					/>
 				<s:Fade
 					duration="{ EffectConstants.DURATION }"
-					startDelay="{ 3 * EffectConstants.DURATION }"
+					effectStart="loginView.visible = true"
 					target="{ loginView }"
 					/>
-			</s:Parallel>
+			</s:Sequence>
 		</s:Transition>
 	</s:transitions>
 	
@@ -174,8 +184,7 @@
 				id="employeesView"
 				includeIn="loggedIn"
 				width="100%" height="100%"
-				/>
-			
+				/>	
 			
 		</s:Group>
 		
