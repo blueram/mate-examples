@@ -2,6 +2,9 @@
 
 <!-- Copyright 2008 Theo Hultberg/Iconara -->
 
-<view:DocumentView xmlns:view="example.view.*">
+<view:DocumentView 
+	xmlns="http://www.adobe.com/2006/mxml" 
+	xmlns:view="example.view.*"
+	>
 
 </view:DocumentView>
