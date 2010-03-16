@@ -4,7 +4,7 @@
 	xmlns:s="library://ns.adobe.com/flex/spark" 
 	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:views="com.cafetownsend.ui.views.*"
-	currentState="{ model.currentState }"
+	currentState="{ model.viewState }"
 	>
 	
 	

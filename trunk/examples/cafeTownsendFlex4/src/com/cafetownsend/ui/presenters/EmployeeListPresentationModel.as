@@ -75,7 +75,7 @@ package com.cafetownsend.ui.presenters
 		
 		private var _selectedEmployee:Employee = null;
 		
-		public static const SELECTEDEMPLOYEE_CHANGE_EVENT:String = "selectedEmployeeChanged";
+		public static const SELECTED_EMPLOYEE_CHANGED:String = "selectedEmployeeChanged";
 		
 		[Bindable(event="selectedEmployeeChanged")]
 		public function get selectedEmployee():Employee
@@ -87,7 +87,7 @@ package com.cafetownsend.ui.presenters
 		{
 			if (_selectedEmployee != value) {
 				_selectedEmployee = value;
-				dispatchEvent(new Event(SELECTEDEMPLOYEE_CHANGE_EVENT));
+				dispatchEvent(new Event(SELECTED_EMPLOYEE_CHANGED));
 			}
 		}		
 		

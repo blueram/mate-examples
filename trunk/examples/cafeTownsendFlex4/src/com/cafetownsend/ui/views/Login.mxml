@@ -4,7 +4,7 @@
 	xmlns:s="library://ns.adobe.com/flex/spark" 
 	xmlns:mx="library://ns.adobe.com/flex/mx" 
 	xmlns:mate="http://mate.asfusion.com/"
-	currentState="{ model.state }"
+	currentState="{ model.viewState }"
 	>
 	
 	<fx:Script>
@@ -25,7 +25,7 @@
 	
 	<s:states>
 		<s:State name="default" /> 		<!-- LoginPresentationModel.DEFULT_STATE  -->
-		<s:State name="messageState" /> <!-- LoginPresentationModel.MESSAGE_STATE  -->
+		<s:State name="error" /> 		<!-- LoginPresentationModel.ERROR_STATE  -->
 	</s:states>
 	
 	<!-- GUI ______________________________________________________________________ -->
@@ -48,7 +48,7 @@
 			>
 			<s:Label 
 				id="loginErrorTxt"
-				includeIn="messageState"
+				includeIn="error"
 				width="100%"
 				text="Invalid login information, please try again"
 				/>

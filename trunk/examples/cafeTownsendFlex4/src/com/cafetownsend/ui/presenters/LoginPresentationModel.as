@@ -12,7 +12,7 @@ package com.cafetownsend.ui.presenters
 		// -------------------------------------------------------
 		// Public constants
 		// -------------------------------------------------------
-		public static const MESSAGE_STATE:String = "messageState";
+		public static const ERROR_STATE:String = "error";
 		public static const DEFAULT_STATE:String = "";
 		
 		
@@ -24,26 +24,31 @@ package com.cafetownsend.ui.presenters
 		{
 			if( status == Authorization.FAILED )
 			{
-				_state = MESSAGE_STATE;
+				_viewState = ERROR_STATE;
 			}
 			else
 			{
-				_state = DEFAULT_STATE;
+				_viewState = DEFAULT_STATE;
 				if(  status == Authorization.LOGGED_IN )
 				{
 					dispatchEvent( new Event( "clearFields" ) );
 				}
 			}
-			dispatchEvent( new Event( "stateChange" ) );
+			dispatchEvent( new Event( "viewStateChanged" ) );
 		}
 		
 		//  state ...................................................
-		private var _state:String = DEFAULT_STATE;
-		[Bindable(Event="stateChange")]
-		public function get state():String
+		
+		public static const VIEW_STATE_CHANGED:String = 'viewStateChanged';
+		
+		private var _viewState:String = DEFAULT_STATE;
+		[Bindable(Event="viewStateChanged")]
+		public function get viewState():String
 		{
-			return _state;
+			return _viewState;
 		}
+		
+		public static const VALIDATION_CHANGED:String = "validationChange";
 		
 		//  passwordErrorString ...................................................
 		private var _passwordErrorString:String = "";
@@ -95,7 +100,6 @@ package com.cafetownsend.ui.presenters
 				event.password = password;
 				dispatcher.dispatchEvent( event );
 				
-				dispatchEvent( new Event( "validationChange" ) );
 			}
 			else
 			{
@@ -108,18 +112,21 @@ package com.cafetownsend.ui.presenters
 		// Private methods
 		// -------------------------------------------------------
 		
+		
+		
+		
 		//  isValid  ..........................................................
-		private function isValid( userName:String, password:String ):Boolean
+		protected function isValid( userName:String, password:String ):Boolean
 		{
 			var validUser: Boolean = userName != null && userName.length;
-			var validPasswort: Boolean = password != null && password.length;
+			var validPassword: Boolean = password != null && password.length;
 			
 			_userNameErrorString = ( validUser ) ? "" : "Username is a required field.";
-			_passwordErrorString = ( validPasswort ) ? "" : "Password is a required field.";
+			_passwordErrorString = ( validPassword ) ? "" : "Password is a required field.";
 			
-			dispatchEvent( new Event( "validationChange" ) );
+			dispatchEvent( new Event( VALIDATION_CHANGED ) );
 			
-			return ( validUser  &&  validPasswort );
+			return ( validUser  &&  validPassword );
 
 		}
 		

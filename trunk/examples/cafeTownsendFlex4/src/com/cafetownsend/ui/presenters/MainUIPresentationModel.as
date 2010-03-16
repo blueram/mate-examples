@@ -10,9 +10,9 @@ package com.cafetownsend.ui.presenters
 	
 	public class MainUIPresentationModel extends EventDispatcher
 	{
-		public static const CURRENTSTATE_CHANGE_EVENT:String = "currentStateChange";
+		public static const VIEW_STATE_CHANGED:String = "viewStateChange";
 		
-		private var _currentState:String = Navigation.LOGIN;
+		private var _viewState:String = Navigation.LOGIN;
 
 		
 		// -------------------------------------------------------
@@ -33,10 +33,10 @@ package com.cafetownsend.ui.presenters
 		}
 		
 		
-		[Bindable(event="currentStateChange")]
-		public function get currentState():String
+		[Bindable(event="viewStateChange")]
+		public function get viewState():String
 		{
-			return _currentState;
+			return _viewState;
 		}
 
 		public function set navigationPath(path:String):void
@@ -45,9 +45,9 @@ package com.cafetownsend.ui.presenters
 			// get the first path value only
 			var value: String = path.split("/")[0];
 				
-			if (_currentState != value) {			
-				_currentState = value;
-				dispatchEvent(new Event(CURRENTSTATE_CHANGE_EVENT));
+			if (_viewState != value) {			
+				_viewState = value;
+				dispatchEvent(new Event(VIEW_STATE_CHANGED));
 			}
 		}
 
