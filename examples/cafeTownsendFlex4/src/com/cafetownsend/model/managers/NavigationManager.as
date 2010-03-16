@@ -10,7 +10,9 @@ package com.cafetownsend.model.managers
 		
 		private var _navigationPath:String = Navigation.LOGIN;
 		
-		[Bindable(Event="navigationChange")]
+		public static const NAVIGATION_CHANGED:String = "navigationChanged";
+		
+		[Bindable(Event="navigationChanged")]
 		public function get navigationPath():String
 		{
 			return _navigationPath;
@@ -19,13 +21,13 @@ package com.cafetownsend.model.managers
 		public function updatePath( path:String ):void
 		{
 			_navigationPath = path;
-			dispatchEvent( new Event( "navigationChange" ) );
+			dispatchEvent( new Event( NAVIGATION_CHANGED ) );
 		}
 		
 		public function updateAfterLogin( login:Boolean ):void
 		{
 			_navigationPath = login ? Navigation.EMPLOYEE_LIST : Navigation.LOGIN ;
-			dispatchEvent( new Event( "navigationChange" ) );
+			dispatchEvent( new Event( NAVIGATION_CHANGED) );
 		}
 	}
 }

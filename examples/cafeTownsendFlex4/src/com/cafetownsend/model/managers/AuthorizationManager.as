@@ -10,7 +10,10 @@ package com.cafetownsend.model.managers
 	{
 		// .........................................Properties......................................
 		private var _status:String = Authorization.LOGGED_OUT;
-		[Bindable(Event="statusChange")]
+		
+		public static const STATUS_CHANGED:String = "statusChanged";
+		
+		[Bindable(Event="statusChanged")]
 		public function get status():String
 		{
 			return _status;
@@ -23,14 +26,14 @@ package com.cafetownsend.model.managers
 			//check hardcoded username and password
 			var isLogin:Boolean = (username == 'Flex' && password == 'Mate');
 			_status = isLogin ? Authorization.LOGGED_IN : Authorization.FAILED;
-			dispatchEvent( new Event( "statusChange" ) );
+			dispatchEvent( new Event( STATUS_CHANGED ) );
 			return isLogin;
 		}
 		
 		public function logout():void
 		{
 			_status = Authorization.LOGGED_OUT;
-			dispatchEvent( new Event( "statusChange" ) );
+			dispatchEvent( new Event( STATUS_CHANGED ) );
 		}
 	}
 }

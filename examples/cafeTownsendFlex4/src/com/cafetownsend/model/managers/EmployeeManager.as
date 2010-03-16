@@ -20,6 +20,8 @@ package com.cafetownsend.model.managers
 		private var _employeeList:ArrayCollection;
 		
 		//.........................................Setters and Getters..........................................
+
+		public static const EMPLOYEE_LIST_CHANGED:String = "employeeListChanged";
 		
 		[Bindable (event="employeeListChanged")]
 		public function get employeeList():ArrayCollection
@@ -28,6 +30,7 @@ package com.cafetownsend.model.managers
 		}
 		
 		private var _employee:Employee;
+		public static const EMPLOYEE_CHANGED:String = "employeeChanged";
 		
 		[Bindable (event="employeeChanged")]
 		public function get employee():Employee
@@ -41,14 +44,14 @@ package com.cafetownsend.model.managers
 		public function saveEmpoyeeList(employees:Array):void 
 		{
 			_employeeList = new ArrayCollection(employees);
-			dispatchEvent(new Event('employeeListChanged'));
+			dispatchEvent(new Event( EMPLOYEE_LIST_CHANGED ));
 		}
 		
 		// -----------------------------------------------------------
 		public function selectEmployee(employee:Employee):void 
 		{
 			_employee = employee;
-			dispatchEvent(new Event('employeeChanged'));
+			dispatchEvent(new Event( EMPLOYEE_CHANGED ));
 		}
 		
 		// -----------------------------------------------------------
@@ -60,42 +63,46 @@ package com.cafetownsend.model.managers
 				null,
 				Alert.OK | Alert.CANCEL,
 				FlexGlobals.topLevelApplication as Sprite,
-				deleteEmployeeConfirmed,
+				checkForDeleteEmployee,
 				null,
 				Alert.OK );
 		}
 		
 		
-		protected function deleteEmployeeConfirmed ( event: CloseEvent ):void 
+		protected function checkForDeleteEmployee ( event: CloseEvent ):void 
 		{
 			// was the Alert event an OK
 			if ( event.detail == Alert.OK ) 
-			{
-				
-				var i:int = 0;
-				var max: int = _employeeList.length;
-				var storedEmployee: Employee;
-				
-				for (i; i < max; i++) 
-				{
-					storedEmployee = _employeeList.getItemAt( i ) as Employee;
-					
-					if( storedEmployee.emp_id == employee.emp_id )
-					{
-						// remove employee from list
-						employeeList.removeItemAt( i );	
-						break;
-					}
-				}
-				
-				// clear out the selected employee just in case
-				selectEmployee( null );
-				
-				//
-				// change view state back to employee list
-				_dispatcher.dispatchEvent( new NavigationEvent( NavigationEvent.EMPLOYEE_LIST ) );
-			}
+				deleteEmployeeHandler();
 		}
+
+		
+		public function deleteEmployeeHandler():void
+		{
+			var i:int = 0;
+			var max: int = _employeeList.length;
+			var storedEmployee: Employee;
+			
+			for (i; i < max; i++) 
+			{
+				storedEmployee = _employeeList.getItemAt( i ) as Employee;
+			
+				if( storedEmployee.emp_id == employee.emp_id )
+				{
+					// remove employee from list
+					employeeList.removeItemAt( i );	
+					break;
+				}
+			}
+			
+			// clear out the selected employee just in case
+			selectEmployee( null );
+			
+			//
+			// change view state back to employee list
+			_dispatcher.dispatchEvent( new NavigationEvent( NavigationEvent.EMPLOYEE_LIST ) );
+		}
+
 
 		// -----------------------------------------------------------
 		// -----------------------------------------------------------

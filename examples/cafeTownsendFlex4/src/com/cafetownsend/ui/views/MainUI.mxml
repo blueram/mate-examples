@@ -5,7 +5,7 @@
 	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:views="com.cafetownsend.ui.views.*"
 	xmlns:mate="http://mate.asfusion.com/"
-	currentState="{ model.currentState }"
+	currentState="{ model.viewState }"
 	width="455" height="{ HEIGHT_MIN }"
 	>
 	

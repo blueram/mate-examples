@@ -35,7 +35,7 @@ package com.cafetownsend.model.vos
 			this.email = newEmployee.email;
 			this.firstname = newEmployee.firstname;
 			this.lastname = newEmployee.lastname;
-			this.startdate = newEmployee.startdate;			
+			this.startdate = new Date(Date.parse( newEmployee.startdate ) );			
 		}
 		
 		public function clone():Employee 
@@ -46,7 +46,7 @@ package com.cafetownsend.model.vos
 			employee.email = this.email;
 			employee.firstname = this.firstname;
 			employee.lastname = this.lastname;
-			employee.startdate = this.startdate;
+			employee.startdate = new Date(Date.parse( this.startdate ) );
 			
 			return employee;
 			
