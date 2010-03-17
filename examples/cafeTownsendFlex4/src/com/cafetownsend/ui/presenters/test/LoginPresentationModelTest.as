@@ -13,7 +13,7 @@ package com.cafetownsend.ui.presenters.test
 	import org.flexunit.asserts.assertTrue;
 	import org.flexunit.asserts.fail;
 	import org.flexunit.async.Async;
-
+	
 	public class LoginPresentationModelTest
 	{		
 		protected var pm: LoginPresentationModel;
@@ -30,79 +30,67 @@ package com.cafetownsend.ui.presenters.test
 			pm = null;
 		}
 		
+		
 
-		[Test( async, description="AsyncTest to check validation handling on login")]
-		public function loginFailed():void 
+		
+		[Test(description="Creating error messages if login failed")]
+		public function errorMessagesOnLoginFailed():void 
 		{
-			var callback: Function = Async.asyncHandler( this, loginFailedHandler, 100, null, handleEventNeverOccurred );
+			pm.login('', '' );
+			
+			assertTrue("userNameErrorString is set", pm.userNameErrorString != '');
+			assertTrue("passwordErrorString is set", pm.passwordErrorString != '');
+			
+		}
+
+		
+		[Test(description="Change view state if login failed")]
+		public function viewStateChangedIfLoginFailed():void 
+		{
+	
+			pm.loginStatus = Authorization.FAILED;
+			
+			assertTrue("viewState is changed to ERROR_STATE", 
+				pm.viewState == LoginPresentationModel.ERROR_STATE );
+			
+		}
+		
+		//--------------------------------------------------------------------------
+		//
+		// Test Bindings
+		//
+		//--------------------------------------------------------------------------
+		
+		[Test( async, description="AsyncTest to check validation handling on login")]
+		public function triggerViewStateChangedOnInvalidLogin():void 
+		{
+			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
 			pm.addEventListener( LoginPresentationModel.VALIDATION_CHANGED, callback, false, 0, true );
 			
 			pm.login('', '' );
 		}
 		
-		public function loginFailedHandler(event:Event, passThroughData:Object ):void 
-		{
-			assertEquals(	"custom event to trigger bindings was fired ", 
-							LoginPresentationModel.VALIDATION_CHANGED, 
-							event.type 
-						);
-			
-			assertTrue("userNameErrorString is set", 
-						pm.userNameErrorString != '');
-
-			assertTrue("passwordErrorString is set", 
-						pm.passwordErrorString != '');
-			
-		}
-
-		[Test( async, description="AsyncTest to check validation handling on login")]
-		public function login():void 
-		{
-			var callback: Function = Async.asyncHandler( this, loginHandler, 100, null, handleEventNeverOccurred );
-			pm.addEventListener( LoginPresentationModel.VALIDATION_CHANGED, callback, false, 0, true );
-			
-			pm.login('username', 'passwort' );
-		}
 		
-		public function loginHandler(event:Event, passThroughData:Object ):void 
+		[Test( async, description="AsyncTest to trigger view state changed")]
+		public function triggerChangeViewStateIfLoginFailed():void 
 		{
-			assertEquals(	"custom event to trigger bindings was fired ", 
-							LoginPresentationModel.VALIDATION_CHANGED, 
-							event.type 
-						);
-			
-			assertTrue("userNameErrorString is not set", 
-						pm.userNameErrorString == '');
-
-			assertTrue("passwordErrorString is not set", 
-						pm.passwordErrorString == '');
-			
-		}
-
-		[Test( async, description="AsyncTest of changing view state depending on login status")]
-		public function changeLoginStatus():void 
-		{
-			var callback: Function = Async.asyncHandler( this, loginStatusChangedHandler, 100, null, handleEventNeverOccurred );
+			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
 			pm.addEventListener( LoginPresentationModel.VIEW_STATE_CHANGED, callback, false, 0, true );
 			
 			pm.loginStatus = Authorization.FAILED;
 		}
 		
-		public function loginStatusChangedHandler(event:Event, passThroughData:Object ):void 
+		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
 		{
-			assertEquals(	"custom event to trigger bindings was fired ", 
-							LoginPresentationModel.VIEW_STATE_CHANGED, 
-							event.type 
-						);
-			
-			assertTrue("userNameErrorString is not set", 
-						pm.viewState == LoginPresentationModel.ERROR_STATE );
-			
+			//
+			// Nothing to do here! 
+			// Because is the binding not triggered,
+			// a fail message is shown in bindingNeverOccurred();
 		}
 		
-		protected function handleEventNeverOccurred( passThroughData:Object ):void 
+		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			fail( 'Binding never triggered');
+			fail( 'Bindings are not triggered');
 		}
 		
 	}

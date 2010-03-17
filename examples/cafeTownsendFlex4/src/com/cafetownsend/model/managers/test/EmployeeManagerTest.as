@@ -14,6 +14,7 @@ package com.cafetownsend.model.managers.test
 	import org.flexunit.asserts.assertEquals;
 	import org.flexunit.asserts.assertFalse;
 	import org.flexunit.asserts.assertTrue;
+	import org.flexunit.asserts.fail;
 	import org.flexunit.async.Async;
 	import org.hamcrest.collection.array;
 	import org.hamcrest.object.sameInstance;
@@ -99,10 +100,52 @@ package com.cafetownsend.model.managers.test
 		}
 		
 		
-		[Test( order="3", async, description="AsyncTest of changing selected employee")]
+		[Test( order="3", description="Change a selected employee")]
 		public function changeEmployee():void
 		{
-			var callback: Function = Async.asyncHandler( this, employeeChanged, 100, null, handleEventNeverOccurred );
+			employee = EmployeeFactory.createEmployee( 100 );
+			manager.selectEmployee( employee );
+			
+			assertThat(	"selected employee has to be the same instance as created before", 
+				manager.employee, 
+				sameInstance( employee ) 
+			);
+			
+			
+		}
+
+		
+		
+		[Test( order="4", description="Save new employee list")]
+		public function changeEmployeeList():void
+		{
+			
+			employees = EmployeeFactory.createEmployeeList();
+			manager.saveEmpoyeeList( employees );
+			
+			assertThat(	"selected employee list has to be the same array as created before", 
+				manager.employeeList.source, 
+				array( employees ) 
+			);
+			
+			
+		}
+
+		
+		
+		
+		//--------------------------------------------------------------------------
+		//
+		// test bindings
+		//
+		//--------------------------------------------------------------------------
+		
+
+		
+		[Test( order="6", async, description="Trigger EMPLOYEE_CHANGED selecting another employee")]
+		public function triggerEmployeeChanged():void
+		{
+			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
 			manager.addEventListener( EmployeeManager.EMPLOYEE_CHANGED, callback, false, 0, true );
 			
 			employee = EmployeeFactory.createEmployee( 100 );
@@ -111,47 +154,31 @@ package com.cafetownsend.model.managers.test
 			
 		}
 		
-		protected function employeeChanged(event:Event, passThroughData:Object ):void 
+		[Test( order="5", async, description="Trigger EMPLOYEE_LIST_CHANGED saving a new employee list")]
+		public function triggerEmployeeListChanged():void
 		{
-			assertEquals(	"custom event to trigger binding was fired ", 
-							EmployeeManager.EMPLOYEE_CHANGED, 
-							event.type 
-			);
-			
-			assertThat(	"selected employee has to be the same instance as created before", 
-						manager.employee, 
-						sameInstance( employee ) 
-			);
-		}
-
-		[Test( order="4", async, description="AsyncTest of changing selected employee list")]
-		public function changeEmployeeList():void
-		{
-			var callback: Function = Async.asyncHandler( this, employeeListChanged, 100, null, handleEventNeverOccurred );
+			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
 			manager.addEventListener( EmployeeManager.EMPLOYEE_LIST_CHANGED, callback, false, 0, true );
 			
 			employees = EmployeeFactory.createEmployeeList();
 			manager.saveEmpoyeeList( employees );
-			
+		
 			
 		}
 		
-		protected function employeeListChanged(event:Event, passThroughData:Object ):void 
+
+		
+		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
 		{
-			assertEquals(	"custom event to trigger binding was fired ", 
-							EmployeeManager.EMPLOYEE_LIST_CHANGED, 
-							event.type 
-			);
-			
-			assertThat(	"selected employee list has to be the same array as created before", 
-						manager.employeeList.source, 
-						array( employees ) 
-			);
+			//
+			// Nothing to do here! 
+			// Because is the binding not triggered,
+			// a fail message is shown in bindingNeverOccurred();
 		}
 		
-		protected function handleEventNeverOccurred( passThroughData:Object ):void 
+		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			Assert.fail( 'Binding Never triggered');
+			fail('Bindings are not triggered');
 		}
 
 		
