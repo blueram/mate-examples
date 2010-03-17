@@ -26,11 +26,11 @@ package com.cafetownsend.ui.presenters
 		private var _employees:ArrayCollection = null;
 		
 		
-		[Bindable(Event="employeesChange")]
+		[Bindable(Event="employeesChanged")]
 		public function set employees( list:ArrayCollection ):void
 		{
 			_employees = list;
-			dispatchEvent( new Event("employeesChange") );
+			dispatchEvent( new Event("employeesChanged") );
 		}
 		public function get employees( ):ArrayCollection
 		{
@@ -64,7 +64,7 @@ package com.cafetownsend.ui.presenters
 		
 		
 		[Bindable(Event="selectedEmployeeChanged")]
-		public function get hasSelecetdEmployee():Boolean
+		public function get hasSelectedEmployee():Boolean
 		{
 			return selectedEmployee != null;
 		}

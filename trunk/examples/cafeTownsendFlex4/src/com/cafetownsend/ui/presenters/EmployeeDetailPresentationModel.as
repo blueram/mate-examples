@@ -40,7 +40,10 @@ package com.cafetownsend.ui.presenters
 		
 		private var _tempEmployee:Employee = new Employee();
 		
-		[Bindable(Event="tempEmployeeChange")]	
+		public static const TEMP_EMPLOYEE_CHANGED:String = "tempEmployeeChanged";
+		
+		
+		[Bindable(Event="tempEmployeeChanged")]	
 		public function get tempEmployee( ):Employee
 		{
 			return _tempEmployee;
@@ -52,22 +55,23 @@ package com.cafetownsend.ui.presenters
 			{
 				_tempEmployee = employee;
 				
-				this.dispatchEvent( new Event('tempEmployeeChange') );
+				this.dispatchEvent( new Event( TEMP_EMPLOYEE_CHANGED ) );
 				
 			}
 		}
 
 
-		[Bindable(Event="tempEmployeeChange")]	
+		[Bindable(Event="tempEmployeeChanged")]	
 		public function get selectedEmployeeCanBeDeleted( ):Boolean
 		{
 			return !selectedEmployee.isEmpty();
 		}
 		
+
 		//  firstnameErrorString ...................................................
 		private var _firstnameErrorString:String = "";
 		
-		[Bindable(Event="validationChange")]
+		[Bindable(Event="validationChanged")]
 		public function get firstnameErrorString():String
 		{
 			return _firstnameErrorString
@@ -76,7 +80,7 @@ package com.cafetownsend.ui.presenters
 		//  lastNameErrorString ...................................................
 		private var _lastNameErrorString:String = "";
 		
-		[Bindable(Event="validationChange")]
+		[Bindable(Event="validationChanged")]
 		public function get lastNameErrorString():String
 		{
 			return _lastNameErrorString;
@@ -85,7 +89,7 @@ package com.cafetownsend.ui.presenters
 		//  emailErrorString ...................................................
 		private var _emailErrorString:String = "";
 		
-		[Bindable(Event="validationChange")]
+		[Bindable(Event="validationChanged")]
 		public function get emailErrorString():String
 		{
 			return _emailErrorString;
@@ -134,7 +138,7 @@ package com.cafetownsend.ui.presenters
 			}
 			else
 			{
-				this.dispatchEvent( new Event("validationChange") );
+				this.dispatchEvent( new Event("validationChanged") );
 			}
 			
 		}
@@ -187,6 +191,10 @@ package com.cafetownsend.ui.presenters
 			return ( validFirstname  &&  validLastname && validEmail );
 		}
 		
+		
+		public static const VALIDATION_CHANGED:String = "validationChanged";
+		
+		
 		protected function clearValidationMessages():void 
 		{
 			_firstnameErrorString
@@ -194,7 +202,7 @@ package com.cafetownsend.ui.presenters
 				= _emailErrorString
 				= '';
 			
-			dispatchEvent( new Event( "validationChange" ) );
+			dispatchEvent( new Event( VALIDATION_CHANGED ) );
 		}
 	}
 }

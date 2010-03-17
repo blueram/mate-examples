@@ -8,6 +8,7 @@ package com.cafetownsend.model.managers.test
 	import flexunit.framework.Assert;
 	
 	import org.flexunit.asserts.assertEquals;
+	import org.flexunit.asserts.fail;
 	import org.flexunit.async.Async;
 	
 	public class AuthorizationManagerTest
@@ -27,44 +28,69 @@ package com.cafetownsend.model.managers.test
 		}
 		
 		
-		[Test( async, description="AsyncTest of changing state after login")]
-		public function changeStateOnLogin():void
+		[Test( description="Change status after login")]
+		public function changeStatusOnLogin():void
 		{
-			var callback: Function = Async.asyncHandler( this, authorizationStateChangedAfterLogin, 100, null, handleEventNeverOccurred );
-			manager.addEventListener( AuthorizationManager.STATUS_CHANGED, callback );
-
 			manager.login('Flex', 'Mate');
 			
-			manager.removeEventListener( AuthorizationManager.STATUS_CHANGED, callback );
+			assertEquals( manager.status, Authorization.LOGGED_IN );
+			
+		}
+
+	
+		
+		[Test( description="Changing status after logout")]
+		public function statusChangedOnLogout():void
+		{	
+			
+			manager.logout();
+			
+			assertEquals( manager.status, Authorization.LOGGED_OUT );
+			
+		}
+
+
+		
+		//--------------------------------------------------------------------------
+		//
+		// test bindings
+		//
+		//--------------------------------------------------------------------------
+		
+		[Test( async, description="Trigger statusChanged on login")]
+		public function triggerStatusChangedOnLogin():void
+		{
+			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
+			manager.addEventListener( AuthorizationManager.STATUS_CHANGED, callback, false, 0, true );
+			
+			manager.login('Flex', 'Mate');
+
 			
 		}
 		
+		
 		[Test( async, description="AsyncTest of changing states after logout")]
-		public function changeStateOnLogout():void
+		public function triggerStatusChangedOnLogout():void
 		{
-			var callback: Function = Async.asyncHandler( this, authorizationStateChangedAfterLogout, 100, null, handleEventNeverOccurred );
-			manager.addEventListener( 	AuthorizationManager.STATUS_CHANGED, callback);
-
+			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
+			manager.addEventListener( 	AuthorizationManager.STATUS_CHANGED, callback, false, 0, true);
+			
 			manager.logout();
 
-			manager.removeEventListener( AuthorizationManager.STATUS_CHANGED, callback);
 		}
 		
-		protected function authorizationStateChangedAfterLogin( event:Event, passThroughData:Object ):void 
+		
+		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
 		{
-			assertEquals("custom event to trigger binding was fired ", event.type, AuthorizationManager.STATUS_CHANGED );
-			assertEquals( manager.status, Authorization.LOGGED_IN );
-		}
-
-		protected function authorizationStateChangedAfterLogout( event:Event, passThroughData:Object ):void 
-		{
-			assertEquals("custom event to trigger binding was fired ", event.type, AuthorizationManager.STATUS_CHANGED );
-			assertEquals( manager.status, Authorization.LOGGED_OUT );
+			//
+			// Nothing to do here! 
+			// Because is the binding not triggered,
+			// a fail message is shown in bindingNeverOccurred();
 		}
 		
-		protected function handleEventNeverOccurred( passThroughData:Object ):void 
+		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			Assert.fail( AuthorizationManager.STATUS_CHANGED + ' Never Occurred');
+			fail( 'Bindings are not triggered');
 		}
 		
 	}

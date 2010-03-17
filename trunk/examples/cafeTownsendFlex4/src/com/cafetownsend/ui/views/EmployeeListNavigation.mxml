@@ -36,14 +36,14 @@
 			label="Edit" 
 			styleName="navButton"
 			click="model.editEmployee()" 
-			enabled="{ model.hasSelecetdEmployee }"
+			enabled="{ model.hasSelectedEmployee }"
 			/>
 		
 		<s:Button 
 			label="Delete" 
 			styleName="navButton"
 			click="model.deleteEmployee()" 
-			enabled="{ model.hasSelecetdEmployee }"
+			enabled="{ model.hasSelectedEmployee }"
 			/>
 		
 	</s:HGroup>

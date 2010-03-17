@@ -29,33 +29,50 @@ package com.cafetownsend.ui.presenters.test
 		}
 		
 		
-		[Test( async, description="AsyncTest of changing view state")]
+
+
+		[Test(description="Changing view state if navigationPath is changed")]
 		public function changeNavigationPath():void
 		{
-			var callback: Function = Async.asyncHandler( this, viewStateChanged, 100, null, handleEventNeverOccurred );
-			
-			pm.addEventListener( MainUIPresentationModel.VIEW_STATE_CHANGED, callback, false, 0, true );
+
 			pm.navigationPath = Navigation.LOGGED_IN;
-			
-			
-		}
-		
-		protected function viewStateChanged(event:Event, passThroughData:Object ):void 
-		{
-			assertEquals("custom event to trigger binding was fired ", 
-				MainUIPresentationModel.VIEW_STATE_CHANGED, 
-						event.type 
-					);
 			
 			assertEquals(	"navigationPath has to be splitted to get the first path value only", 
 				pm.viewState, 
 				Navigation.LOGGED_IN  
 			);
+			
+		}
+
+		
+		//--------------------------------------------------------------------------
+		//
+		// test bindings
+		//
+		//--------------------------------------------------------------------------
+		
+		[Test(async, description="Trigger VIEW_STATE_CHANGED changing navigationPath")]
+		public function triggerViewStateChanged():void
+		{
+			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
+			
+			pm.addEventListener( MainUIPresentationModel.VIEW_STATE_CHANGED, callback, false, 0, true );
+			pm.navigationPath = Navigation.LOGGED_IN;		
+			
 		}
 		
-		protected function handleEventNeverOccurred( passThroughData:Object ):void 
+		
+		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
 		{
-			fail( 'View state never changed');
+			//
+			// Nothing to do here! 
+			// Because is the binding not triggered,
+			// a fail message is shown in bindingNeverOccurred();
+		}
+		
+		protected function bindingNeverOccurred( passThroughData:Object ):void 
+		{
+			fail( 'Bindings are not triggered');
 		}
 		
 	}

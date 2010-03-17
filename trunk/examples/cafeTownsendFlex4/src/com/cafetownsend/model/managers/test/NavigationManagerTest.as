@@ -8,12 +8,13 @@ package com.cafetownsend.model.managers.test
 	import flexunit.framework.Assert;
 	
 	import org.flexunit.asserts.assertEquals;
+	import org.flexunit.asserts.fail;
 	import org.flexunit.async.Async;
 	
 	public class NavigationManagerTest
 	{		
 		protected var manager:NavigationManager;
-
+		
 		[Before]
 		public function setUp():void
 		{
@@ -27,42 +28,68 @@ package com.cafetownsend.model.managers.test
 		}
 		
 		
-		[Test( async, description="AsyncTest of updating navigationPath" )]
+		[Test( description="Update navigationPath" )]
 		public function updatePath():void
 		{
-			var callback: Function = Async.asyncHandler( this, pathChanged, 100, null, handleEventNeverOccurred );
+			manager.updatePath( Navigation.EMPLOYEE_DETAIL );
+			
+			assertEquals("navigationPath is changed ", manager.navigationPath, Navigation.EMPLOYEE_DETAIL );
+			
+		}
+		
+		
+		[Test( description="Update navigationPath after login" )]
+		public function updateNavigatioinPathAfterLogin():void
+		{
+			manager.updateAfterLogin( true );
+			
+			assertEquals( manager.navigationPath, Navigation.EMPLOYEE_LIST );
+			
+		}
+		
+		
+		
+		
+		//--------------------------------------------------------------------------
+		//
+		// test bindings
+		//
+		//--------------------------------------------------------------------------
+		
+		
+		[Test( async, description="Trigger NAVIGATION_CHANGED updating the path" )]
+		public function triggerNaviationChanged():void
+		{
+			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
 			manager.addEventListener( NavigationManager.NAVIGATION_CHANGED, callback, false, 0, true );
 			
-			manager.updatePath( Navigation.EMPLOYEE_DETAIL );
-
+			manager.updatePath( Navigation.EMPLOYEE_LIST );
+			
 		}
-
-		[Test( async, description="AsyncTest of updating navigationPath after login" )]
-		public function updateAfterLogin():void
+		
+		
+		
+		[Test( async, description="Trigger NAVIGATION_CHANGED after login" )]
+		public function triggerNavigationChangedAfterLogin():void
 		{
-			var callback: Function = Async.asyncHandler( this, pathChangedAfterLogin, 100, null, handleEventNeverOccurred );
+			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
 			manager.addEventListener( NavigationManager.NAVIGATION_CHANGED, callback, false, 0, true );
 			
 			manager.updateAfterLogin( true );
-
-		}
-
-		
-		protected function pathChanged( event:Event, passThroughData:Object ):void 
-		{
-			assertEquals("custom event to trigger binding was fired ", event.type, NavigationManager.NAVIGATION_CHANGED );
-			assertEquals("navigationPath is changed ", manager.navigationPath, Navigation.EMPLOYEE_DETAIL );
+			
 		}
 		
-		protected function pathChangedAfterLogin( event:Event, passThroughData:Object ):void 
+		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
 		{
-			assertEquals("custom event to trigger binding was fired ", event.type, NavigationManager.NAVIGATION_CHANGED );
-			assertEquals( manager.navigationPath, Navigation.EMPLOYEE_LIST );
+			//
+			// Nothing to do here! 
+			// Because is the binding not triggered,
+			// a fail message is shown in bindingNeverOccurred();
 		}
 		
-		protected function handleEventNeverOccurred( passThroughData:Object ):void 
+		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			Assert.fail( NavigationManager.NAVIGATION_CHANGED + ' Never Occurred');
+			fail('Bindings are not triggered');
 		}
 	}
 }

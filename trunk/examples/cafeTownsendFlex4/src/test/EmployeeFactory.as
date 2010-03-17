@@ -15,7 +15,23 @@ package test
 		 */
 		public static function createEmployee(id: int = 1):Employee 
 		{
-			var employee: Employee = new Employee( id );			
+			var employee: Employee = new Employee( id );
+			//
+			// add simple mock data 
+			employee.email = "email_" + id;
+			employee.firstname = "firstname_" + id;
+			employee.lastname = "lastname" + id;
+			employee.startdate = new Date();
+			return employee;			
+		}
+
+		/**
+		 * Helper method (factory) to create an invalid Employee object
+		 * 
+		 */
+		public static function createInvalidEmployee():Employee 
+		{
+			var employee: Employee = new Employee();
 			return employee;			
 		}
 		

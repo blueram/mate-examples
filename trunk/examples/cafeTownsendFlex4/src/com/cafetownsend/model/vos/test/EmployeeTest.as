@@ -3,7 +3,9 @@ package com.cafetownsend.model.vos.test
 	import com.cafetownsend.model.vos.Employee;
 	
 	import org.flexunit.asserts.assertEquals;
+	import org.flexunit.asserts.assertFalse;
 	import org.flexunit.asserts.assertNotNull;
+	import org.flexunit.asserts.assertTrue;
 	import org.hamcrest.object.sameInstance;
 
 	public class EmployeeTest
@@ -48,6 +50,20 @@ package com.cafetownsend.model.vos.test
 			assertEquals("firstname ", employee.firstname, employeeCloned.firstname );
 			assertEquals("lastname ", employee.lastname, employeeCloned.lastname );
 			assertEquals("startdate ", employee.startdate.toDateString(), employeeCloned.startdate.toDateString() );
+		}
+
+		[Test]
+		public function employeeIsEmpty():void 
+		{
+			var employee: Employee = createEmployee();
+			
+			assertFalse( employee.isEmpty() );
+			
+			employee.email = '';
+			employee.lastname = '';
+			employee.firstname = '';
+			
+			assertTrue( employee.isEmpty() );
 		}
 		
 
