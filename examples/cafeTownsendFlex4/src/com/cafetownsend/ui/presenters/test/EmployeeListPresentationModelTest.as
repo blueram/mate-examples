@@ -58,20 +58,12 @@ package com.cafetownsend.ui.presenters.test
 		[Test(async,description="Trigger selectedEmployeeChanged")]
 		public function triggerSelectedEmployeeChanged():void 
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			pm.addEventListener( EmployeeListPresentationModel.SELECTED_EMPLOYEE_CHANGED, callback, false, 0, true );
+			Async.proceedOnEvent( this, pm, EmployeeListPresentationModel.SELECTED_EMPLOYEE_CHANGED, 200, bindingNeverOccurred );
 			
 			// trigger SELECTED_EMPLOYEE_CHANGED
 			pm.selectedEmployee = EmployeeFactory.createEmployee();
 		}
 		
-		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
-		{
-			//
-			// Nothing to do here! 
-			// Because is the binding not triggered,
-			// a fail message is shown in bindingNeverOccurred();
-		}
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{

@@ -60,8 +60,7 @@ package com.cafetownsend.model.managers.test
 		[Test( async, description="Trigger NAVIGATION_CHANGED updating the path" )]
 		public function triggerNaviationChanged():void
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			manager.addEventListener( NavigationManager.NAVIGATION_CHANGED, callback, false, 0, true );
+			Async.proceedOnEvent( this, manager, NavigationManager.NAVIGATION_CHANGED, 200, bindingNeverOccurred );
 			
 			manager.updatePath( Navigation.EMPLOYEE_LIST );
 			
@@ -72,20 +71,11 @@ package com.cafetownsend.model.managers.test
 		[Test( async, description="Trigger NAVIGATION_CHANGED after login" )]
 		public function triggerNavigationChangedAfterLogin():void
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			manager.addEventListener( NavigationManager.NAVIGATION_CHANGED, callback, false, 0, true );
+			Async.proceedOnEvent( this, manager, NavigationManager.NAVIGATION_CHANGED, 200, bindingNeverOccurred );
 			
-			manager.updateAfterLogin( true );
-			
+			manager.updateAfterLogin( true );			
 		}
-		
-		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
-		{
-			//
-			// Nothing to do here! 
-			// Because is the binding not triggered,
-			// a fail message is shown in bindingNeverOccurred();
-		}
+
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{

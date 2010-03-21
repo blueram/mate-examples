@@ -76,8 +76,7 @@ package com.cafetownsend.ui.presenters.test
 		[Test( async, description="Trigger TEMP_EMPLOYEE_CHANGED if a new employee is selected")]
 		public function triggerTempEmployeeChanged():void 
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			pm.addEventListener( EmployeeDetailPresentationModel.TEMP_EMPLOYEE_CHANGED, callback, false, 0, true );
+			Async.proceedOnEvent( this, pm, EmployeeDetailPresentationModel.TEMP_EMPLOYEE_CHANGED, 200, bindingNeverOccurred );
 			
 			// create an employee
 			var employee: Employee = EmployeeFactory.createEmployee( 200 ); 
@@ -90,9 +89,8 @@ package com.cafetownsend.ui.presenters.test
 		public function triggerValidationChanged():void 
 		{
 			//
-			// listener for VALIDATION_CHANGED event
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			pm.addEventListener( EmployeeDetailPresentationModel.VALIDATION_CHANGED, callback, false, 0, true );
+			// check if VALIDATION_CHANGED will be fired
+			Async.proceedOnEvent( this, pm, EmployeeDetailPresentationModel.VALIDATION_CHANGED, 200, bindingNeverOccurred );
 			
 			//
 			// create an empty (invalid) employee
@@ -101,15 +99,6 @@ package com.cafetownsend.ui.presenters.test
 			// and trigger VALIDATION_CHANGED
 			pm.saveEmployee();
 
-		}
-
-		
-		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
-		{
-			//
-			// Nothing to do here! 
-			// Because is the binding not triggered,
-			// a fail message is shown in bindingNeverOccurred();
 		}
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
