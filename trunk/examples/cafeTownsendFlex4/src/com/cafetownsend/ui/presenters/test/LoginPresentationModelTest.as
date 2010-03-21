@@ -64,8 +64,7 @@ package com.cafetownsend.ui.presenters.test
 		[Test( async, description="AsyncTest to check validation handling on login")]
 		public function triggerViewStateChangedOnInvalidLogin():void 
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			pm.addEventListener( LoginPresentationModel.VALIDATION_CHANGED, callback, false, 0, true );
+			Async.proceedOnEvent( this, pm, LoginPresentationModel.VALIDATION_CHANGED, 200, bindingNeverOccurred );
 			
 			pm.login('', '' );
 		}
@@ -74,18 +73,9 @@ package com.cafetownsend.ui.presenters.test
 		[Test( async, description="AsyncTest to trigger view state changed")]
 		public function triggerChangeViewStateIfLoginFailed():void 
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			pm.addEventListener( LoginPresentationModel.VIEW_STATE_CHANGED, callback, false, 0, true );
+			Async.proceedOnEvent( this, pm, LoginPresentationModel.VIEW_STATE_CHANGED, 200, bindingNeverOccurred );
 			
 			pm.loginStatus = Authorization.FAILED;
-		}
-		
-		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
-		{
-			//
-			// Nothing to do here! 
-			// Because is the binding not triggered,
-			// a fail message is shown in bindingNeverOccurred();
 		}
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 

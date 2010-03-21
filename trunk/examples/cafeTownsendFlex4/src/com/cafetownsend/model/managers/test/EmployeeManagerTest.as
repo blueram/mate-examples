@@ -145,36 +145,24 @@ package com.cafetownsend.model.managers.test
 		[Test( order="6", async, description="Trigger EMPLOYEE_CHANGED selecting another employee")]
 		public function triggerEmployeeChanged():void
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			manager.addEventListener( EmployeeManager.EMPLOYEE_CHANGED, callback, false, 0, true );
+			
+			Async.proceedOnEvent( this, manager, EmployeeManager.EMPLOYEE_CHANGED, 200, bindingNeverOccurred );
 			
 			employee = EmployeeFactory.createEmployee( 100 );
-			manager.selectEmployee( employee );
-			
+			manager.selectEmployee( employee );		
 			
 		}
 		
 		[Test( order="5", async, description="Trigger EMPLOYEE_LIST_CHANGED saving a new employee list")]
 		public function triggerEmployeeListChanged():void
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			manager.addEventListener( EmployeeManager.EMPLOYEE_LIST_CHANGED, callback, false, 0, true );
+			Async.proceedOnEvent( this, manager, EmployeeManager.EMPLOYEE_LIST_CHANGED, 200, bindingNeverOccurred );
 			
 			employees = EmployeeFactory.createEmployeeList();
-			manager.saveEmpoyeeList( employees );
-		
+			manager.saveEmpoyeeList( employees );		
 			
 		}
-		
 
-		
-		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
-		{
-			//
-			// Nothing to do here! 
-			// Because is the binding not triggered,
-			// a fail message is shown in bindingNeverOccurred();
-		}
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{

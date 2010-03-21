@@ -60,32 +60,20 @@ package com.cafetownsend.model.managers.test
 		[Test( async, description="Trigger statusChanged on login")]
 		public function triggerStatusChangedOnLogin():void
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			manager.addEventListener( AuthorizationManager.STATUS_CHANGED, callback, false, 0, true );
+			Async.proceedOnEvent( this, manager, AuthorizationManager.STATUS_CHANGED, 200, bindingNeverOccurred );
 			
 			manager.login('Flex', 'Mate');
-
-			
+		
 		}
 		
 		
 		[Test( async, description="AsyncTest of changing states after logout")]
 		public function triggerStatusChangedOnLogout():void
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
-			manager.addEventListener( 	AuthorizationManager.STATUS_CHANGED, callback, false, 0, true);
-			
+			Async.proceedOnEvent( this, manager, AuthorizationManager.STATUS_CHANGED, 200, bindingNeverOccurred );
+
 			manager.logout();
 
-		}
-		
-		
-		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
-		{
-			//
-			// Nothing to do here! 
-			// Because is the binding not triggered,
-			// a fail message is shown in bindingNeverOccurred();
 		}
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 

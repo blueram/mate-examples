@@ -56,20 +56,10 @@ package com.cafetownsend.ui.presenters.test
 		[Test( async, description="Trigger VIEW_STATE_CHANGED if navigationPath is changed")]
 		public function triggerViewStateChanged():void
 		{
-			var callback: Function = Async.asyncHandler( this, triggerBindingEventHandler, 100, null, bindingNeverOccurred );
+			Async.proceedOnEvent( this, pm, EmployeesPresentationModel.VIEW_STATE_CHANGED, 200, bindingNeverOccurred );
 			
-			pm.addEventListener( EmployeesPresentationModel.VIEW_STATE_CHANGED, callback, false, 0, true );
-			pm.navigationPath = Navigation.EMPLOYEE_LIST;
+			pm.navigationPath = Navigation.EMPLOYEE_LIST;		
 			
-			
-		}
-		
-		public function triggerBindingEventHandler( event:Event, passThroughData:Object ):void 
-		{
-			//
-			// Nothing to do here! 
-			// Because is the binding not triggered,
-			// a fail message is shown in bindingNeverOccurred();
 		}
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
