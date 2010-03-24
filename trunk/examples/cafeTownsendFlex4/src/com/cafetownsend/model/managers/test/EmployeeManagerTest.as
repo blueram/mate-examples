@@ -68,8 +68,8 @@ package com.cafetownsend.model.managers.test
 			
 			manager.deleteEmployeeHandler();
 			
-			assertFalse( manager.employeeList.length == noOfEmployees );
-			assertTrue( manager.employeeList.length == noOfEmployees - 1 );
+			Assert.assertFalse( manager.employeeList.length == noOfEmployees );
+			Assert.assertTrue( manager.employeeList.length == noOfEmployees - 1 );
 			
 		}
 
@@ -85,14 +85,14 @@ package com.cafetownsend.model.managers.test
 			// and add it to list
 			manager.saveEmployee( employee ); 
 			
-			assertFalse( manager.employeeList.length == noOfEmployees );
-			assertTrue( manager.employeeList.length == noOfEmployees + 1 );
+			Assert.assertFalse( manager.employeeList.length == noOfEmployees );
+			Assert.assertTrue( manager.employeeList.length == noOfEmployees + 1 );
 			
 			//
 			// A copy of the employee has to be stored at last index within list,
 			// so we test here the emp_id only
 			var addedEmployee: Employee = manager.employeeList.getItemAt( manager.employeeList.length - 1 ) as Employee;
-			assertEquals( "Last employee in list should match ", 
+			Assert.assertEquals( "Last employee in list should match ", 
 							employee.emp_id,
 							addedEmployee.emp_id
 							);
@@ -166,7 +166,7 @@ package com.cafetownsend.model.managers.test
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			fail('Bindings are not triggered');
+			Assert.fail('Bindings are not triggered');
 		}
 
 		

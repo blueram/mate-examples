@@ -38,8 +38,8 @@ package com.cafetownsend.ui.presenters.test
 		{
 			pm.login('', '' );
 			
-			assertTrue("userNameErrorString is set", pm.userNameErrorString != '');
-			assertTrue("passwordErrorString is set", pm.passwordErrorString != '');
+			Assert.assertTrue("userNameErrorString is set", pm.userNameErrorString != '');
+			Assert.assertTrue("passwordErrorString is set", pm.passwordErrorString != '');
 			
 		}
 
@@ -50,7 +50,7 @@ package com.cafetownsend.ui.presenters.test
 	
 			pm.loginStatus = Authorization.FAILED;
 			
-			assertTrue("viewState is changed to ERROR_STATE", 
+			Assert.assertTrue("viewState is changed to ERROR_STATE", 
 				pm.viewState == LoginPresentationModel.ERROR_STATE );
 			
 		}
@@ -80,7 +80,7 @@ package com.cafetownsend.ui.presenters.test
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			fail( 'Bindings are not triggered');
+			Assert.fail( 'Bindings are not triggered');
 		}
 		
 	}
