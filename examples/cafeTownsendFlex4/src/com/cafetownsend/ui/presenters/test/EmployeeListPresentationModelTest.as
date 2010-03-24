@@ -6,6 +6,8 @@ package com.cafetownsend.ui.presenters.test
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
+	import flexunit.framework.Assert;
+	
 	import mx.collections.ArrayCollection;
 	
 	import org.flexunit.asserts.assertEquals;
@@ -44,7 +46,7 @@ package com.cafetownsend.ui.presenters.test
 			// set it as selected employee
 			pm.selectedEmployee = selectedEmployee;
 			// check selectedEmployeeIndex
-			assertEquals( index, pm.selectedEmployeeIndex );
+			Assert.assertEquals( index, pm.selectedEmployeeIndex );
 			
 		}
 		
@@ -67,7 +69,7 @@ package com.cafetownsend.ui.presenters.test
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			fail('Bindings are not triggered');
+			Assert.fail('Bindings are not triggered');
 		}
 		
 	}

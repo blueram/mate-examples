@@ -48,27 +48,27 @@ package com.cafetownsend.model.managers.test
 			
 			var employees:Array = parser.loadEmployeesFromXML( employeesXML );
 			
-			assertNotNull( "employees ", employees );
-			assertTrue("employees.length ", employees.length == 4 );
+			Assert.assertNotNull( "employees ", employees );
+			Assert.assertTrue("employees.length ", employees.length == 4 );
 			
 			employee = employees[ 0 ] as Employee;
 			
-			assertNotNull( employee );
-			assertEquals( 1, employee.emp_id );
-			assertEquals( "firstname ", "Sue", employee.firstname );
-			assertEquals( "lastname ", "Hove", employee.lastname );
-			assertEquals( "email ", "shove@cafetownsend.com", employee.email );
-			assertEquals( "email ", "shove@cafetownsend.com", employee.email );
-			assertNotNull( "startdate ", employee.startdate );
+			Assert.assertNotNull( employee );
+			Assert.assertEquals( 1, employee.emp_id );
+			Assert.assertEquals( "firstname ", "Sue", employee.firstname );
+			Assert.assertEquals( "lastname ", "Hove", employee.lastname );
+			Assert.assertEquals( "email ", "shove@cafetownsend.com", employee.email );
+			Assert.assertEquals( "email ", "shove@cafetownsend.com", employee.email );
+			Assert.assertNotNull( "startdate ", employee.startdate );
 
 			employee = employees[ 1 ] as Employee;
 			
-			assertNotNull( employee );
-			assertEquals( 2, employee.emp_id );
-			assertEquals( "Matt", employee.firstname );
-			assertEquals( "Boles", employee.lastname );
-			assertEquals( "mboles@cafetownsend.com", employee.email );
-			assertNotNull( "startdate ", employee.startdate );
+			Assert.assertNotNull( employee );
+			Assert.assertEquals( 2, employee.emp_id );
+			Assert.assertEquals( "Matt", employee.firstname );
+			Assert.assertEquals( "Boles", employee.lastname );
+			Assert.assertEquals( "mboles@cafetownsend.com", employee.email );
+			Assert.assertNotNull( "startdate ", employee.startdate );
 
 		}
 	}

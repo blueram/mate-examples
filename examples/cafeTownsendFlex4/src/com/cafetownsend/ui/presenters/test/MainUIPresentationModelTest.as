@@ -37,7 +37,7 @@ package com.cafetownsend.ui.presenters.test
 
 			pm.navigationPath = Navigation.LOGGED_IN;
 			
-			assertEquals(	"navigationPath has to be splitted to get the first path value only", 
+			Assert.assertEquals(	"navigationPath has to be splitted to get the first path value only", 
 				pm.viewState, 
 				Navigation.LOGGED_IN  
 			);
@@ -63,7 +63,7 @@ package com.cafetownsend.ui.presenters.test
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			fail( 'Bindings are not triggered');
+			Assert.fail( 'Bindings are not triggered');
 		}
 		
 	}

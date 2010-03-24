@@ -33,7 +33,7 @@ package com.cafetownsend.model.managers.test
 		{
 			manager.updatePath( Navigation.EMPLOYEE_DETAIL );
 			
-			assertEquals("navigationPath is changed ", manager.navigationPath, Navigation.EMPLOYEE_DETAIL );
+			Assert.assertEquals("navigationPath is changed ", manager.navigationPath, Navigation.EMPLOYEE_DETAIL );
 			
 		}
 		
@@ -43,7 +43,7 @@ package com.cafetownsend.model.managers.test
 		{
 			manager.updateAfterLogin( true );
 			
-			assertEquals( manager.navigationPath, Navigation.EMPLOYEE_LIST );
+			Assert.assertEquals( manager.navigationPath, Navigation.EMPLOYEE_LIST );
 			
 		}
 		
@@ -79,7 +79,7 @@ package com.cafetownsend.model.managers.test
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			fail('Bindings are not triggered');
+			Assert.fail('Bindings are not triggered');
 		}
 	}
 }

@@ -6,6 +6,8 @@ package com.cafetownsend.ui.presenters.test
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
+	import flexunit.framework.Assert;
+	
 	import org.flexunit.assertThat;
 	import org.flexunit.asserts.assertEquals;
 	import org.flexunit.asserts.assertFalse;
@@ -39,10 +41,10 @@ package com.cafetownsend.ui.presenters.test
 			var employee: Employee = EmployeeFactory.createEmployee( 200 ); 
 			pm.selectedEmployee = employee;			
 			
-			assertNotNull("tempEmployee is not null", pm.tempEmployee );
-			assertTrue("tempEmployee !== selectedEmployee ", pm.tempEmployee !== pm.selectedEmployee );
-			assertEquals("emp_id ", pm.selectedEmployee.emp_id, pm.tempEmployee.emp_id );
-			assertEquals("emp_id ", 200, pm.tempEmployee.emp_id );
+			Assert.assertNotNull("tempEmployee is not null", pm.tempEmployee );
+			Assert.assertTrue("tempEmployee !== selectedEmployee ", pm.tempEmployee !== pm.selectedEmployee );
+			Assert.assertEquals("emp_id ", pm.selectedEmployee.emp_id, pm.tempEmployee.emp_id );
+			Assert.assertEquals("emp_id ", 200, pm.tempEmployee.emp_id );
 		}
 
 
@@ -59,9 +61,9 @@ package com.cafetownsend.ui.presenters.test
 			// and try to save it
 			pm.saveEmployee();
 			
-			assertTrue("emailErrorString is not empty", pm.emailErrorString != '' );
-			assertTrue("lastNameErrorString is not empty", pm.lastNameErrorString != '' );
-			assertTrue("firstnameErrorString is not empty", pm.firstnameErrorString != '' );
+			Assert.assertTrue("emailErrorString is not empty", pm.emailErrorString != '' );
+			Assert.assertTrue("lastNameErrorString is not empty", pm.lastNameErrorString != '' );
+			Assert.assertTrue("firstnameErrorString is not empty", pm.firstnameErrorString != '' );
 		
 			
 		}
@@ -103,7 +105,7 @@ package com.cafetownsend.ui.presenters.test
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			fail( 'Bindings are not triggered');
+			Assert.fail( 'Bindings are not triggered');
 		}
 		
 		

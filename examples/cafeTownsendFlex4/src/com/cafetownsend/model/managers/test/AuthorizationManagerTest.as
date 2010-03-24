@@ -33,7 +33,7 @@ package com.cafetownsend.model.managers.test
 		{
 			manager.login('Flex', 'Mate');
 			
-			assertEquals( manager.status, Authorization.LOGGED_IN );
+			Assert.assertEquals( manager.status, Authorization.LOGGED_IN );
 			
 		}
 
@@ -45,7 +45,7 @@ package com.cafetownsend.model.managers.test
 			
 			manager.logout();
 			
-			assertEquals( manager.status, Authorization.LOGGED_OUT );
+			Assert.assertEquals( manager.status, Authorization.LOGGED_OUT );
 			
 		}
 
@@ -78,7 +78,7 @@ package com.cafetownsend.model.managers.test
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			fail( 'Bindings are not triggered');
+			Assert.fail( 'Bindings are not triggered');
 		}
 		
 	}

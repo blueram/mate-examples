@@ -38,7 +38,7 @@ package com.cafetownsend.ui.presenters.test
 
 			pm.navigationPath = Navigation.EMPLOYEE_LIST;
 			
-			assertEquals(	"navigationPath has to be splitted to get the second path value only", 
+			Assert.assertEquals(	"navigationPath has to be splitted to get the second path value only", 
 							pm.viewState, 
 							"employeeList"  
 			);
@@ -64,7 +64,7 @@ package com.cafetownsend.ui.presenters.test
 		
 		protected function bindingNeverOccurred( passThroughData:Object ):void 
 		{
-			fail( 'Bindings are not triggered');
+			Assert.fail( 'Bindings are not triggered');
 		}
 	}
 }

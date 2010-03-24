@@ -2,6 +2,8 @@ package com.cafetownsend.model.vos.test
 {
 	import com.cafetownsend.model.vos.Employee;
 	
+	import flexunit.framework.Assert;
+	
 	import org.flexunit.asserts.assertEquals;
 	import org.flexunit.asserts.assertFalse;
 	import org.flexunit.asserts.assertNotNull;
@@ -31,11 +33,11 @@ package com.cafetownsend.model.vos.test
 			var employeeCopied: Employee = new Employee()
 			employeeCopied.copyFrom( employee );
 			
-			assertEquals("emp_id ", employee.emp_id, employeeCopied.emp_id );
-			assertEquals("email ", employee.email, employeeCopied.email );
-			assertEquals("firstname ", employee.firstname, employeeCopied.firstname );
-			assertEquals("lastname ", employee.lastname, employeeCopied.lastname );
-			assertEquals("startdate ", employee.startdate.toDateString(), employeeCopied.startdate.toDateString() );
+			Assert.assertEquals("emp_id ", employee.emp_id, employeeCopied.emp_id );
+			Assert.assertEquals("email ", employee.email, employeeCopied.email );
+			Assert.assertEquals("firstname ", employee.firstname, employeeCopied.firstname );
+			Assert.assertEquals("lastname ", employee.lastname, employeeCopied.lastname );
+			Assert.assertEquals("startdate ", employee.startdate.toDateString(), employeeCopied.startdate.toDateString() );
 		}
 
 
@@ -45,11 +47,11 @@ package com.cafetownsend.model.vos.test
 			var employee: Employee = createEmployee();
 			var employeeCloned: Employee = employee.clone();
 			
-			assertEquals("emp_id ", employee.emp_id, employeeCloned.emp_id );
-			assertEquals("email ", employee.email, employeeCloned.email );
-			assertEquals("firstname ", employee.firstname, employeeCloned.firstname );
-			assertEquals("lastname ", employee.lastname, employeeCloned.lastname );
-			assertEquals("startdate ", employee.startdate.toDateString(), employeeCloned.startdate.toDateString() );
+			Assert.assertEquals("emp_id ", employee.emp_id, employeeCloned.emp_id );
+			Assert.assertEquals("email ", employee.email, employeeCloned.email );
+			Assert.assertEquals("firstname ", employee.firstname, employeeCloned.firstname );
+			Assert.assertEquals("lastname ", employee.lastname, employeeCloned.lastname );
+			Assert.assertEquals("startdate ", employee.startdate.toDateString(), employeeCloned.startdate.toDateString() );
 		}
 
 		[Test]
@@ -57,13 +59,13 @@ package com.cafetownsend.model.vos.test
 		{
 			var employee: Employee = createEmployee();
 			
-			assertFalse( employee.isEmpty() );
+			Assert.assertFalse( employee.isEmpty() );
 			
 			employee.email = '';
 			employee.lastname = '';
 			employee.firstname = '';
 			
-			assertTrue( employee.isEmpty() );
+			Assert.assertTrue( employee.isEmpty() );
 		}
 		
 
